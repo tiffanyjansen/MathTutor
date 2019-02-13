@@ -30,13 +30,13 @@ namespace MathCenter.Controllers
          * add them to the database.
          */
         [HttpGet]
-        public ActionResult SignIn(int? VNum)
+        public ActionResult SignIn(string VNum)
         {
             //If no input, refresh page.
             if (VNum == null)
             {
                 return View();
-            }
+            }                  
             //If student is in the database, redirect to done page.
             if (db.Students.Find(VNum) != null)
             {
@@ -55,7 +55,7 @@ namespace MathCenter.Controllers
         /*
          * This method will finish the "creation" process of a student.
          */
-        public ActionResult CreateStudent(int Id)
+        public ActionResult CreateStudent(string Id)
         {
             ViewBag.Id = Id;
 
@@ -66,7 +66,7 @@ namespace MathCenter.Controllers
          * This method will continue the "creation" process of a student.
          */
          [HttpPost]
-         public ActionResult CreateStudent(int Id, string FirstName, string LastName)
+         public ActionResult CreateStudent(string Id, string FirstName, string LastName)
         {
             Person person = new Person { VNum = Id, FirstName = FirstName, LastName = LastName };
             Debug.WriteLine(person.FirstName + ", " + person.LastName + ", " + person.VNum);
@@ -82,7 +82,61 @@ namespace MathCenter.Controllers
          */
          public ActionResult SelectClass(Person Adult)
         {
+            List<Class> distictDept = db.Classes
+                .GroupBy(c => c.DeptPrefix)
+                .Select(d => d.FirstOrDefault())
+                .ToList();
+
+            return View(distictDept);
+        }
+
+        /*
+         * This takes the input of the user (the department prefix) and uses that to go on to decide the class number.
+         */
+        [HttpPost]
+        public ActionResult SelectClass(Person Adult, string classDept)
+        {
+            if(classDept == "other")
+            {
+                return RedirectToAction("Other");
+            }
+
+            Debug.WriteLine(classDept);
+
+            List<Class> DistictNums = db.Classes
+                .Where(c => c.DeptPrefix == classDept)
+                .Select(c => c)
+                .ToList();
+                //.GroupBy(c => c.ClassNum)
+                //.Select(n => n.FirstOrDefault())
+                //.ToList();
+
+            Debug.WriteLine(DistictNums.First().ClassNum);
+            Debug.WriteLine(DistictNums.Last().ClassNum);
+
+            return RedirectToAction("SelectClassNum", new { NumList = DistictNums });
+        }
+
+        public ActionResult SelectClassNum(List<Class> NumList)
+        {            
+            return View(NumList);
+        }
+
+        /*
+         * Allows user to type in their class number/class in general.
+         */
+        public ActionResult Other(Person Adult, string deptPrefix)
+        {
+
+            ViewBag.Person = Adult;
+            if(deptPrefix != null)
+            {
+                ViewBag.Prefix = deptPrefix;
+            }
+            ViewBag.Prefix = "";
+
             return View();
         }
+
     }
 }

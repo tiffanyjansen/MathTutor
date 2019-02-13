@@ -17,7 +17,9 @@ namespace MathCenter.Models
 
         public TimeSpan Time { get; set; }
 
-        public int StudentID { get; set; }
+        [Required]
+        [StringLength(8)]
+        public string StudentID { get; set; }
 
         public virtual Student Student { get; set; }
     }

@@ -9,9 +9,9 @@ namespace MathCenter.Models.ViewModels
     public class Person
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [StringLength(8)]
         [Display(Name = "Student V#")]
-        public int VNum { get; set; }
+        public string VNum { get; set; }
 
         [Required]
         [Display(Name = "First Name")]

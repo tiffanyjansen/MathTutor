@@ -194,6 +194,7 @@
     <Content Include="Views\Home\SignIn.cshtml" />
     <Content Include="Views\Home\CreateStudent.cshtml" />
     <Content Include="Views\Home\SelectClass.cshtml" />
+    <Content Include="Views\Home\SelectClassNum.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
