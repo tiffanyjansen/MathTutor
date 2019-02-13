@@ -20,13 +20,15 @@ p {
     color: #2C4251;
 }
 
-button {
+button,
+.btn {
     color: #2C4251;
     background-color: #6874E8;
     border-radius: 5px;
 }
 
-    button:hover {
+    button:hover,
+    .btn:hover {
         color: #6874E8;
         background-color: #2C4251;
         border-radius: 5px;

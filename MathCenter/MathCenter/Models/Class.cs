@@ -20,8 +20,10 @@ namespace MathCenter.Models
 
         [Required]
         [StringLength(10)]
+        [Display(Name ="Class Prefix")]
         public string DeptPrefix { get; set; }
 
+        [Display(Name ="Class Number")]
         public int ClassNum { get; set; }
 
         [Required]
@@ -33,6 +35,7 @@ namespace MathCenter.Models
 
         public int? StartTime { get; set; }
 
+        [Display(Name ="Other Information")]
         public string Other { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
