@@ -2,6 +2,7 @@
 using MathCenter.Models.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -68,9 +69,10 @@ namespace MathCenter.Controllers
          public ActionResult CreateStudent(int Id, string FirstName, string LastName)
         {
             Person person = new Person { VNum = Id, FirstName = FirstName, LastName = LastName };
-            if(person != null)
+            Debug.WriteLine(person.FirstName + ", " + person.LastName + ", " + person.VNum);
+            if (person != null)
             {
-                RedirectToAction("SelectClass", new { Adult = person });
+                return RedirectToAction("SelectClass", new { Adult = person });
             }
             return View();
         }
