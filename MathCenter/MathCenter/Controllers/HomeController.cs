@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MathCenter.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,21 +9,43 @@ namespace MathCenter.Controllers
 {
     public class HomeController : Controller
     {
+        //Access to Database.
+        MathContext db = new MathContext();
+
+
+        /*
+         * The "Home Page." The page for Tutors/Faculty to either access the 
+         * sign in sheet or the data. (Depending on which you are.)
+         */
         public ActionResult Index()
         {
             return View();
         }
 
-        public ActionResult About()
+        /*
+         * The method for signing a student in. This page will just have the student
+         * enter their V Number, then it will direct them to select their class and 
+         * add them to the database.
+         */
+        [HttpGet]
+        public ActionResult SignIn(int? VNum)
         {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
+            //If no input, refresh page.
+            if (VNum == null)
+            {
+                return View();
+            }
+            //If student is in the database, redirect to done page.
+            if (db.Students.Find(VNum) != null)
+            {
+                return RedirectToAction("Done");
+            }
+            //Otherwise, redirect to create student page.
+            return RedirectToAction("CreateStudent");
         }
 
-        public ActionResult Contact()
+        public ActionResult Done()
         {
-            ViewBag.Message = "Your contact page.";
 
             return View();
         }
