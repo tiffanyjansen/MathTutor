@@ -49,5 +49,13 @@ namespace MathCenter.Controllers
 
             return View();
         }
+
+        /*
+         * This method will finish the "creation" process of a student.
+         */
+        public ActionResult CreateStudent()
+        {
+            return View();
+        }
     }
 }
