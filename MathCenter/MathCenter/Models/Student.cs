@@ -16,14 +16,15 @@ namespace MathCenter.Models
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Display(Name ="Student V#")]
         public int VNum { get; set; }
 
         [Required]
-        [Display(Name="First Name")]
+        [Display(Name ="First Name")]
         public string FirstName { get; set; }
 
         [Required]
-        [Display(Name="Last Name")]
+        [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
         public int Class { get; set; }

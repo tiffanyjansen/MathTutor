@@ -7,15 +7,16 @@
 /* Classes Table */
 CREATE TABLE [dbo].[Classes]
 (
-	[CRN] INT NOT NULL,
+	[ClassID] INT IDENTITY(1,1) NOT NULL,
+	[CRN] INT,
 	[DeptPrefix] NVARCHAR(10) NOT NULL,
-	[ClassNum] INT NOT NULL,
-	[Instructor] NVARCHAR(MAX) NOT NULL,
-	[Days] NVARCHAR(10) NOT NULL,
+	[ClassNum] INT,
+	[Instructor] NVARCHAR(MAX),
+	[Days] NVARCHAR(10),
 	[StartTime] INT,
 	[Other] NVARCHAR(MAX),
 
-	CONSTRAINT [PK_dbo.Classes] PRIMARY KEY (CRN)
+	CONSTRAINT [PK_dbo.Classes] PRIMARY KEY (ClassID)
 );
 
 /* Students Table */
@@ -27,7 +28,7 @@ CREATE TABLE [dbo].[Students]
 	[Class] INT NOT NULL,
 
 	CONSTRAINT [PK_dbo.Students] PRIMARY KEY (VNum),
-	CONSTRAINT [FK_dbo.Students] FOREIGN KEY (Class) REFERENCES [dbo].[Classes]
+	CONSTRAINT [FK_dbo.Students] FOREIGN KEY (Class) REFERENCES [dbo].[Classes] (ClassID)
 );
 
 /* SignIn Table (For Logging Information) */
@@ -40,7 +41,7 @@ CREATE TABLE [dbo].[SignIns]
 	[StudentID] INT Not Null,
 
 	CONSTRAINT [PK_dbo.SignIns] PRIMARY KEY CLUSTERED (ID ASC),
-	CONSTRAINT [FK_dbo.SignIns] FOREIGN KEY (StudentID) REFERENCES [dbo].[Students]
+	CONSTRAINT [FK_dbo.SignIns] FOREIGN KEY (StudentID) REFERENCES [dbo].[Students] (VNum)
 );
 
 /* Seed Data For Testing */
@@ -50,9 +51,9 @@ INSERT INTO Classes(CRN, DeptPrefix, ClassNum, Instructor, Days, StartTime) VALU
 (125, 'MTH', 111, 'Nerz, Andrew', 'MTWF', 0800)
 
 INSERT INTO Students(VNum, FirstName, LastName, Class) VALUES
-(00778899, 'Eryn', 'Murphy', 123),
-(00221144, 'Tiffany', 'Jansen', 124),
-(00559977, 'Nadine', 'Englund', 125)
+(00778899, 'Eryn', 'Murphy', 1),
+(00221144, 'Tiffany', 'Jansen', 2),
+(00559977, 'Nadine', 'Englund', 3)
 
 INSERT INTO SignIns(Week, Date, Time, StudentID) VALUES
 (2, '2019-02-05', '14:30:15', 00778899),

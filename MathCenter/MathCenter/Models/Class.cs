@@ -14,28 +14,23 @@ namespace MathCenter.Models
             Students = new HashSet<Student>();
         }
 
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int CRN { get; set; }
+        public int ClassID { get; set; }
+
+        public int? CRN { get; set; }
 
         [Required]
         [StringLength(10)]
-        [Display(Name ="Class Prefix")]
         public string DeptPrefix { get; set; }
 
-        [Display(Name ="Class Number")]
-        public int ClassNum { get; set; }
+        public int? ClassNum { get; set; }
 
-        [Required]
         public string Instructor { get; set; }
 
-        [Required]
         [StringLength(10)]
         public string Days { get; set; }
 
         public int? StartTime { get; set; }
 
-        [Display(Name ="Other Information")]
         public string Other { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

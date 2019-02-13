@@ -1,4 +1,5 @@
 ﻿using MathCenter.Models;
+using MathCenter.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,7 +42,7 @@ namespace MathCenter.Controllers
                 return RedirectToAction("Done");
             }
             //Otherwise, redirect to create student page.
-            return RedirectToAction("CreateStudent");
+            return RedirectToAction("CreateStudent", new { Id = VNum });
         }
 
         public ActionResult Done()
@@ -53,7 +54,31 @@ namespace MathCenter.Controllers
         /*
          * This method will finish the "creation" process of a student.
          */
-        public ActionResult CreateStudent()
+        public ActionResult CreateStudent(int Id)
+        {
+            ViewBag.Id = Id;
+
+            return View();
+        }
+
+        /*
+         * This method will continue the "creation" process of a student.
+         */
+         [HttpPost]
+         public ActionResult CreateStudent(int Id, string FirstName, string LastName)
+        {
+            Person person = new Person { VNum = Id, FirstName = FirstName, LastName = LastName };
+            if(person != null)
+            {
+                RedirectToAction("SelectClass", new { Adult = person });
+            }
+            return View();
+        }
+
+        /*
+         * This method will allow the student to select their class
+         */
+         public ActionResult SelectClass(Person Adult)
         {
             return View();
         }
