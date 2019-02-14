@@ -80,12 +80,15 @@ namespace MathCenter.Controllers
         /*
          * This method will allow the student to select their class
          */
+         [HttpGet]
          public ActionResult SelectClass(Person Adult)
         {
             List<Class> distictDept = db.Classes
                 .GroupBy(c => c.DeptPrefix)
                 .Select(d => d.FirstOrDefault())
                 .ToList();
+
+            Debug.WriteLine(distictDept.FirstOrDefault().ClassNum);
 
             return View(distictDept);
         }
@@ -94,25 +97,24 @@ namespace MathCenter.Controllers
          * This takes the input of the user (the department prefix) and uses that to go on to decide the class number.
          */
         [HttpPost]
-        public ActionResult SelectClass(Person Adult, string classDept)
+        public ActionResult SelectClass(string classDept)
         {
             if(classDept == "other")
             {
                 return RedirectToAction("Other");
             }
 
-            Debug.WriteLine(classDept);
+            Debug.WriteLine(db.Classes.Select(c => c.DeptPrefix).First() == classDept);
 
             List<Class> DistictNums = db.Classes
-                .Where(c => c.DeptPrefix == classDept)
-                .Select(c => c)
+                .Where(c => classDept == c.DeptPrefix)
                 .ToList();
                 //.GroupBy(c => c.ClassNum)
                 //.Select(n => n.FirstOrDefault())
                 //.ToList();
 
             Debug.WriteLine(DistictNums.First().ClassNum);
-            Debug.WriteLine(DistictNums.Last().ClassNum);
+            //Debug.WriteLine(DistictNums.Last().ClassNum);
 
             return RedirectToAction("SelectClassNum", new { NumList = DistictNums });
         }

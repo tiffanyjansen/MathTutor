@@ -10,16 +10,20 @@
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
-
-        <h3>
-            <select>
-                @foreach (var item in Model)
-                {
-                    <option name="classNum" value=@Html.DisplayFor(modelItem => item.ClassNum)> @Html.DisplayFor(modelItem => item.ClassNum) </option>
-                }
-                <option name="classNum" value="other">Other</option>
-            </select>
-            <button type="submit">Submit</button>
-        </h3>
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                <h3>
+                    <select>
+                        @foreach (var item in Model)
+                        {
+                            <option name="classNum" value=@Html.DisplayFor(modelItem => item.ClassNum)> @Html.DisplayFor(modelItem => item.ClassNum) </option>
+                        }
+                        <option name="classNum" value="other">Other</option>
+                    </select>
+                    <button type="submit">Submit</button>
+                </h3>
+            </div>
+        </div>
     }
-</div>
+</div>    
