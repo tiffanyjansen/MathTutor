@@ -30,5 +30,7 @@ namespace MathCenter.Models
                 .HasForeignKey(e => e.StudentID)
                 .WillCascadeOnDelete(false);
         }
+
+        public System.Data.Entity.DbSet<MathCenter.Models.ViewModels.PersonWeek> PersonWeeks { get; set; }
     }
 }

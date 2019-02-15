@@ -97,5 +97,23 @@ namespace MathCenter.Controllers
             //Otherwise, redirect to create student page.
             return RedirectToAction("NameInput", new WeekVNum { Week = Week, VNum = VNum});
         }
+
+        /*
+        * This is the method for inputting their name. It will allow the user
+        * to input their name and get to adding their class.
+        */
+        [HttpGet]
+        public ActionResult NameInput(WeekVNum week)
+        {
+            ViewBag.VNum = week.VNum;
+            ViewBag.Week = week.Week;
+
+            return View();
+        }
+        [HttpPost]
+        public ActionResult NameInput(PersonWeek pWeek)
+        {
+            return View();
+        }
     }
 }

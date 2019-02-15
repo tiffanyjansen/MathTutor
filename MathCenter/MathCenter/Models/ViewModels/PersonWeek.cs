@@ -6,12 +6,18 @@ using System.Web;
 
 namespace MathCenter.Models.ViewModels
 {
-    public class WeekVNum
+    public class PersonWeek
     {
-        [Required]
+        [Key]
+        [StringLength(8)]
+        public string VNum { get; set; }
+
         public int Week { get; set; }
 
         [Required]
-        public string VNum { get; set; }
+        public string FirstName { get; set; }
+
+        [Required]
+        public string LastName { get; set; }
     }
 }
