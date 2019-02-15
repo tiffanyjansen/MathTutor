@@ -4,25 +4,27 @@
 
 <div class="container">
     <div class="row">
+        <div class="center">
+            <h4 style="color: darkblue;">@ViewBag.Error</h4>
+        </div>
         <form method="post">
             <div class="col-md-6">
                 <h1>Tutors:</h1>
                 <div class="center">
-
                     <h2>
                         Week Number:
-                        <select>
-                            <option name="Week" value="-">-</option>
-                            <option name="Week" value="2">2</option>
-                            <option name="Week" value="3">3</option>
-                            <option name="Week" value="4">4</option>
-                            <option name="Week" value="5">5</option>
-                            <option name="Week" value="6">6</option>
-                            <option name="Week" value="7">7</option>
-                            <option name="Week" value="8">8</option>
-                            <option name="Week" value="9">9</option>
-                            <option name="Week" value="10">10</option>
-                            <option name="Week" value="11">11</option>
+                        <select name="Week">
+                            <option value="-1" selected>-</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
                         </select><br /><br />
                         Password: <input type="password" name="tutorPwd" /><br /><br />
                     </h2>
