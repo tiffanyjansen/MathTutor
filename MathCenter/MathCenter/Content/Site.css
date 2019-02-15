@@ -3,34 +3,34 @@
 }
 
 body {
-    padding-top: 50px;
-    background-color: #C1C1C1;
+    padding-top: 25px;
+    background-color: #F0F8EA;
 }
 
 h1 {
-    font-family: "Comic Sans MS", cursive, sans-serif;
-    color: #6874E8;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    color: #92140C;
 }
 
 h2,
 h3,
 h4,
 p {
-    font-family: "Comic Sans MS", cursive, sans-serif;
-    color: #2C4251;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    color: #DF2935;
 }
 
 button,
 .btn {
-    color: #2C4251;
-    background-color: #6874E8;
+    color: #F0F8EA;
+    background-color: #92140C;
     border-radius: 5px;
 }
 
     button:hover,
     .btn:hover {
-        color: #6874E8;
-        background-color: #2C4251;
+        color: #F0F8EA;
+        background-color: #DF2935;
         border-radius: 5px;
     }
 
