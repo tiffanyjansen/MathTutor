@@ -1,5 +1,4 @@
 ﻿using MathCenter.Models;
-using MathCenter.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -21,6 +20,47 @@ namespace MathCenter.Controllers
          */
         public ActionResult Index()
         {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Index(string button, string tutorPwd, string facultyPwd)
+        {
+            //Get the passwords from the outside file so the passwords are not hard-coded.
+            string tutorPass = "Math42";
+                //System.Configuration.ConfigurationManager.AppSettings["TutorPass"];
+            string facultyPass = "Math42";
+                //System.Configuration.ConfigurationManager.AppSettings["FacultyPass"];
+
+            Debug.WriteLine(button);
+            if (button == "tutor")
+            {
+                Debug.WriteLine(tutorPwd);
+                Debug.WriteLine(tutorPass);
+                if (tutorPwd == tutorPass)
+                {
+                    return RedirectToAction("SignIn");
+                }
+                else
+                {
+                    ViewBag.Error = "You typed in the wrong password. Please Try Again.";
+                    return View();
+                }
+            }
+            if(button == "faculty")
+            {
+                Debug.WriteLine(facultyPwd);
+                Debug.WriteLine(facultyPass);
+                if (facultyPwd == facultyPass)
+                {
+                    return RedirectToAction("FacultyStuff");
+                }
+                else
+                {
+                    ViewBag.Error = "Please Try Again. You typed in the wrong password.";
+                    return View();
+                }
+            }
             return View();
         }
 
