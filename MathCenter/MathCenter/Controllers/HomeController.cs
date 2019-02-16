@@ -114,7 +114,7 @@ namespace MathCenter.Controllers
         [HttpPost]
         public ActionResult NameInput(PersonWeek pWeek)
         {
-            return RedirectToAction("ClassDept", new {  });
+            return RedirectToAction("ClassDept", new { Num = pWeek.VNum, NumWeek = pWeek.Week, FName = pWeek.FirstName, LName = pWeek.LastName });
         }
 
         /*
@@ -123,8 +123,10 @@ namespace MathCenter.Controllers
          * category for people not in any of the available classes.
          */
          [HttpGet]
-         public ActionResult ClassDept()
+         public ActionResult ClassDept(string Num, int NumWeek, string FName, string LName)
         {
+            PersonWeek pWeek = new PersonWeek { VNum = Num, Week = NumWeek, FirstName = FName, LastName = LName};
+
             return View();
         }
     }
