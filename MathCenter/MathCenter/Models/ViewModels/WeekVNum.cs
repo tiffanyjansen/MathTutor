@@ -9,7 +9,7 @@ namespace MathCenter.Models.ViewModels
     public class WeekVNum
     {
         [Required]
-        public int Week { get; set; }
+        public int WeekNum { get; set; }
 
         [Required]
         public string VNum { get; set; }

@@ -12,6 +12,7 @@ namespace MathCenter.Models.ViewModels
         [StringLength(8)]
         public string VNum { get; set; }
 
+        [Required]
         public int Week { get; set; }
 
         [Required]

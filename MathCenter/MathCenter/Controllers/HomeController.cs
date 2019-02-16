@@ -39,7 +39,7 @@ namespace MathCenter.Controllers
                 //Check the password and make sure there is a week input.
                 if (tutorPwd == tutorPass && Week != -1)
                 {
-                    return RedirectToAction("SignIn", new { Week = Week});
+                    return RedirectToAction("SignIn", new {Week});
                 }
                 //Return specific errors if the input is not valid.
                 else if(tutorPwd != tutorPass)
@@ -88,14 +88,15 @@ namespace MathCenter.Controllers
             {
                 ViewBag.Error = "Your V Number is invalid. It must be 8 characters. Please do not include the V.";
                 return View();
-            }                
+            }            
+
             //If student is in the database, redirect to done page.
             if (db.Students.Find(VNum) != null)
             {
-                return RedirectToAction("Done", new WeekVNum { Week = Week, VNum = VNum});
+                return RedirectToAction("Done", new { VNum, Week });
             }
-            //Otherwise, redirect to create student page.
-            return RedirectToAction("NameInput", new WeekVNum { Week = Week, VNum = VNum});
+            //Otherwise, redirect to create student page.            
+            return RedirectToAction("NameInput", new { VNum, Week });
         }
 
         /*
@@ -103,15 +104,26 @@ namespace MathCenter.Controllers
         * to input their name and get to adding their class.
         */
         [HttpGet]
-        public ActionResult NameInput(WeekVNum week)
+        public ActionResult NameInput(string VNum, int Week)
         {
-            ViewBag.VNum = week.VNum;
-            ViewBag.Week = week.Week;
+            ViewBag.VNum = VNum;
+            ViewBag.Week = Week;
 
             return View();
         }
         [HttpPost]
         public ActionResult NameInput(PersonWeek pWeek)
+        {
+            return RedirectToAction("ClassDept", new {  });
+        }
+
+        /*
+         * This is the method for selecting the class prefix for the class the
+         * user is taking. (ex: MTH, FYS, PSY, etc.) It will also have an "other"
+         * category for people not in any of the available classes.
+         */
+         [HttpGet]
+         public ActionResult ClassDept()
         {
             return View();
         }
