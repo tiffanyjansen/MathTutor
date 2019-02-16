@@ -9,8 +9,13 @@
         <h3>
             V <input type="text" placeholder="Your V# ..." name="VNum" />
             <input type="hidden" name="week" value=@ViewBag.Num />
-            <button type="submit">Submit</button>
+            <button type="submit" name="VButton">Submit</button>
         </h3>
-        <h4 style="color: darkblue;">@ViewBag.Error</h4>
+        <div id="Error" style="color: darkblue;"><h4></h4></div>
     </form>
 </div>
+
+@section scripts
+{
+    <script type="text/javascript" src="~/Scripts/database_java.js"></script>
+}

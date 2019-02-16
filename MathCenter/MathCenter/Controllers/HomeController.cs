@@ -81,22 +81,23 @@ namespace MathCenter.Controllers
             return View();
         }             
         [HttpPost]
-        public ActionResult SignIn(string VNum, int Week)
+        public ActionResult SignIn()
         {                
-            //If no input, refresh page.
-            if (VNum == null || VNum.Length != 8)
-            {
-                ViewBag.Error = "Your V Number is invalid. It must be 8 characters. Please do not include the V.";
-                return View();
-            }            
+            ////If no input, refresh page.
+            //if (VNum == null || VNum.Length != 8)
+            //{
+            //    ViewBag.Error = "Your V Number is invalid. It must be 8 characters. Please do not include the V.";
+            //    return View();
+            //}            
 
-            //If student is in the database, redirect to done page.
-            if (db.Students.Find(VNum) != null)
-            {
-                return RedirectToAction("Done", new { VNum, Week });
-            }
-            //Otherwise, redirect to create student page.            
-            return RedirectToAction("NameInput", new { VNum, Week });
+            ////If student is in the database, redirect to done page.
+            //if (db.Students.Find(VNum) != null)
+            //{
+            //    return RedirectToAction("Done", new { VNum, Week });
+            //}
+            ////Otherwise, redirect to create student page.            
+            //return RedirectToAction("NameInput", new { VNum, Week });
+            return View();
         }
 
         /*
