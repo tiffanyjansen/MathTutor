@@ -2,6 +2,7 @@
 using MathCenter.Models.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Diagnostics;
 using System.Linq;
 using System.Web;
@@ -81,41 +82,68 @@ namespace MathCenter.Controllers
             return View();
         }             
         [HttpPost]
-        public ActionResult SignIn()
-        {                
-            ////If no input, refresh page.
-            //if (VNum == null || VNum.Length != 8)
-            //{
-            //    ViewBag.Error = "Your V Number is invalid. It must be 8 characters. Please do not include the V.";
-            //    return View();
-            //}            
+        public ActionResult SignIn(string VNum, int Week)
+        {
+            //If no input, refresh page.
+            if (VNum == null || VNum.Length != 8)
+            {
+                ViewBag.Error = "Your V Number is invalid. It must be 8 characters. Please do not include the V.";
+                return View();
+            }
 
-            ////If student is in the database, redirect to done page.
-            //if (db.Students.Find(VNum) != null)
-            //{
-            //    return RedirectToAction("Done", new { VNum, Week });
-            //}
-            ////Otherwise, redirect to create student page.            
-            //return RedirectToAction("NameInput", new { VNum, Week });
-            return View();
+            //If student is in the database, redirect to done page.
+            if (db.Students.Find(VNum) != null)
+            {
+                return RedirectToAction("Done", new { VNum, Week });
+            }
+            //Otherwise, redirect to create student page.            
+            return RedirectToAction("NameInput", new { VNum, Week });
         }
 
         /*
         * This is the method for inputting their name. It will allow the user
         * to input their name and get to adding their class.
+        * 
+        * It will also add the student to the database and provide a placeholder
+        * class so we don't have to carry around all the information.
         */
         [HttpGet]
         public ActionResult NameInput(string VNum, int Week)
         {
+            //Use the VNum and Week in the View.
             ViewBag.VNum = VNum;
             ViewBag.Week = Week;
 
+            //Return the View
             return View();
         }
         [HttpPost]
         public ActionResult NameInput(PersonWeek pWeek)
         {
-            return RedirectToAction("ClassDept", new { Num = pWeek.VNum, NumWeek = pWeek.Week, FName = pWeek.FirstName, LName = pWeek.LastName });
+            //Create a student and set the class to the "placeholder class" created in the up script.
+            Student student = new Student { VNum = pWeek.VNum, FirstName = pWeek.FirstName, LastName = pWeek.LastName, Class = -1 };
+
+            //Add student to database, we will change the class later.
+            try
+            {
+                db.Students.Add(student);
+                db.SaveChanges();
+            }
+            catch (DbEntityValidationException dbEx)
+            {
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        Trace.TraceInformation("Property: {0} Error: {1}",
+                                                validationError.PropertyName,
+                                                validationError.ErrorMessage);
+                    }
+                }
+            }
+
+            //Redirect to the select department method and slowly select the class.
+            return RedirectToAction("ClassDept", new { NumWeek = pWeek.Week, Id = student.VNum});
         }
 
         /*
@@ -124,11 +152,67 @@ namespace MathCenter.Controllers
          * category for people not in any of the available classes.
          */
          [HttpGet]
-         public ActionResult ClassDept(string Num, int NumWeek, string FName, string LName)
+         public ActionResult ClassDept(int NumWeek, string Id )
         {
-            PersonWeek pWeek = new PersonWeek { VNum = Num, Week = NumWeek, FirstName = FName, LastName = LName};
+            //Find all of the distict Class Prefixes and use that for the drop down.
+            var ClassDepts = db.Classes
+                .GroupBy(c => c.DeptPrefix)
+                .Select(c => c.FirstOrDefault())
+                .ToList();
 
-            return View();
+            //Remove the placeholder class from the list of options.
+            var remClass = ClassDepts.Where(c => c.DeptPrefix == "NO").Select(c => c).FirstOrDefault();
+            ClassDepts.Remove(remClass);
+
+            //Keep these floating around so we can easily have the stuff working. 
+            ViewBag.Id = Id;
+            ViewBag.NumWeek = NumWeek;
+
+            //Return the View so students can select their DeptPrefix.
+            return View(ClassDepts);
+        }
+        [HttpPost]
+        public ActionResult ClassDept(int NumWeek, string Id, string dept)
+        {
+            //Check if the dept selected was other.
+            if (dept == "other"){
+                //Redirect to the Page to Type in the "other" info.
+                return RedirectToAction("Other", new { WeekNum = NumWeek, Id });
+            }
+            else
+            {
+                //Redirect to the Page to select the Class Number
+                return RedirectToAction("ClassNum", new { WeekNum = NumWeek, Id, Dept = dept });
+            }
+        }
+
+        /*
+         * This is the method for selecting the class number for the class the
+         * user is taking. (ex: 111, 102, 344, etc.) It will also have an "other"
+         * category for people not in any of the available classes.
+         */
+        [HttpGet]
+        public ActionResult ClassNum(int WeekNum, string Id, string Dept)
+        {
+            Debug.WriteLine("Dept = " + Dept);
+            
+            //Find all of the distict Class Numbers in relation to the Prefix Given and use that for the drop down.
+            var ClassNums = db.Classes
+                .Where(c => c.DeptPrefix == Dept)
+                .GroupBy(c => c.ClassNum)
+                .Select(c => c.FirstOrDefault())
+                .ToList();
+
+            //Remove the placeholder class from the list of options.
+            var remClass = ClassNums.Where(c => c.DeptPrefix == "NO").Select(c => c).FirstOrDefault();
+            ClassNums.Remove(remClass);
+
+            //Keep these floating around so we can easily have the stuff working. 
+            ViewBag.Id = Id;
+            ViewBag.WeekNum = WeekNum;
+
+            // Return the View so students can select their Class Number.
+            return View(ClassNums);
         }
     }
 }

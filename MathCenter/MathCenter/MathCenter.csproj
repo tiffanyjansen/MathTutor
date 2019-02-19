@@ -167,7 +167,6 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
-    <Content Include="Scripts\database_java.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
@@ -194,6 +193,8 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\SignIn.cshtml" />
     <Content Include="Views\Home\NameInput.cshtml" />
+    <Content Include="Views\Home\ClassDept.cshtml" />
+    <Content Include="Views\Home\ClassNum.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

@@ -1,0 +1,25 @@
+﻿@model IEnumerable<MathCenter.Models.Class>
+@{
+    ViewBag.Title = "ClassDept";
+}
+
+<div class="container">
+    <h1>Please Select your Class Prefix:</h1>
+    <h2>For example: If you are taking MTH 111, select MTH</h2>
+    <h3>If your class prefix is not in the list, please select Other</h3>
+    <form method="post">
+        <h3>
+            <select>
+                @foreach (var item in Model)
+                {
+                    <option name="dept" value="@Html.DisplayFor(modelItem => item.DeptPrefix)">@Html.DisplayFor(modelItem => item.DeptPrefix)</option>
+                }
+                <option name="dept" value="other">Other</option>
+            </select>
+            <input type="hidden" name="NumWeek" value=@ViewBag.NumWeek />
+            <input type="hidden" name="Id" value=@ViewBag.Id />
+            <button type="submit">Submit</button>
+        </h3>
+    </form>
+</div>
+

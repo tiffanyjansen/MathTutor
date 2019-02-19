@@ -1,0 +1,26 @@
+﻿@model IEnumerable<MathCenter.Models.Class>
+@{
+    ViewBag.Title = "ClassNum";
+}
+
+<div class="container">
+    <h1>Please Select your Class Number:</h1>
+    <h2>For example: If you are taking MTH 111, select 111</h2>
+    <h3>If your class number is not in the list, please select Other</h3>
+    <form method="post">
+        <h3>
+            <select>
+                @foreach (var item in Model)
+                {
+                    <option name="dept" value=@Html.DisplayFor(modelItem => item.ClassNum)>@Html.DisplayFor(modelItem => item.ClassNum)</option>
+                }
+                <option name="dept" value="other">Other</option>
+            </select>
+            <input type="hidden" name="WeekNum" value=@ViewBag.WeekNum />
+            <input type="hidden" name="Id" value=@ViewBag.Id />
+            <button type="submit">Submit</button>
+        </h3>
+    </form>
+</div>
+
+

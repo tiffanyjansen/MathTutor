@@ -44,6 +44,16 @@ CREATE TABLE [dbo].[SignIns]
 	CONSTRAINT [FK_dbo.SignIns] FOREIGN KEY (StudentID) REFERENCES [dbo].[Students] (VNum)
 );
 
+/* Seed Placeholder Class */
+/* Make it so I can make a random class with ID = -1 */
+SET IDENTITY_INSERT [dbo].[Classes] ON; 
+
+INSERT INTO [dbo].[Classes] (ClassID, CRN, DeptPrefix, ClassNum, Instructor, Days, StartTime) VALUES
+(-1, 00000, 'NO', 00, 'NOPE', 'NO', 0000);
+
+/* Turn it back off so we can only do it once. */
+SET IDENTITY_INSERT [dbo].[Classes] OFF; 
+
 /* Seed Data For Testing */
 INSERT INTO Classes(CRN, DeptPrefix, ClassNum, Instructor, Days, StartTime) VALUES
 (123, 'MTH', 70, 'Rosales, Kendal', 'MWF', 1200),
