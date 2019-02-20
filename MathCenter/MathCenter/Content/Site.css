@@ -3,7 +3,7 @@
 }
 
 body {
-    background-color: #F0F8EA;
+    background-color: #DF2935;
 }
 
 h1 {
@@ -37,4 +37,14 @@ input {
     width: 25%;
     height: 35px;
     border-radius: 10px;
+}
+
+.container {
+    background-color: #F0F8EA;
+    border-radius: 10px;
+    padding-top: 25px;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 25px;
+    border-color: #92140C;
 }
