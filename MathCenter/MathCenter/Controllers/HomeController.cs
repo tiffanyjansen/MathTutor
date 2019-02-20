@@ -135,7 +135,7 @@ namespace MathCenter.Controllers
             else
             {
                 //Add the student to the database.
-                student = new Student { VNum = pWeek.VNum, FirstName = pWeek.FirstName, LastName = pWeek.LastName, Class = -1 };
+                student = new Student { VNum = pWeek.VNum, FirstName = pWeek.FirstName, LastName = pWeek.LastName, Class = 1 };
                 db.Students.Add(student);
             }
 
@@ -143,7 +143,7 @@ namespace MathCenter.Controllers
             db.SaveChanges();
             
             //Redirect to the select department method and slowly select the class.
-            return RedirectToAction("ClassDept", new { NumWeek = pWeek.Week, Id = student.VNum});
+            return RedirectToAction("ClassDept", new { NumWeek = pWeek.Week, pWeek.VNum });
         }
 
         /*
@@ -152,7 +152,7 @@ namespace MathCenter.Controllers
          * category for people not in any of the available classes.
          */
          [HttpGet]
-         public ActionResult ClassDept(int NumWeek, string Id )
+         public ActionResult ClassDept(int NumWeek, string VNum )
         {
             //Find all of the distict Class Prefixes and use that for the drop down.
             var ClassDepts = db.Classes
@@ -171,24 +171,24 @@ namespace MathCenter.Controllers
             
 
             //Keep these floating around so we can easily have the stuff working. 
-            ViewBag.Id = Id;
+            ViewBag.Id = VNum;
             ViewBag.NumWeek = NumWeek;
 
             //Return the View so students can select their DeptPrefix.
             return View(ClassDepts);
         }
         [HttpPost]
-        public ActionResult ClassDept(string dept, int NumWeek, string Id)
+        public ActionResult ClassDept(string dept, int NumWeek, string VNum)
         {
             //Check if the dept selected was other.
             if (dept == "other"){
                 //Redirect to the Page to Type in the "other" info.
-                return RedirectToAction("Other", new { WeekNum = NumWeek, Id });
+                return RedirectToAction("Other", new { WeekNum = NumWeek, VNum });
             }
             else
             {
                 //Redirect to the Page to select the Class Number
-                return RedirectToAction("ClassNum", new { WeekNum = NumWeek, Id, Dept = dept });
+                return RedirectToAction("ClassNum", new { WeekNum = NumWeek, VNum, Dept = dept });
             }
         }
 
@@ -198,7 +198,7 @@ namespace MathCenter.Controllers
          * category for people not in any of the available classes.
          */
         [HttpGet]
-        public ActionResult ClassNum(int WeekNum, string Id, string Dept)
+        public ActionResult ClassNum(int WeekNum, string VNum, string Dept)
         {
             //Find all of the distict Class Numbers in relation to the Prefix Given and use that for the drop down.
             var ClassNums = db.Classes
@@ -217,7 +217,7 @@ namespace MathCenter.Controllers
             }
 
             //Keep these floating around so we can easily have the stuff working. 
-            ViewBag.Id = Id;
+            ViewBag.Id = VNum;
             ViewBag.WeekNum = WeekNum;
             ViewBag.Dept = Dept;
 
@@ -225,18 +225,18 @@ namespace MathCenter.Controllers
             return View(ClassNums);
         }
         [HttpPost]
-        public ActionResult ClassNum(int WeekNum, string Id, int cNum, string dept)
+        public ActionResult ClassNum(int WeekNum, string VNum, int cNum, string dept)
         {
             //Check if the number selected was other.
             if (cNum == -2)
             {
                 //Redirect to the Page to Type in the "other" info.
-                return RedirectToAction("Other", new { WeekNum, Id });
+                return RedirectToAction("Other", new { WeekNum, VNum });
             }
             else
             {
                 //Redirect to the Page to select the Professor
-                return RedirectToAction("ChooseProf", new { NumWeek = WeekNum, Id, Num = cNum, dept });
+                return RedirectToAction("ChooseProf", new { NumWeek = WeekNum, VNum, Num = cNum, dept });
             }
         }
         /*
@@ -245,7 +245,7 @@ namespace MathCenter.Controllers
          * in any of the available classes.
          */
         [HttpGet]
-        public ActionResult ChooseProf(int NumWeek, string Id, int Num, string dept)
+        public ActionResult ChooseProf(int NumWeek, string VNum, int Num, string dept)
         {
             //Find all of the distict Class Professors in relation to the previous Info and use that for the drop down.
             var Instructors = db.Classes
@@ -265,7 +265,7 @@ namespace MathCenter.Controllers
             }
 
             //Keep these floating around so we can easily have the stuff working. 
-            ViewBag.Id = Id;
+            ViewBag.Id = VNum;
             ViewBag.WeekNum = NumWeek;
             ViewBag.cNum = Num;
             ViewBag.dept = dept;            
@@ -274,18 +274,18 @@ namespace MathCenter.Controllers
             return View(Instructors);
         }
         [HttpPost]
-        public ActionResult ChooseProf(int WeekNum, string Id, string Prof, int classN, string dept)
+        public ActionResult ChooseProf(int WeekNum, string VNum, string Prof, int classN, string dept)
         {
             //Check if the number selected was other.
             if (Prof == "other")
             {
                 //Redirect to the Page to Type in the "other" info.
-                return RedirectToAction("Other", new { WeekNum, Id });
+                return RedirectToAction("Other", new { WeekNum, VNum });
             }            
             else
             {
                 //Redirect to the Page to select the Professor
-                return RedirectToAction("ChooseStartTime", new { WeekNum, Id, cNum = classN, Prof, dept });
+                return RedirectToAction("ChooseStartTime", new { WeekNum, VNum, cNum = classN, Prof, dept });
             }
         }
 
@@ -295,7 +295,7 @@ namespace MathCenter.Controllers
          * an other category, just in case.
          */ 
          [HttpGet]
-         public ActionResult ChooseStartTime(int WeekNum, int Id, int cNum, string Prof, string dept)
+         public ActionResult ChooseStartTime(int WeekNum, int VNum, int cNum, string Prof, string dept)
         {
             //Find all possible start times
             var startTimes = db.Classes
@@ -315,26 +315,27 @@ namespace MathCenter.Controllers
             }
 
             //Keep Week Number and StudentID
-            ViewBag.Id = Id;
+            ViewBag.Id = VNum;
             ViewBag.WeekNum = WeekNum;
 
             // Return the View so students can select their Class Number.
             return View(startTimes);
         }
         [HttpPost]
-        public ActionResult ChooseStartTime(int WeekNum, string Id, int classID)
+        public ActionResult ChooseStartTime(int WeekNum, string VNum, int classID)
         {
             Debug.WriteLine("classID = " + classID);
+            Debug.WriteLine("Id = " + VNum);
             if (classID == -2)
             {
-                return RedirectToAction("Other", new { WeekNum, Id });
+                return RedirectToAction("Other", new { WeekNum, VNum });
             }            
             //Set the student's class to their actual class.
-            Student currentStudent = db.Students.Find(Id);
+            Student currentStudent = db.Students.Find(VNum);
             currentStudent.Class = classID;
 
             //Create the SignIn to add it to the Database.
-            SignIn signIn = new SignIn { Week = WeekNum, Date = DateTime.Today.Date, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, Sec = DateTime.Now.TimeOfDay.Seconds, StudentID = Id };
+            SignIn signIn = new SignIn { Week = WeekNum, Date = DateTime.Today.Date, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, Sec = DateTime.Now.TimeOfDay.Seconds, StudentID = VNum };
             db.SignIns.Add(signIn);
 
             //Save the database changes.
@@ -358,7 +359,7 @@ namespace MathCenter.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult Other(int Week, string Id, string other)
+        public ActionResult Other(int Week, string VNum, string other)
         {
             //Create the class to be connected to the student.
             db.Classes.Add(new Class { Other = other });
@@ -372,11 +373,11 @@ namespace MathCenter.Controllers
                 .Select(c => c).FirstOrDefault();
 
             //Add the class to the current student.
-            Student currentStudent = db.Students.Find(Id);
+            Student currentStudent = db.Students.Find(VNum);
             currentStudent.Class = sClass.ClassID;
 
             //Create the Sign In to be added to the db.
-            db.SignIns.Add(new SignIn { Week = Week, Date = DateTime.Today.Date, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, Sec = DateTime.Now.TimeOfDay.Seconds, StudentID = Id });
+            db.SignIns.Add(new SignIn { Week = Week, Date = DateTime.Today.Date, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, Sec = DateTime.Now.TimeOfDay.Seconds, StudentID = VNum });
 
             //Save the Changes to the db.
             db.SaveChanges();
