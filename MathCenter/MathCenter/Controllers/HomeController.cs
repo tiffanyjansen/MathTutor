@@ -121,11 +121,25 @@ namespace MathCenter.Controllers
         [HttpPost]
         public ActionResult NameInput(PersonWeek pWeek)
         {
+            //Create empty student to be used later.
+            Student student = null;
+            
+            //Check if Student is already in DB.
+            if (db.Students.Find(pWeek.VNum) != null)
+            {
+                student = db.Students.Find(pWeek.VNum);
+                student.FirstName = pWeek.FirstName;
+                student.LastName = pWeek.LastName;
+            }
             //Create a student and set the class to the "placeholder class" created in the up script.
-            Student student = new Student { VNum = pWeek.VNum, FirstName = pWeek.FirstName, LastName = pWeek.LastName, Class = -1 };
+            else
+            {
+                //Add the student to the database.
+                student = new Student { VNum = pWeek.VNum, FirstName = pWeek.FirstName, LastName = pWeek.LastName, Class = -1 };
+                db.Students.Add(student);
+            }
 
-            //Add student to database, we will change the class later.
-            db.Students.Add(student);
+            //Save the changes to the database.            
             db.SaveChanges();
             
             //Redirect to the select department method and slowly select the class.
@@ -306,7 +320,7 @@ namespace MathCenter.Controllers
             db.SaveChanges();
             
             //Redirect to the "finish" page.
-            return RedirectToAction("Finish");
+            return RedirectToAction("Finish", new { Week = WeekNum });
         }
 
         /*
@@ -327,7 +341,14 @@ namespace MathCenter.Controllers
         {
             //Create the class to be connected to the student.
             db.Classes.Add(new Class { Other = other });
-            Class sClass = db.Classes.Last();
+
+            //Save the class into the database.
+            db.SaveChanges();
+
+            //Get the class again.
+            Class sClass = db.Classes
+                .Where(c => c.Other == other)
+                .Select(c => c).FirstOrDefault();
 
             //Add the class to the current student.
             Student currentStudent = db.Students.Find(Id);
@@ -340,7 +361,7 @@ namespace MathCenter.Controllers
             db.SaveChanges();
 
             //Redirect to the finish page.
-            return RedirectToAction("Finish");
+            return RedirectToAction("Finish", new { Week });
         }
         
         /*
@@ -362,21 +383,32 @@ namespace MathCenter.Controllers
         [HttpPost]
         public ActionResult Done(string VNum, int Week, int approved)
         {
-            //Create the Sign In and add it to the database.
-            SignIn signIn = new SignIn { Week = Week, Date = DateTime.Today, Time = DateTime.Now.TimeOfDay, StudentID = VNum };
-            db.SignIns.Add(signIn);
-            db.SaveChanges();
+            if (approved == 1)
+            {
+                //Create the Sign In and add it to the database.
+                SignIn signIn = new SignIn { Week = Week, Date = DateTime.Today, Time = DateTime.Now.TimeOfDay, StudentID = VNum };
+                db.SignIns.Add(signIn);
+                db.SaveChanges();
 
-            //Redirect to the "finish" page.
-            return RedirectToAction("Finish");
+                //Redirect to the "finish" page.
+                return RedirectToAction("Finish", new { Week });
+            }
+            else
+            {
+                //If it's not you redirect to Sign In page.
+                return RedirectToAction("NameInput", new { VNum, Week });
+            }
         }
 
         /*
          * The last page that gives a good message.
          */ 
          [HttpGet]
-         public ActionResult Finish()
+         public ActionResult Finish(int Week)
         {
+            //The Week Continues to float.
+            ViewBag.Week = Week;
+            
             //Return the View.
             return View();
         }
