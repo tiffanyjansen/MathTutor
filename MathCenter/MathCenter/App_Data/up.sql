@@ -50,8 +50,8 @@ CREATE TABLE [dbo].[SignIns]
 /* Make it so I can make a random class with ID = -1 */
 SET IDENTITY_INSERT [dbo].[Classes] ON; 
 
-INSERT INTO [dbo].[Classes] (ClassID, CRN, DeptPrefix, ClassNum, Instructor, Days, StartTime) VALUES
-(-1, 00000, 'NO', 00, 'NOPE', 'NO', 0000);
+INSERT INTO [dbo].[Classes] (ClassID, Other) VALUES
+(-1, 'Placeholder');
 
 /* Turn it back off so we can only do it once. */
 SET IDENTITY_INSERT [dbo].[Classes] OFF; 
