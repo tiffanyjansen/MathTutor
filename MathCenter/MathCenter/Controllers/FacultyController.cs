@@ -43,21 +43,43 @@ namespace MathCenter.Controllers
         [HttpPost]
         public ActionResult Add(string data)
         {
-            Debug.WriteLine("Data = " + data);
-
+            //Split the data by new line.
             var dataList = data.Split(Environment.NewLine.ToCharArray());
-            Debug.WriteLine(dataList.First());
-
-            foreach(var row in dataList)
+            
+            //Try all this stuff.
+            try
             {
-                var rowList = row.Split(' ');
-                foreach(var item in rowList)
+                //Get every row in the list created above.
+                foreach (var row in dataList)
                 {
-                    Debug.WriteLine("Item = " + item);
-                }
-            }
+                    //Split each row by space or tab.
+                    var rowList = row.Split();
+                    if (rowList.Length >= 8)
+                    {
+                        //Go through the list created by above and make variables with the names.
+                        int CRN = Convert.ToInt32(rowList[0]);
+                        string DeptPrefix = rowList[1];
+                        int ClassNum = Convert.ToInt32(rowList[2]);
+                        string StartTime = rowList[3];
+                        string Days = rowList[4];
+                        string Instructor = rowList[6] + " " + rowList[7];
 
-            return View();
+                        //Add the class to the database with the info above.
+                        db.Classes.Add(new Class { CRN = CRN, DeptPrefix = DeptPrefix, ClassNum = ClassNum, StartTime = StartTime, Days = Days, Instructor = Instructor });
+                    }
+                }
+                //After going through all the rows, save changes.
+                db.SaveChanges();
+            }
+            //Catch any exception that comes through.
+            catch (Exception)
+            {
+                //Return an error message if an exception was thrown.
+                ViewBag.Error = "The data you inputted was not added to the database, please try again.";
+                return View();
+            }
+            //If everything worked, redirect to the "data" page (for now)
+            return RedirectToAction("Data");
         }
     }
 }
