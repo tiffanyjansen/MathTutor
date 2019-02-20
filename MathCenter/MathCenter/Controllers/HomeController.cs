@@ -59,7 +59,7 @@ namespace MathCenter.Controllers
                 //Check the password.
                 if (facultyPwd == facultyPass)
                 {
-                    return RedirectToAction("FacultyStuff");
+                    return RedirectToAction("Index", "Faculty");
                 }
                 //Return specific errors if the input is not valid.
                 else
@@ -164,6 +164,10 @@ namespace MathCenter.Controllers
             var remClass = ClassDepts.Where(c => c.DeptPrefix == "NO").Select(c => c).FirstOrDefault();
             ClassDepts.Remove(remClass);
 
+            //Remove the 'other' classes from the list of options.
+            var remClass2 = ClassDepts.Where(c => c.DeptPrefix == null).Select(c => c).FirstOrDefault();
+            ClassDepts.Remove(remClass2);
+
             //Keep these floating around so we can easily have the stuff working. 
             ViewBag.Id = Id;
             ViewBag.NumWeek = NumWeek;
@@ -204,6 +208,10 @@ namespace MathCenter.Controllers
             //Remove the placeholder class from the list of options.
             var remClass = ClassNums.Where(c => c.DeptPrefix == "NO").Select(c => c).FirstOrDefault();
             ClassNums.Remove(remClass);
+
+            //Remove the 'other' classes from the list of options.
+            var remClass2 = ClassNums.Where(c => c.DeptPrefix == null).Select(c => c).FirstOrDefault();
+            ClassNums.Remove(remClass2);
 
             //Keep these floating around so we can easily have the stuff working. 
             ViewBag.Id = Id;
@@ -247,6 +255,10 @@ namespace MathCenter.Controllers
             //Remove the placeholder class from the list of options.
             var remClass = Instructors.Where(c => c.DeptPrefix == "NO").Select(c => c).FirstOrDefault();
             Instructors.Remove(remClass);
+
+            //Remove the 'other' classes from the list of options.
+            var remClass2 = Instructors.Where(c => c.DeptPrefix == null).Select(c => c).FirstOrDefault();
+            Instructors.Remove(remClass2);
 
             //Keep these floating around so we can easily have the stuff working. 
             ViewBag.Id = Id;
@@ -293,6 +305,10 @@ namespace MathCenter.Controllers
             var remClass = startTimes.Where(c => c.DeptPrefix == "NO").Select(c => c).FirstOrDefault();
             startTimes.Remove(remClass);
 
+            //Remove the 'other' classes from the list of options.
+            var remClass2 = startTimes.Where(c => c.DeptPrefix == null).Select(c => c).FirstOrDefault();
+            startTimes.Remove(remClass2);
+
             //Keep Week Number and StudentID
             ViewBag.Id = Id;
             ViewBag.WeekNum = WeekNum;
@@ -313,7 +329,7 @@ namespace MathCenter.Controllers
             currentStudent.Class = classID;
 
             //Create the SignIn to add it to the Database.
-            SignIn signIn = new SignIn { Week = WeekNum, Date = DateTime.Today, Time = DateTime.Now.TimeOfDay, StudentID = Id };
+            SignIn signIn = new SignIn { Week = WeekNum, Date = DateTime.Today.Date, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, Sec = DateTime.Now.TimeOfDay.Seconds, StudentID = Id };
             db.SignIns.Add(signIn);
 
             //Save the database changes.
@@ -355,7 +371,7 @@ namespace MathCenter.Controllers
             currentStudent.Class = sClass.ClassID;
 
             //Create the Sign In to be added to the db.
-            db.SignIns.Add(new SignIn { Week = Week, Date = DateTime.Today, Time = DateTime.Now.TimeOfDay, StudentID = Id });
+            db.SignIns.Add(new SignIn { Week = Week, Date = DateTime.Today.Date, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, Sec = DateTime.Now.TimeOfDay.Seconds, StudentID = Id });
 
             //Save the Changes to the db.
             db.SaveChanges();
@@ -386,7 +402,7 @@ namespace MathCenter.Controllers
             if (approved == 1)
             {
                 //Create the Sign In and add it to the database.
-                SignIn signIn = new SignIn { Week = Week, Date = DateTime.Today, Time = DateTime.Now.TimeOfDay, StudentID = VNum };
+                SignIn signIn = new SignIn { Week = Week, Date = DateTime.Today.Date, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, Sec= DateTime.Now.TimeOfDay.Seconds, StudentID = VNum };
                 db.SignIns.Add(signIn);
                 db.SaveChanges();
 

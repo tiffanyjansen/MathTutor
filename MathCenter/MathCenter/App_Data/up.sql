@@ -37,7 +37,9 @@ CREATE TABLE [dbo].[SignIns]
 	[ID] INT IDENTITY (1,1) NOT NULL,
 	[Week] INT NOT NULL,
 	[Date] DATE NOT NULL,
-	[Time] TIME NOT NULL,
+	[Hour] INT NOT NULL,
+	[Min] INT NOT NUll,
+	[Sec] INT NOT NULL,
 	[StudentID] NVARCHAR(8) NOT Null,
 
 	CONSTRAINT [PK_dbo.SignIns] PRIMARY KEY CLUSTERED (ID ASC),
@@ -66,7 +68,7 @@ INSERT INTO Students(VNum, FirstName, LastName, Class) VALUES
 ('00221144', 'Tiffany', 'Jansen', 2),
 ('00559977', 'Nadine', 'Englund', 3)
 
-INSERT INTO SignIns(Week, Date, Time, StudentID) VALUES
-(2, '2019-02-05', '14:30:15', '00778899'),
-(3, '2019-02-12', '15:25:15', '00221144'),
-(3, '2019-02-13', '09:35:12', '00559977')
+INSERT INTO SignIns(Week, Date, Hour, Min, Sec, StudentID) VALUES
+(2, '2019-02-05', 14, 30, 15, '00778899'),
+(3, '2019-02-12', 15, 25, 15, '00221144'),
+(3, '2019-02-13', 09, 35, 12, '00559977')

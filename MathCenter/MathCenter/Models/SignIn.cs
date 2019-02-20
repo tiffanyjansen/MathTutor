@@ -15,7 +15,11 @@ namespace MathCenter.Models
         [Column(TypeName = "date")]
         public DateTime Date { get; set; }
 
-        public TimeSpan Time { get; set; }
+        public int Hour { get; set; }
+
+        public int Min { get; set; }
+
+        public int Sec { get; set; }
 
         [Required]
         [StringLength(8)]
