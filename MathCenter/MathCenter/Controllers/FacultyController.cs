@@ -10,6 +10,7 @@ namespace MathCenter.Controllers
 {
     public class FacultyController : Controller
     {
+        //Database Connection
         MathContext db = new MathContext();
         
         /*
@@ -45,6 +46,16 @@ namespace MathCenter.Controllers
         {
             //Split the data by new line.
             var dataList = data.Split(Environment.NewLine.ToCharArray());
+
+            //Check if the placeholder is in the database or not.
+            var placeholder = db.Classes.Where(c => c.Other == "Placeholder")
+                .Select(c => c).FirstOrDefault();
+            if (placeholder == null)
+            {
+                //Add the placeholder to the database.
+                db.Classes.Add(new Class { Other = "Placeholder" });
+                db.SaveChanges();
+            }
             
             //Try all this stuff.
             try
@@ -61,8 +72,12 @@ namespace MathCenter.Controllers
                         string DeptPrefix = rowList[1];
                         int ClassNum = Convert.ToInt32(rowList[2]);
                         string StartTime = rowList[3];
-                        string Days = rowList[4];
-                        string Instructor = rowList[6] + " " + rowList[7];
+                        string Days = "";
+                        if(StartTime != "Online")
+                        {
+                            Days = rowList[4];
+                        }                        
+                        string Instructor = rowList[rowList.Length - 3] + " " + rowList[rowList.Length - 2];
 
                         //Add the class to the database with the info above.
                         db.Classes.Add(new Class { CRN = CRN, DeptPrefix = DeptPrefix, ClassNum = ClassNum, StartTime = StartTime, Days = Days, Instructor = Instructor });
@@ -78,8 +93,25 @@ namespace MathCenter.Controllers
                 ViewBag.Error = "The data you inputted was not added to the database, please try again.";
                 return View();
             }
-            //If everything worked, redirect to the "data" page (for now)
-            return RedirectToAction("Data");
+            //If everything worked, redirect to the classes page where all the classes that are in the database is shown on a page.
+            return RedirectToAction("Class");
+        }
+
+        /*
+         * The class method returns a table with all the Classes in the database.
+         */ 
+         [HttpGet]
+         public ActionResult Class()
+        {
+            //Get the entire list of classes.
+            var Classes = db.Classes.ToList();
+
+            //Remove the Placeholder Class
+            var remClass = Classes.Where(c => c.Other == "Placeholder").Select(c => c).FirstOrDefault();
+            Classes.Remove(remClass);
+
+            //Return the View with only the classes you actually want.
+            return View(Classes);
         }
     }
 }

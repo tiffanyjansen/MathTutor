@@ -206,6 +206,7 @@
     <Content Include="Views\Faculty\Index.cshtml" />
     <Content Include="Views\Faculty\Data.cshtml" />
     <Content Include="Views\Faculty\Add.cshtml" />
+    <Content Include="Views\Faculty\Class.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

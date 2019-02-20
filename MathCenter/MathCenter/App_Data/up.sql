@@ -46,6 +46,7 @@ CREATE TABLE [dbo].[SignIns]
 	CONSTRAINT [FK_dbo.SignIns] FOREIGN KEY (StudentID) REFERENCES [dbo].[Students] (VNum)
 );
 
+/*
 /* Seed Placeholder Class */
 /* Make it so I can make a random class with ID = -1 */
 SET IDENTITY_INSERT [dbo].[Classes] ON; 
@@ -72,3 +73,4 @@ INSERT INTO SignIns(Week, Date, Hour, Min, Sec, StudentID) VALUES
 (2, '2019-02-05', 14, 30, 15, '00778899'),
 (3, '2019-02-12', 15, 25, 15, '00221144'),
 (3, '2019-02-13', 09, 35, 12, '00559977')
+*/
