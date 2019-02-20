@@ -195,6 +195,11 @@
     <Content Include="Views\Home\NameInput.cshtml" />
     <Content Include="Views\Home\ClassDept.cshtml" />
     <Content Include="Views\Home\ClassNum.cshtml" />
+    <Content Include="Views\Home\ChooseProf.cshtml" />
+    <Content Include="Views\Home\ChooseStartTime.cshtml" />
+    <Content Include="Views\Home\Done.cshtml" />
+    <Content Include="Views\Home\Finish.cshtml" />
+    <Content Include="Views\Home\Other.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

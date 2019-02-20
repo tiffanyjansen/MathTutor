@@ -18,7 +18,6 @@ namespace MathCenter.Models
 
         public int? CRN { get; set; }
 
-        [Required]
         [StringLength(10)]
         public string DeptPrefix { get; set; }
 
@@ -29,7 +28,8 @@ namespace MathCenter.Models
         [StringLength(10)]
         public string Days { get; set; }
 
-        public int? StartTime { get; set; }
+        [StringLength(25)]
+        public string StartTime { get; set; }
 
         public string Other { get; set; }
 

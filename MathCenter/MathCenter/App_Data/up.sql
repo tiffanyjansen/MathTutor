@@ -9,11 +9,11 @@ CREATE TABLE [dbo].[Classes]
 (
 	[ClassID] INT IDENTITY(1,1) NOT NULL,
 	[CRN] INT,
-	[DeptPrefix] NVARCHAR(10) NOT NULL,
+	[DeptPrefix] NVARCHAR(10),
 	[ClassNum] INT,
 	[Instructor] NVARCHAR(MAX),
 	[Days] NVARCHAR(10),
-	[StartTime] INT,
+	[StartTime] NVARCHAR(25),
 	[Other] NVARCHAR(MAX),
 
 	CONSTRAINT [PK_dbo.Classes] PRIMARY KEY (ClassID)
@@ -56,9 +56,10 @@ SET IDENTITY_INSERT [dbo].[Classes] OFF;
 
 /* Seed Data For Testing */
 INSERT INTO Classes(CRN, DeptPrefix, ClassNum, Instructor, Days, StartTime) VALUES
-(123, 'MTH', 70, 'Rosales, Kendal', 'MWF', 1200),
-(124, 'PSY', 95, 'Weibe, Ron', 'TR', 1400),
-(125, 'MTH', 111, 'Nerz, Andrew', 'MTWF', 0800)
+(123, 'MTH', 70, 'Rosales, Kendal', 'MWF', '1200'),
+(126, 'MTH', 70, 'Rosales, Kendal', 'MWF', '1300'),
+(124, 'PSY', 95, 'Weibe, Ron', 'TR', '1400'),
+(125, 'MTH', 111, 'Nerz, Andrew', 'MTWF', '0800')
 
 INSERT INTO Students(VNum, FirstName, LastName, Class) VALUES
 ('00778899', 'Eryn', 'Murphy', 1),

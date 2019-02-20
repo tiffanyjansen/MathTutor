@@ -1,0 +1,20 @@
+﻿@model MathCenter.Models.Student
+@{
+    ViewBag.Title = "Done";
+}
+
+<div class="container">
+    <h2>Is this you?</h2>
+    <h3>
+        @Html.DisplayFor(m => m.FirstName)
+        @Html.DisplayFor(m => m.LastName)
+    </h3>
+    <form method="post">
+        <h3>
+            <input type="hidden" name="Week" value=@ViewBag.Week />
+            <input type="hidden" name="VNum" value=@ViewBag.VNum />
+            <button type="submit" name="approved" value="1">Yes</button>
+            <button type="submit" name="approved" value="0">No</button>
+        </h3>
+    </form>
+</div>

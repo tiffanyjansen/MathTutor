@@ -9,12 +9,12 @@
     <h3>If your class prefix is not in the list, please select Other</h3>
     <form method="post">
         <h3>
-            <select>
+            <select name="dept">
                 @foreach (var item in Model)
                 {
-                    <option name="dept" value="@Html.DisplayFor(modelItem => item.DeptPrefix)">@Html.DisplayFor(modelItem => item.DeptPrefix)</option>
+                    <option value=@Html.DisplayFor(modelItem => item.DeptPrefix)>@Html.DisplayFor(modelItem => item.DeptPrefix)</option>
                 }
-                <option name="dept" value="other">Other</option>
+                <option value="other">Other</option>
             </select>
             <input type="hidden" name="NumWeek" value=@ViewBag.NumWeek />
             <input type="hidden" name="Id" value=@ViewBag.Id />
