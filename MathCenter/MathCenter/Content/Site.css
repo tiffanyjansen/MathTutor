@@ -48,3 +48,18 @@ input {
     padding-bottom: 25px;
     border-color: #92140C;
 }
+
+.table {
+    background-color: #F0F8EA;
+}
+
+th {
+    padding: 5px;
+    border: 1px solid #92140C;
+}
+
+td {
+    padding: 5px;
+    border: 1px solid #92140C;
+}
+
