@@ -26,7 +26,17 @@ namespace MathCenter.Controllers
         [HttpPost]
         public ActionResult Index(int? download)
         {
-            Excel();
+            Debug.WriteLine("Download = " + download);
+            //if you press the download button, the excel sheet will be created.
+            if (download == 1)
+            {
+                Excel();
+            }
+            //If you press the reset button, it will redirect you to another page.
+            if(download == 2)
+            {
+                return RedirectToAction("Reset");
+            }
             return View();
         }        
 
@@ -155,6 +165,66 @@ namespace MathCenter.Controllers
 
             //Return the View with only the classes you actually want.
             return View(Classes);
+        }
+
+        /*
+         * This method takes you to a page to reset the data. 
+         * (That way the button doesn't feel so scary)
+         */
+         [HttpGet]
+         public ActionResult Reset()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Reset(int? reset)
+        {
+            if(reset == 1)
+            {
+                Excel();
+                ClearDB();
+                return RedirectToAction("Complete");
+            }
+            else if(reset == 2)
+            {
+                ClearDB();
+                return RedirectToAction("Complete");
+            }
+            else if(reset == 3)
+            {
+                return RedirectToAction("Index");
+            }
+            return View();
+        }
+
+        private void ClearDB()
+        {
+            //Delete all the SignIns from the DB.
+            foreach (var SignIn in db.SignIns.ToList())
+            {
+                db.SignIns.Remove(SignIn);
+            }
+            //Delete all the Students from the DB.
+            foreach (var Student in db.Students.ToList())
+            {
+                db.Students.Remove(Student);
+            }
+            //Delete all the Classes from the DB.
+            foreach (var Class in db.Classes.ToList())
+            {
+                db.Classes.Remove(Class);
+            }
+            //Save changes to Database.
+            db.SaveChanges();            
+        }
+
+        /*
+         * This page let's you know that the database was wiped.
+         */ 
+         [HttpGet]
+         public ActionResult Complete()
+        {
+            return View();
         }
     }
 }
