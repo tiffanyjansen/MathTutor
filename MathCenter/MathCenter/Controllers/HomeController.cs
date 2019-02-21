@@ -29,10 +29,8 @@ namespace MathCenter.Controllers
         {
             //Get the passwords from the outside file so the passwords are not hard-coded.
             //Hard code passwords since the outside file was being dumb.
-            string tutorPass = "Math42";
-                //System.Configuration.ConfigurationManager.AppSettings["TutorPass"];
-            string facultyPass = "Math42";
-                //System.Configuration.ConfigurationManager.AppSettings["FacultyPass"];
+            string tutorPass = "Math42"; //System.Web.Configuration.WebConfigurationManager.AppSettings["TutorPass"];
+            string facultyPass = "Math42"; //System.Web.Configuration.WebConfigurationManager.AppSettings["FacultyPass"];
 
             //Check which button was pressed.
             if (button == "tutor")
