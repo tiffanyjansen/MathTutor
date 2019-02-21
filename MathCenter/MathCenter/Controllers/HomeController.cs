@@ -137,8 +137,16 @@ namespace MathCenter.Controllers
                 db.Students.Add(student);
             }
 
-            //Save the changes to the database.            
-            db.SaveChanges();
+            try
+            {
+                //Save the changes to the database.            
+                db.SaveChanges();
+            }
+            catch (Exception)
+            {
+                ViewBag.Error = "There was an error with the database. Please try again.";
+                return View(pWeek.VNum, pWeek.Week);
+            }
             
             //Redirect to the select department method and slowly select the class.
             return RedirectToAction("ClassDept", new { NumWeek = pWeek.Week, pWeek.VNum });
