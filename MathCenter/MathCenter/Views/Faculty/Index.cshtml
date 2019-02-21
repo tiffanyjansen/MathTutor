@@ -8,8 +8,11 @@
         <h2>Welcome!</h2>
     </div>
     <h3>Show the Data on a Page: @Html.ActionLink("Data", "Data", "Faculty")</h3>
+    <form method="post">
+        <h3>
+            <button name="download" value="1" type="submit">Download the Data</button>
+        </h3>
+    </form>
     <h3>Add Classes to the Database: @Html.ActionLink("Add Classes", "Add", "Faculty")</h3>
     <h3>Show all the Classes in the System: @Html.ActionLink("Classes", "Class", "Faculty")</h3>
 </div>
-
-

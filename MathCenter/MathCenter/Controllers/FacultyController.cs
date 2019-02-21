@@ -30,6 +30,12 @@ namespace MathCenter.Controllers
         {
             return View(db.SignIns.ToList());
         }
+        [HttpPost]
+        public ActionResult Data(int? download)
+        {
+
+            return View();
+        }
 
         /*
          * This method returns a page with a box where users can add classes to the database.
