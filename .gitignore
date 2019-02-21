@@ -3,6 +3,12 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# My files
+Web_Deploy.config
+.../Web_Deploy.config
+.../.../Web_Deploy.config
+.../.../.../Web_Deploy.config
+
 # User-specific files
 *.suo
 *.user
