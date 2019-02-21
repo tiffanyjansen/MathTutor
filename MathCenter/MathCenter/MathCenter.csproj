@@ -171,6 +171,7 @@
     <Content Include="Images\logo_final.jpg" />
     <Content Include="Images\logo_horizontal.gif" />
     <Content Include="Images\logo_horizontal.jpg" />
+    <Content Include="Images\mathheart.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Properties\PublishProfiles\math-tutor - Web Deploy.pubxml" />

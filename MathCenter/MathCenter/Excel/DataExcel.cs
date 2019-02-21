@@ -22,23 +22,23 @@ namespace MathCenter.Excel
                 var sheet = excelPackage.Workbook.Worksheets.Add("Data");
                 sheet.Name = "Math Center Report";
                 //Sign In Info
-                sheet.Column(1).Width = 20; //Week
+                sheet.Column(1).Width = 11; //Week
                 sheet.Column(2).Width = 10; //Date
-                sheet.Column(3).Width = 10; //Hour
-                sheet.Column(4).Width = 20; //Min
-                sheet.Column(5).Width = 20; //Sec
+                sheet.Column(3).Width = 4; //Hour
+                sheet.Column(4).Width = 7; //Min
+                sheet.Column(5).Width = 7; //Sec
                 //Student Info
-                sheet.Column(6).Width = 20; //VNum
-                sheet.Column(7).Width = 30; //FirstName
-                sheet.Column(8).Width = 30; //LastName
+                sheet.Column(6).Width = 8; //VNum
+                sheet.Column(7).Width = 15; //FirstName
+                sheet.Column(8).Width = 15; //LastName
                 //Class Info
-                sheet.Column(9).Width = 20; //CRN
-                sheet.Column(10).Width = 20; //DeptPrefix
-                sheet.Column(11).Width = 20; //ClassNum
-                sheet.Column(12).Width = 50; //Instructor
-                sheet.Column(13).Width = 10; //Days
-                sheet.Column(14).Width = 20; //StartTime
-                sheet.Column(15).Width = 30; //Other
+                sheet.Column(9).Width = 7; //CRN
+                sheet.Column(10).Width = 12; //DeptPrefix
+                sheet.Column(11).Width = 12; //ClassNum
+                sheet.Column(12).Width = 25; //Instructor
+                sheet.Column(13).Width = 5; //Days
+                sheet.Column(14).Width = 10; //StartTime
+                sheet.Column(15).Width = 10; //Other
 
                 //heading of the table
                 #region Table Header
