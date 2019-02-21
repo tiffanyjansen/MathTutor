@@ -1,4 +1,6 @@
 ﻿using MathCenter.Models;
+using MathCenter.Models.ViewModels;
+using MathCenter.Excel;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -21,28 +23,63 @@ namespace MathCenter.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public ActionResult Index(int? download)
+        {
+            Excel();
+            return View();
+        }        
 
         /*
-         * This method returns a table with all of the data from the Database.
+         * This method will do the work of downloading the excel file with 'hopefully'
+         * all the data.
          */ 
+         public void Excel()
+        {
+            DataExcel excel = new DataExcel();
+            Response.ClearContent();
+            Response.BinaryWrite(excel.GenerateExcel(GetData()));
+            Response.AddHeader("content-disposition", "attachment; filename=MathCenterData.xlsx");
+            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            Response.Flush();
+            Response.End();
+        }
+        public List<Data> GetData()
+        {
+            //Create an empty list.
+            List<Data> datas = new List<Data>();
+
+            //Go through the list of sign ins and add all the data to the list.
+            foreach (var SignIn in db.SignIns.ToList())
+            {
+                Data data = new Data { Week = SignIn.Week, Date = SignIn.Date, Hour = SignIn.Hour, Min = SignIn.Min, Sec = SignIn.Sec, VNum = SignIn.Student.VNum, FirstName = SignIn.Student.FirstName, LastName = SignIn.Student.LastName, CRN = SignIn.Student.Class1.CRN, DeptPrefix = SignIn.Student.Class1.DeptPrefix, ClassNum = SignIn.Student.Class1.ClassNum, Days = SignIn.Student.Class1.Days, Instructor = SignIn.Student.Class1.Instructor, Other = SignIn.Student.Class1.Other, StartTime = SignIn.Student.Class1.StartTime };
+
+                datas.Add(data);
+            }
+
+            //Remove the Placeholder class.
+            var remClass = datas.Where(d => d.Other == "Placeholder").Select(d => d).FirstOrDefault();
+            datas.Remove(remClass);
+
+            //Return the list of the data.
+            return datas;
+        }
+
+        /*
+        * This method returns a table with all of the data from the Database.
+        */
         [HttpGet]
         public ActionResult Data()
         {
             return View(db.SignIns.ToList());
-        }
-        [HttpPost]
-        public ActionResult Data(int? download)
-        {
-
-            return View();
         }
 
         /*
          * This method returns a page with a box where users can add classes to the database.
          * It will allow users to add classes whenever they want to and will always have the 
          * placeholder class automatically get added to the db.
-         */ 
-         [HttpGet]
+         */
+        [HttpGet]
          public ActionResult Add()
         {
             return View();
