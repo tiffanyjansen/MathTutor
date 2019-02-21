@@ -45,32 +45,3 @@ CREATE TABLE [dbo].[SignIns]
 	CONSTRAINT [PK_dbo.SignIns] PRIMARY KEY CLUSTERED (ID ASC),
 	CONSTRAINT [FK_dbo.SignIns] FOREIGN KEY (StudentID) REFERENCES [dbo].[Students] (VNum)
 );
-
-/*
-/* Seed Placeholder Class */
-/* Make it so I can make a random class with ID = -1 */
-SET IDENTITY_INSERT [dbo].[Classes] ON; 
-
-INSERT INTO [dbo].[Classes] (ClassID, Other) VALUES
-(-1, 'Placeholder');
-
-/* Turn it back off so we can only do it once. */
-SET IDENTITY_INSERT [dbo].[Classes] OFF; 
-
-/* Seed Data For Testing */
-INSERT INTO Classes(CRN, DeptPrefix, ClassNum, Instructor, Days, StartTime) VALUES
-(123, 'MTH', 70, 'Rosales, Kendal', 'MWF', '1200'),
-(126, 'MTH', 70, 'Rosales, Kendal', 'MWF', '1300'),
-(124, 'PSY', 95, 'Weibe, Ron', 'TR', '1400'),
-(125, 'MTH', 111, 'Nerz, Andrew', 'MTWF', '0800')
-
-INSERT INTO Students(VNum, FirstName, LastName, Class) VALUES
-('00778899', 'Eryn', 'Murphy', 1),
-('00221144', 'Tiffany', 'Jansen', 2),
-('00559977', 'Nadine', 'Englund', 3)
-
-INSERT INTO SignIns(Week, Date, Hour, Min, Sec, StudentID) VALUES
-(2, '2019-02-05', 14, 30, 15, '00778899'),
-(3, '2019-02-12', 15, 25, 15, '00221144'),
-(3, '2019-02-13', 09, 35, 12, '00559977')
-*/
