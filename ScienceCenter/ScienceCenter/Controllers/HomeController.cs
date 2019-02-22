@@ -118,7 +118,12 @@ namespace ScienceCenter.Controllers
         public ActionResult NameInput(PersonWeek pWeek)
         {
             Debug.WriteLine("Made it to the post method");
-            
+
+            Debug.WriteLine("VNum = " + pWeek.VNum);
+            Debug.WriteLine("FirstName = " + pWeek.FirstName);
+            Debug.WriteLine("LastName = " + pWeek.LastName);
+            Debug.WriteLine("Week = " + pWeek.Week);
+
             //Create empty student to be used later.
             Student student = null;
 
@@ -134,16 +139,18 @@ namespace ScienceCenter.Controllers
             {
                 //Add the student to the database.
                 student = new Student { VNum = pWeek.VNum, FirstName = pWeek.FirstName, LastName = pWeek.LastName, Class = 1 };
-                db.Students.Add(student);
+                db.Students.Add(student);                
             }
 
             try
             {
                 //Save the changes to the database.            
                 db.SaveChanges();
+                Debug.WriteLine("Student was added to db");
             }
             catch (Exception)
             {
+                Debug.WriteLine("There was an error");
                 ViewBag.Error = "There was an error with the database. Please try again.";
                 return View(pWeek.VNum, pWeek.Week);
             }

@@ -29,7 +29,6 @@ namespace ScienceCenter.Models
         [Required]
         public string Instructor { get; set; }
 
-        [Required]
         [StringLength(10)]
         public string Days { get; set; }
 

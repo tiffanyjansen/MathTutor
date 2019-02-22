@@ -12,7 +12,7 @@ CREATE TABLE [dbo].[Classes]
 	[DeptPrefix] NVARCHAR(10) NOT NULL,
 	[ClassNum] NVARCHAR(4) NOT NULL,
 	[Instructor] NVARCHAR(MAX) NOT NULL,
-	[Days] NVARCHAR(10) NOT NULL,
+	[Days] NVARCHAR(10),
 	[StartTime] NVARCHAR(25) NOT NULL,
 
 	CONSTRAINT [PK_dbo.Classes] PRIMARY KEY (ClassID)
