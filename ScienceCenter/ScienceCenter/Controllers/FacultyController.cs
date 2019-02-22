@@ -125,15 +125,24 @@ namespace ScienceCenter.Controllers
                     var rowList = row.Split();
                     if (rowList.Length >= 8)
                     {
+                        int counter = 0;                        
                         //Go through the list created by above and make variables with the names.
-                        int CRN = Convert.ToInt32(rowList[0]);
-                        string DeptPrefix = rowList[1];
-                        string ClassNum = rowList[2];
-                        string StartTime = rowList[3];
-                        string Days = "";
-                        if (StartTime != "Online")
+                        int CRN = Convert.ToInt32(rowList[counter]);
+                        counter++;
+                        string DeptPrefix = rowList[counter];
+                        counter++;
+                        string ClassNum = rowList[counter];
+                        counter++;
+                        if(rowList[counter] == "")
                         {
-                            Days = rowList[4];
+                            counter++;
+                        }
+                        string StartTime = rowList[counter];
+                        counter++;
+                        string Days = "";
+                        if (StartTime != "ONLINE")
+                        {
+                            Days = rowList[counter];
                         }
                         string Instructor = rowList[rowList.Length - 3] + " " + rowList[rowList.Length - 2];
 

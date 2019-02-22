@@ -50,24 +50,26 @@ input {
     padding-left: 25px;
     padding-right: 25px;
     padding-bottom: 25px;
-    border-color: #23CE6B;
+    border-color: #0D0A0B;
 }
 
+table,
 .table {
-    background-color: #23CE6B;
+    background-color: #EFF7CF;
+    border: 1px solid #0D0A0B;
 }
 
 th {
     padding: 5px;
-    border: 1px solid #850915;
+    border: 1px solid #0D0A0B;
     text-align: center;
-    color: #EFF7CF;
+    color: #0D0A0B;
 }
 
 td {
     padding: 5px;
-    border: 1px solid #850915;
-    color: #EFF7CF;
+    border: 1px solid #0D0A0B;
+    color: #0D0A0B;
 }
 
 select {

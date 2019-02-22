@@ -117,13 +117,6 @@ namespace ScienceCenter.Controllers
         [HttpPost]
         public ActionResult NameInput(PersonWeek pWeek)
         {
-            Debug.WriteLine("Made it to the post method");
-
-            Debug.WriteLine("VNum = " + pWeek.VNum);
-            Debug.WriteLine("FirstName = " + pWeek.FirstName);
-            Debug.WriteLine("LastName = " + pWeek.LastName);
-            Debug.WriteLine("Week = " + pWeek.Week);
-
             //Create empty student to be used later.
             Student student = null;
 
@@ -138,7 +131,8 @@ namespace ScienceCenter.Controllers
             else
             {
                 //Add the student to the database.
-                student = new Student { VNum = pWeek.VNum, FirstName = pWeek.FirstName, LastName = pWeek.LastName, Class = 1 };
+                student = new Student { VNum = pWeek.VNum, FirstName = pWeek.FirstName, LastName = pWeek.LastName, Class = 
+                    db.Classes.Where(c => c.CRN == 0).Select(c => c.ClassID).First()};
                 db.Students.Add(student);                
             }
 
@@ -175,7 +169,7 @@ namespace ScienceCenter.Controllers
 
             //Remove the classes with "Other" not being null
             ClassDepts.Remove(ClassDepts
-                .Where(c => c.ClassID == 1)
+                .Where(c => c.CRN == 0)
                 .Select(c => c).First());
             
             //Keep these floating around so we can easily have the stuff working. 
@@ -206,12 +200,7 @@ namespace ScienceCenter.Controllers
                 .GroupBy(c => c.ClassNum)
                 .Select(c => c.FirstOrDefault())
                 .ToList();
-
-            //Remove the classes with "Other" not being null
-            ClassNums.Remove(ClassNums
-                .Where(c => c.ClassID == 1)
-                .Select(c => c).First());
-            
+                      
             //Keep these floating around so we can easily have the stuff working. 
             ViewBag.Id = VNum;
             ViewBag.WeekNum = WeekNum;
@@ -242,11 +231,6 @@ namespace ScienceCenter.Controllers
                 .GroupBy(c => c.Instructor)
                 .Select(c => c.FirstOrDefault())
                 .ToList();
-
-            //Remove the classes with "Other" not being null
-            Instructors.Remove(Instructors
-                .Where(c => c.ClassID == 1)
-                .Select(c => c).First());
 
             //Keep these floating around so we can easily have the stuff working. 
             ViewBag.Id = VNum;
@@ -279,11 +263,6 @@ namespace ScienceCenter.Controllers
                 .Where(n => n.Instructor == Prof)
                 .Select(p => p)
                 .ToList();
-
-            //Remove the classes with "Other" not being null
-            startTimes.Remove(startTimes
-                .Where(c => c.ClassID == 1)
-                .Select(c => c).First());
 
             //Keep Week Number and StudentID
             ViewBag.Id = VNum;
