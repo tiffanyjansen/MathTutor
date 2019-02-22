@@ -3,6 +3,8 @@ using ScienceCenter.Models;
 using ScienceCenter.Models.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -109,8 +111,23 @@ namespace ScienceCenter.Controllers
             if (placeholder == null)
             {
                 //Add the placeholder to the database.
-                db.Classes.Add(new Class { CRN = 0, DeptPrefix = "", ClassNum = "", Instructor = "", Days = "None", StartTime = "" });
-                db.SaveChanges();
+                db.Classes.Add(new Class { CRN = 0, DeptPrefix = "NaN", ClassNum = "NaN", Instructor = "", Days = "None", StartTime = "NaN" });
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (DbEntityValidationException dbEx)
+                {
+                    foreach (var validationErrors in dbEx.EntityValidationErrors)
+                    {
+                        foreach (var validationError in validationErrors.ValidationErrors)
+                        {
+                            Trace.TraceInformation("Property: {0} Error: {1}",
+                                                    validationError.PropertyName,
+                                                    validationError.ErrorMessage);
+                        }
+                    }
+                }
             }
 
             //Try all this stuff.

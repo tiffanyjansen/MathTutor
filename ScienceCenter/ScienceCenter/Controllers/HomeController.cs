@@ -2,6 +2,7 @@
 using ScienceCenter.Models.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -116,6 +117,8 @@ namespace ScienceCenter.Controllers
         [HttpPost]
         public ActionResult NameInput(PersonWeek pWeek)
         {
+            Debug.WriteLine("Made it to the post method");
+            
             //Create empty student to be used later.
             Student student = null;
 
@@ -146,7 +149,7 @@ namespace ScienceCenter.Controllers
             }
 
             //Redirect to the select department method and slowly select the class.
-            return RedirectToAction("ClassDept", new { NumWeek = pWeek.Week, pWeek.VNum });
+            return RedirectToAction("ClassDept", new { NumWeek = pWeek.Week, VNum = pWeek.VNum });
         }
 
         /*
