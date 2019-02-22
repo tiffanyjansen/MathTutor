@@ -4,7 +4,7 @@
 
 body {
     margin-top: 25px;
-    background-color: #EAB9E5;
+    background-color: #ADEEE3;
 }
 
 h1 {
@@ -48,13 +48,13 @@ select {
 }
 
 .container {
-    background-color: #9452A5;
+    background-color: #0FA3B1;
     border-radius: 10px;
     padding-top: 25px;
     padding-left: 25px;
     padding-right: 25px;
     padding-bottom: 25px;
-    border: 3px solid #72286F;
+    border: 3px solid #0A1128;
 }
 
 .table {
