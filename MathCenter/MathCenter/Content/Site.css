@@ -39,6 +39,7 @@ input {
     width: 25%;
     height: 35px;
     border-radius: 10px;
+    border-color: #948BBF;
 }
 
 .container {
@@ -65,4 +66,3 @@ td {
     padding: 5px;
     border: 1px solid #0D0630;
 }
-

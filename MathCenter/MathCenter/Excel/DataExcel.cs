@@ -28,7 +28,7 @@ namespace MathCenter.Excel
                 sheet.Column(4).Width = 7; //Min
                 sheet.Column(5).Width = 7; //Sec
                 //Student Info
-                sheet.Column(6).Width = 8; //VNum
+                sheet.Column(6).Width = 10; //VNum
                 sheet.Column(7).Width = 15; //FirstName
                 sheet.Column(8).Width = 15; //LastName
                 //Class Info

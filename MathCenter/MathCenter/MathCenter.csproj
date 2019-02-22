@@ -167,6 +167,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\logo.png" />
     <Content Include="Images\logo_final.gif" />
     <Content Include="Images\logo_final.jpg" />
     <Content Include="Images\logo_horizontal.gif" />
@@ -174,7 +175,7 @@
     <Content Include="Images\mathheart.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <None Include="Properties\PublishProfiles\math-tutor - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\math-tutor-wou - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />

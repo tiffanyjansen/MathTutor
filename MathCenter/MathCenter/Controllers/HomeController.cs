@@ -341,7 +341,7 @@ namespace MathCenter.Controllers
             currentStudent.Class = classID;
 
             //Create the SignIn to add it to the Database.
-            SignIn signIn = new SignIn { Week = WeekNum, Date = DateTime.Today.Date, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, Sec = DateTime.Now.TimeOfDay.Seconds, StudentID = VNum };
+            SignIn signIn = new SignIn { Week = WeekNum, Date = DateTime.Today, Hour = DateTime.Today.Hour, Min = DateTime.Now.TimeOfDay.Minutes, Sec = DateTime.Now.TimeOfDay.Seconds, StudentID = VNum };
             db.SignIns.Add(signIn);
 
             //Save the database changes.
@@ -382,8 +382,10 @@ namespace MathCenter.Controllers
             Student currentStudent = db.Students.Find(VNum);
             currentStudent.Class = sClass.ClassID;
 
+            
+
             //Create the Sign In to be added to the db.
-            db.SignIns.Add(new SignIn { Week = Week, Date = DateTime.Today.Date, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, Sec = DateTime.Now.TimeOfDay.Seconds, StudentID = VNum });
+            db.SignIns.Add(new SignIn { Week = Week, Date = DateTime.Today, Hour = DateTime.Today.Hour, Min = DateTime.Now.TimeOfDay.Minutes, Sec = DateTime.Now.TimeOfDay.Seconds, StudentID = VNum });
 
             //Save the Changes to the db.
             db.SaveChanges();
@@ -414,7 +416,7 @@ namespace MathCenter.Controllers
             if (approved == 1)
             {
                 //Create the Sign In and add it to the database.
-                SignIn signIn = new SignIn { Week = Week, Date = DateTime.Today.Date, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, Sec= DateTime.Now.TimeOfDay.Seconds, StudentID = VNum };
+                SignIn signIn = new SignIn { Week = Week, Date = DateTime.Today, Hour = DateTime.Today.Hour, Min = DateTime.Now.TimeOfDay.Minutes, Sec= DateTime.Now.TimeOfDay.Seconds, StudentID = VNum };
                 db.SignIns.Add(signIn);
                 db.SaveChanges();
 

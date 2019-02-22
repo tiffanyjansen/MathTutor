@@ -37,6 +37,11 @@ namespace MathCenter.Controllers
             {
                 return RedirectToAction("Reset");
             }
+            //If you press the Go Back Button, it will redirect you to another page.
+            if (download == 3)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }        
 
