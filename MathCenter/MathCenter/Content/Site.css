@@ -4,12 +4,12 @@
 
 body {
     margin-top: 25px;
-    background-color: #948BBF;
+    background-color: #F0F8EA;
 }
 
 h1 {
     font-family: "Trebuchet MS", Helvetica, sans-serif;
-    color: #0D0630;
+    color: #0A1128;
 }
 
 li,
@@ -18,20 +18,20 @@ h3,
 h4,
 p {
     font-family: "Trebuchet MS", Helvetica, sans-serif;
-    color: #20174F;
+    color: #454955;
 }
 
 button,
 .btn {
-    color: #948BBF;
-    background-color: #0D0630;
+    color: #FCFCFC;
+    background-color: #0A1128;
     border-radius: 5px;
 }
 
     button:hover,
     .btn:hover {
-        color: #0D0603;
-        background-color: #948BBF;
+        color: #0A1128;
+        background-color: #FCFCFC;
         border-radius: 5px;
     }
 
@@ -40,16 +40,21 @@ input {
     height: 35px;
     border-radius: 10px;
     border-color: #948BBF;
+    color: #0A1128;
+}
+
+select {
+    color: #0A1128;
 }
 
 .container {
-    background-color: #BBAEF9;
+    background-color: #2EC0F9;
     border-radius: 10px;
     padding-top: 25px;
     padding-left: 25px;
     padding-right: 25px;
     padding-bottom: 25px;
-    border-color: #0D0630;
+    border-color: #0A1128;
 }
 
 .table {
