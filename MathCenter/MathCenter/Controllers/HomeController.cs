@@ -426,7 +426,7 @@ namespace MathCenter.Controllers
             else
             {
                 //If it's not you redirect to Sign In page.
-                return RedirectToAction("NameInput", new { VNum, Week });
+                return RedirectToAction("SignIn", new { Week });
             }
         }
 
