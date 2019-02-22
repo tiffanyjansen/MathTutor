@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewBag.Title = "SignIn";
+}
+
+<div class="container">
+    <div class="center">
+        <h1 style="font-size:75px;">Welcome!</h1>
+        <h2>Please Sign In Here!</h2>
+        <form method="post">
+            <h3>
+                V <input type="text" placeholder="Your V# ..." name="VNum" />
+                <input type="hidden" name="week" value=@ViewBag.Num />
+                <button type="submit">Submit</button>
+            </h3>
+            <div style="color: red;"><h4>@ViewBag.Error</h4></div>
+        </form>
+    </div>
+</div>
+

@@ -1,0 +1,66 @@
+﻿@model IEnumerable<ScienceCenter.Models.Class>
+
+@{
+    ViewBag.Title = "Class";
+}
+
+<div class="container">
+    <div class="center">
+        <h1>Here is a Table with all of the Classes Found on the Site</h1>
+        <h3>Link to go back: @Html.ActionLink("Go Back to Home", "Index", "Faculty")</h3>
+    </div>
+</div>
+<br /><br />
+<table class="table container">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CRN)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DeptPrefix)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ClassNum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Instructor)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Days)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StartTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Other)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CRN)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeptPrefix)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClassNum)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Instructor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Days)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Other)
+            </td>
+        </tr>
+    }
+
+</table>

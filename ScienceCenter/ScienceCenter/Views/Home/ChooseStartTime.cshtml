@@ -1,0 +1,24 @@
+﻿@model IEnumerable<ScienceCenter.Models.Class>
+@{
+    ViewBag.Title = "ChooseStartTime";
+}
+
+<div class="container">
+    <h1>Please Select your Start Time:</h1>
+    <h3>If your start time is not in the list, please select Other</h3>
+    <div class="center">
+        <form method="post">
+            <h3>
+                <select name="classID">
+                    @foreach (var item in Model)
+                    {
+                        <option value="@Html.DisplayFor(modelItem => item.ClassID)">@Html.DisplayFor(modelItem => item.StartTime) @Html.DisplayFor(modelItem => item.Days)</option>
+                    }
+                </select>
+                <input type="hidden" name="WeekNum" value=@ViewBag.WeekNum />
+                <input type="hidden" name="Id" value=@ViewBag.Id />
+                <button type="submit">Submit</button>
+            </h3>
+        </form>
+    </div>
+</div>

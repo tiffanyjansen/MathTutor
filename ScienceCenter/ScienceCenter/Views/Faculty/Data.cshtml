@@ -1,0 +1,100 @@
+﻿@model IEnumerable<ScienceCenter.Models.SignIn>
+
+@{
+    ViewBag.Title = "Data";
+}
+
+<div class="container">
+    <div class="center">
+        <h1>Here is all of the data from the Math Center Sign In</h1>
+        <h3>Link to go back: @Html.ActionLink("Go Back to Home", "Index", "Faculty")</h3>
+    </div>
+</div>
+<br /><br />
+<table class="table container">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Week)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Hour)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Min)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Sec)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Student.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Student.LastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Student.Class1.CRN)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Student.Class1.DeptPrefix)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Student.Class1.ClassNum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Student.Class1.Instructor)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Student.Class1.Days)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Student.Class1.StartTime)
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Week)
+            </td>
+            <td>
+                @item.Date.ToString("d")
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Hour)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Min)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sec)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Student.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Student.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Student.Class1.CRN)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Student.Class1.DeptPrefix)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Student.Class1.ClassNum)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Student.Class1.Instructor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Student.Class1.Days)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Student.Class1.StartTime)
+            </td>
+        </tr>
+    }
+</table>
