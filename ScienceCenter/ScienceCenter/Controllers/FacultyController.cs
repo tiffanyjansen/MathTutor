@@ -45,12 +45,12 @@ namespace ScienceCenter.Controllers
             //If you press the download by professor button, the excel sheet for it will be created.
             if(download == 4)
             {
-                ProfExcel();
+                //ProfExcel();
             }
             //If you press the download by class button, the excel sheet for it will be created.
             if(download == 5)
             {
-                ClassExcel();
+                //ClassExcel();
             }
             return View();
         }
