@@ -30,7 +30,7 @@ namespace ScienceCenter.Controllers
             //if you press the download button, the excel sheet will be created.
             if (download == 1)
             {
-                Excel();
+                EntireExcel();
             }
             //If you press the reset button, it will redirect you to another page.
             if (download == 2)
@@ -42,6 +42,16 @@ namespace ScienceCenter.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+            //If you press the download by professor button, the excel sheet for it will be created.
+            if(download == 4)
+            {
+                ProfExcel();
+            }
+            //If you press the download by class button, the excel sheet for it will be created.
+            if(download == 5)
+            {
+                ClassExcel();
+            }
             return View();
         }
 
@@ -49,12 +59,12 @@ namespace ScienceCenter.Controllers
          * This method will do the work of downloading the excel file with 'hopefully'
          * all the data.
          */
-        public void Excel()
+        public void EntireExcel()
         {
             DataExcel excel = new DataExcel();
             Response.ClearContent();
             Response.BinaryWrite(excel.GenerateExcel(GetData()));
-            Response.AddHeader("content-disposition", "attachment; filename=MathCenterData.xlsx");
+            Response.AddHeader("content-disposition", "attachment; filename=ScienceCenterData.xlsx");
             Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             Response.Flush();
             Response.End();
@@ -195,7 +205,7 @@ namespace ScienceCenter.Controllers
         {
             if (reset == 1)
             {
-                Excel();
+                EntireExcel();
                 ClearDB();
                 return RedirectToAction("Complete");
             }

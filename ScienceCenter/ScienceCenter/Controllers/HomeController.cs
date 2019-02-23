@@ -317,10 +317,15 @@ namespace ScienceCenter.Controllers
                 //Redirect to the "finish" page.
                 return RedirectToAction("Finish", new { Week });
             }
-            else
+            else if(approved == -1)
             {
                 //If it's not you redirect to Sign In page.
                 return RedirectToAction("SignIn", new { Week });
+            }
+            else
+            {
+                //If the name is wrong, redirect to name input.
+                return RedirectToAction("NameInput", new { VNum, Week });
             }
         }
 

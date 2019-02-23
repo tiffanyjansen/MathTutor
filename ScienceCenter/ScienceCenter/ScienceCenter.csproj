@@ -140,7 +140,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\FacultyController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Excel\ClassLevelExcel.cs" />
     <Compile Include="Excel\DataExcel.cs" />
+    <Compile Include="Excel\ProfessorExcel.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
