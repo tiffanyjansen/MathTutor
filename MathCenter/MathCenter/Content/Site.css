@@ -4,12 +4,12 @@
 
 body {
     margin-top: 25px;
-    background-color: #C0C0C0;
+    background-color: white;
 }
 
 h1 {
     font-family: "Trebuchet MS", Helvetica, sans-serif;
-    color: #0A1128;
+    color: black;
 }
 
 li,
@@ -18,20 +18,20 @@ h3,
 h4,
 p {
     font-family: "Trebuchet MS", Helvetica, sans-serif;
-    color: #FCFCFC;
+    color: white;
 }
 
 button,
 .btn {
-    color: #FCFCFC;
-    background-color: #0A1128;
+    color: white;
+    background-color: black;
     border-radius: 5px;
 }
 
     button:hover,
     .btn:hover {
-        color: #0A1128;
-        background-color: #FCFCFC;
+        color: black;
+        background-color: white;
         border-radius: 5px;
     }
 
@@ -39,35 +39,37 @@ input {
     width: 25%;
     height: 35px;
     border-radius: 10px;
-    border-color: #948BBF;
-    color: #0A1128;
+    border-color: #CFE6FB;
+    color: black;
 }
 
 select {
-    color: #0A1128;
+    color: black;
 }
 
 .container {
-    background-color: #589AE0;
+    background-color: #348CDA;
     border-radius: 10px;
     padding-top: 25px;
     padding-left: 25px;
     padding-right: 25px;
     padding-bottom: 25px;
-    border: 3px solid #0A1128;
+    border: 3px solid black;
 }
 
 .table {
-    background-color: #BBAEF9;
+    background-color: #CFE6FB;
 }
 
 th {
     padding: 5px;
-    border: 1px solid #0D0630;
+    border: 1px solid black;
     text-align: center;
+    color: black;
 }
 
 td {
     padding: 5px;
-    border: 1px solid #0D0630;
+    border: 1px solid black;
+    color: black;
 }
