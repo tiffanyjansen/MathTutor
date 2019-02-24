@@ -4,7 +4,7 @@
 
 body {
     margin-top: 25px;
-    background-color: black;
+    background-color: #FFFCF9;
 }
 
 h1 {
@@ -23,15 +23,15 @@ p {
 
 button,
 .btn {
-    color: #F1EFD8;
-    background-color: #4B8E97;
+    color: #FFFCF9;
+    background-color: #B80C09;
     border-radius: 5px;
 }
 
     button:hover,
     .btn:hover {
-        color: #4B8E97;
-        background-color: #F1EFD8;
+        color: #B80C09;
+        background-color: #FFFCF9;
         border-radius: 5px;
     }
 
@@ -53,7 +53,7 @@ select {
 }
 
 .container {
-    background-color: #AECDCF;
+    background-color: #B1EDE8;
 }
 
 .table {
