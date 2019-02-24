@@ -1,24 +1,77 @@
-﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+﻿.center {
+    text-align: center;
 }
 
-/* Set padding to keep content from hitting the edges */
-.body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+body {
+    margin-top: 25px;
+    background-color: #EFF7CF;
 }
 
-/* Override the default bootstrap behavior where horizontal description lists 
-   will truncate terms that are too long to fit in the left column 
-*/
-.dl-horizontal dt {
-    white-space: normal;
+h1 {
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    color: #0D0A0B;
 }
 
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 280px;
+li,
+h2,
+h3,
+h4,
+p {
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    color: #EFF7CF;
+}
+
+button,
+.btn {
+    color: #EFF7CF;
+    background-color: #850915;
+    border-radius: 5px;
+}
+
+    button:hover,
+    .btn:hover {
+        color: #850915;
+        background-color: #EFF7CF;
+        border-radius: 5px;
+    }
+
+input {
+    width: 35%;
+    height: 35px;
+    border-radius: 10px;
+    border-color: #850915;
+    color: #0D0A0B;
+}
+
+.container {
+    background-color: #902B33;
+    border-radius: 10px;
+    padding-top: 25px;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 25px;
+    border-color: #0D0A0B;
+}
+
+table,
+.table {
+    background-color: #EFF7CF;
+    border: 1px solid #0D0A0B;
+}
+
+th {
+    padding: 5px;
+    border: 1px solid #0D0A0B;
+    text-align: center;
+    color: #0D0A0B;
+}
+
+td {
+    padding: 5px;
+    border: 1px solid #0D0A0B;
+    color: #0D0A0B;
+}
+
+select {
+    color: #0D0A0B;
 }

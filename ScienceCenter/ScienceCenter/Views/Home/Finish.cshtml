@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewBag.Title = "Finish";
+}
+
+<div class="container">
+    <div class="center">
+        <h2>Congratulations! You've Signed In!</h2>
+        <h3>"There is a difference between not knowing and not knowing yet." -Shelia Tobias</h3>
+        <h2>Good luck with your science endeavors!</h2>
+        <h3>
+            <button type="submit">
+                @Html.ActionLink("Done", "SignIn", "Home", new { Week = ViewBag.Week }, null)
+            </button>
+        </h3>
+    </div>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript" src="~/Scripts/reloadPage.js"></script>
+}
+
