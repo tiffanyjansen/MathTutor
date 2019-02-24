@@ -27,10 +27,9 @@ namespace MathCenter.Controllers
         [HttpPost]
         public ActionResult Index(string button, string tutorPwd, string facultyPwd, int? Week)
         {
-            //Get the passwords from the outside file so the passwords are not hard-coded.
             //Hard code passwords since the outside file was being dumb.
-            string tutorPass = "Math42"; //System.Web.Configuration.WebConfigurationManager.AppSettings["TutorPass"];
-            string facultyPass = "Math42"; //System.Web.Configuration.WebConfigurationManager.AppSettings["FacultyPass"];
+            string tutorPass = "Math42";
+            string facultyPass = "Math42"; 
 
             //Check which button was pressed.
             if (button == "tutor")
@@ -341,7 +340,7 @@ namespace MathCenter.Controllers
             currentStudent.Class = classID;
 
             //Create the SignIn to add it to the Database.
-            SignIn signIn = new SignIn { Week = WeekNum, Date = DateTime.Today, Hour = DateTime.Today.Hour, Min = DateTime.Now.TimeOfDay.Minutes, Sec = DateTime.Now.TimeOfDay.Seconds, StudentID = VNum };
+            SignIn signIn = new SignIn { Week = WeekNum, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, Sec = DateTime.Now.TimeOfDay.Seconds, StudentID = VNum };
             db.SignIns.Add(signIn);
 
             //Save the database changes.
@@ -385,7 +384,7 @@ namespace MathCenter.Controllers
             
 
             //Create the Sign In to be added to the db.
-            db.SignIns.Add(new SignIn { Week = Week, Date = DateTime.Today, Hour = DateTime.Today.Hour, Min = DateTime.Now.TimeOfDay.Minutes, Sec = DateTime.Now.TimeOfDay.Seconds, StudentID = VNum });
+            db.SignIns.Add(new SignIn { Week = Week, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, Sec = DateTime.Now.TimeOfDay.Seconds, StudentID = VNum });
 
             //Save the Changes to the db.
             db.SaveChanges();
@@ -416,7 +415,7 @@ namespace MathCenter.Controllers
             if (approved == 1)
             {
                 //Create the Sign In and add it to the database.
-                SignIn signIn = new SignIn { Week = Week, Date = DateTime.Today, Hour = DateTime.Today.Hour, Min = DateTime.Now.TimeOfDay.Minutes, Sec= DateTime.Now.TimeOfDay.Seconds, StudentID = VNum };
+                SignIn signIn = new SignIn { Week = Week, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, Sec= DateTime.Now.TimeOfDay.Seconds, StudentID = VNum };
                 db.SignIns.Add(signIn);
                 db.SaveChanges();
 
