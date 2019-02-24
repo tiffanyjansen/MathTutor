@@ -309,6 +309,42 @@ namespace ScienceCenter.Controllers
         }
 
         /*
+         * 
+         */
+         [HttpGet]
+         public ActionResult DailyCount()
+        {
+            //Create an empty list
+            List<CountDay> daily = new List<CountDay>();
+
+            //Get all the days in the tables.
+            List<SignIn> days = db.SignIns
+                .GroupBy(s => s.Date)
+                .Select(s => s.FirstOrDefault())
+                .ToList();
+
+            //ID Numbers
+            int i = 1;
+
+            //Go through all the days and count how many students there were.
+            foreach (SignIn day in days)
+            {
+                int dailyCount = db.SignIns
+                    .Where(s => s.Date == day.Date)
+                    .Count();
+
+                //Add it to the list.
+                daily.Add(new CountDay { Date = day.Date, NumStudents = dailyCount, ID = 1 });
+
+                //Increment the ID number
+                i++;
+            }
+
+            //Return the view.
+            return View(daily);
+        }
+
+        /*
          * This method takes you to a page to reset the data. 
          * (That way the button doesn't feel so scary)
          */
@@ -338,6 +374,9 @@ namespace ScienceCenter.Controllers
             return View();
         }
 
+        /*
+         * This is the reset db method.
+         */ 
         private void ClearDB()
         {
             //Delete all the SignIns from the DB.
