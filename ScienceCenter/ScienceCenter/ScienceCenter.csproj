@@ -150,7 +150,7 @@
     <Compile Include="Models\ScienceContext.cs" />
     <Compile Include="Models\SignIn.cs" />
     <Compile Include="Models\Student.cs" />
-    <Compile Include="Models\ViewModels\ClassData.cs" />
+    <Compile Include="Models\ViewModels\CountDay.cs" />
     <Compile Include="Models\ViewModels\Data.cs" />
     <Compile Include="Models\ViewModels\PersonWeek.cs" />
     <Compile Include="Models\ViewModels\ProfData.cs" />
@@ -215,6 +215,7 @@
     <Content Include="Views\Faculty\Complete.cshtml" />
     <Content Include="Views\Faculty\ProfData.cshtml" />
     <Content Include="Views\Faculty\ClassData.cshtml" />
+    <Content Include="Views\Faculty\DailyCount.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
