@@ -50,7 +50,7 @@ namespace ScienceCenter.Controllers
             //If you press the download by class button, the excel sheet for it will be created.
             if(download == 5)
             {
-                //ClassExcel();
+                ClassExcel();
             }
             return View();
         }
@@ -78,7 +78,21 @@ namespace ScienceCenter.Controllers
             ProfessorExcel excel = new ProfessorExcel();
             Response.ClearContent();
             Response.BinaryWrite(excel.GenerateExcel(GetProfData()));
-            Response.AddHeader("content-disposition", "attachment; filename=ScienceCenterData.xlsx");
+            Response.AddHeader("content-disposition", "attachment; filename=ScienceCenterDataByProf.xlsx");
+            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            Response.Flush();
+            Response.End();
+        }
+
+        /*
+         * This method creates and downloads the Sort by Class Level excel sheet.
+         */
+        private void ClassExcel()
+        {
+            ClassLevelExcel excel = new ClassLevelExcel();
+            Response.ClearContent();
+            Response.BinaryWrite(excel.GenerateExcel(GetClassData()));
+            Response.AddHeader("content-disposition", "attachment; filename=ScienceCenterDataByClass.xlsx");
             Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             Response.Flush();
             Response.End();
@@ -86,7 +100,7 @@ namespace ScienceCenter.Controllers
 
         /*
          * This method gets all of the data for the "Data Excel"
-         */ 
+         */
         private List<Data> GetData()
         {
             //Create an empty list.
@@ -109,13 +123,67 @@ namespace ScienceCenter.Controllers
         }
 
         /*
-         * This method gets all the ProfData for the "Prof" excel sheet
-         */ 
-         private List<ProfData> GetProfData()
+         * This method gets all the data in no particular order for the 2 extra excel sheets.
+         */
+        private List<ProfData> GetProfs()
         {
             //Create an empty list to be filled after the queries.
             List<ProfData> pData = new List<ProfData>();
 
+            //Going through all the students, get the number of times they came in and all the info from the classes needed.
+            foreach (var student in db.Students.ToList())
+            {
+                //Get the number of times the student came in.
+                int numTimes = db.SignIns
+                    .Where(s => s.StudentID == student.VNum)
+                    .Count();
+
+                //Check if there was an error ot not.
+                if (numTimes != 0)
+                {
+                    //Create the data to be added.
+                    ProfData data = new ProfData { FirstName = student.FirstName, LastName = student.LastName, CRN = student.Class1.CRN, DeptPrefix = student.Class1.DeptPrefix, Instructor = student.Class1.Instructor, Days = student.Class1.Days, ClassNum = student.Class1.ClassNum, StartTime = student.Class1.StartTime, TimesIn = numTimes };
+
+                    //Add the data to the list.
+                    pData.Add(data);
+                }               
+            }
+
+            //return the created list.
+            return pData;
+        }
+
+
+    /*
+     * This method gets all the ProfData for the "Prof" excel sheet
+     */
+        private List<ProfData> GetProfData()
+        {
+            //Create the list.
+            List<ProfData> pData = GetProfs();
+
+            //Sort the list by instructor
+            pData = pData.OrderBy(p => p.Instructor).ToList();
+
+            //return the ordered list.
+            return pData;
+        }
+
+        /*
+         * This method gets all the ClassData for the "Class Level" excel sheet
+         */
+        private List<ProfData> GetClassData()
+        {
+            //Create the list.
+            List<ProfData> pData = GetProfs();
+
+            //Sort the list by instructor
+            pData = pData
+                .OrderBy(p => p.DeptPrefix)
+                .OrderBy(p => p.ClassNum)
+                .ToList();
+
+            //return the ordered list.
             return pData;
         }
 
@@ -126,6 +194,26 @@ namespace ScienceCenter.Controllers
         public ActionResult Data()
         {
             return View(db.SignIns.ToList());
+        }
+
+        /*
+        * This method returns a table with all of the data sorted by professor from the 
+        * Database.
+        */
+        [HttpGet]
+        public ActionResult ProfData()
+        {
+            return View(GetProfData());
+        }
+
+        /*
+        * This method returns a table with all of the data sorted by class level from the 
+        * Database.
+        */
+        [HttpGet]
+        public ActionResult ClassData()
+        {
+            return View(GetClassData());
         }
 
         /*

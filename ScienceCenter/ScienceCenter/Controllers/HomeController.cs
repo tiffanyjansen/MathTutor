@@ -310,7 +310,7 @@ namespace ScienceCenter.Controllers
             if (approved == 1)
             {
                 //Create the Sign In and add it to the database.
-                SignIn signIn = new SignIn { Week = Week, Date = DateTime.Today, Hour = DateTime.Today.Hour, Min = DateTime.Now.TimeOfDay.Minutes, Sec = DateTime.Now.TimeOfDay.Seconds, StudentID = VNum };
+                SignIn signIn = new SignIn { Week = Week, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, Sec = DateTime.Now.TimeOfDay.Seconds, StudentID = VNum };
                 db.SignIns.Add(signIn);
                 db.SaveChanges();
 

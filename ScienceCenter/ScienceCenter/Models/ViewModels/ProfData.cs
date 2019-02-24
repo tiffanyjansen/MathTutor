@@ -9,22 +9,7 @@ namespace ScienceCenter.Models.ViewModels
 {
     public class ProfData
     {
-        [Display(Name = "Week")]
-        public int Week { get; set; }
-
-        [Column(TypeName = "date")]
-        [Display(Name = "Date")]
-        public DateTime Date { get; set; }
-
-        [Display(Name = "Hour")]
-        public int Hour { get; set; }
-
-        [Display(Name = "Minute")]
-        public int Min { get; set; }
-
-        [Display(Name = "Second")]
-        public int Sec { get; set; }
-
+        [Key]
         [Required]
         [Display(Name = "First Name")]
         public string FirstName { get; set; }

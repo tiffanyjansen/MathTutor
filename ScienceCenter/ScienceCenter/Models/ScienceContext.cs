@@ -30,5 +30,7 @@ namespace ScienceCenter.Models
                 .HasForeignKey(e => e.StudentID)
                 .WillCascadeOnDelete(false);
         }
+
+        public System.Data.Entity.DbSet<ScienceCenter.Models.ViewModels.ProfData> ProfDatas { get; set; }
     }
 }
