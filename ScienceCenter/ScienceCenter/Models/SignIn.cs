@@ -17,12 +17,15 @@ namespace ScienceCenter.Models
 
         public int Hour { get; set; }
 
+        [Display(Name ="Minute")]
         public int Min { get; set; }
 
+        [Display(Name = "Second")]
         public int Sec { get; set; }
 
         [Required]
         [StringLength(8)]
+        [Display(Name = "V-Number")]
         public string StudentID { get; set; }
 
         public virtual Student Student { get; set; }

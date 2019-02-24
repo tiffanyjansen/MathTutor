@@ -7,7 +7,7 @@ using System.Web;
 
 namespace ScienceCenter.Models.ViewModels
 {
-    public class Data
+    public class ProfData
     {
         [Display(Name = "Week")]
         public int Week { get; set; }
@@ -24,10 +24,6 @@ namespace ScienceCenter.Models.ViewModels
 
         [Display(Name = "Second")]
         public int Sec { get; set; }
-
-        [StringLength(8)]
-        [Display(Name = "V-Number")]
-        public string VNum { get; set; }
 
         [Required]
         [Display(Name = "First Name")]
@@ -57,5 +53,8 @@ namespace ScienceCenter.Models.ViewModels
         [StringLength(25)]
         [Display(Name = "Start Time")]
         public string StartTime { get; set; }
+
+        [Display(Name = "Times Came In")]
+        public int TimesIn { get; set; }
     }
 }

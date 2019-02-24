@@ -13,7 +13,7 @@ namespace ScienceCenter.Excel
         int rowIndex = 1;
         ExcelRange cell;
 
-        public byte[] GenerateExcel(List<Data> data)
+        public byte[] GenerateExcel(List<ProfData> data)
         {
             using (var excelPackage = new ExcelPackage())
             {

@@ -16,12 +16,15 @@ namespace ScienceCenter.Models
 
         [Key]
         [StringLength(8)]
+        [Display(Name = "V-Number")]
         public string VNum { get; set; }
 
         [Required]
+        [Display(Name = "First Name")]
         public string FirstName { get; set; }
 
         [Required]
+        [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
         public int Class { get; set; }

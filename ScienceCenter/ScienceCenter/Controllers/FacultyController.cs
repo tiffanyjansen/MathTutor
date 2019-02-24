@@ -45,7 +45,7 @@ namespace ScienceCenter.Controllers
             //If you press the download by professor button, the excel sheet for it will be created.
             if(download == 4)
             {
-                //ProfExcel();
+                ProfExcel();
             }
             //If you press the download by class button, the excel sheet for it will be created.
             if(download == 5)
@@ -59,7 +59,7 @@ namespace ScienceCenter.Controllers
          * This method will do the work of downloading the excel file with 'hopefully'
          * all the data.
          */
-        public void EntireExcel()
+        private void EntireExcel()
         {
             DataExcel excel = new DataExcel();
             Response.ClearContent();
@@ -69,7 +69,25 @@ namespace ScienceCenter.Controllers
             Response.Flush();
             Response.End();
         }
-        public List<Data> GetData()
+
+        /*
+         * This method creates and downloads the Sort by Professor excel sheet.
+         */ 
+         private void ProfExcel()
+        {
+            ProfessorExcel excel = new ProfessorExcel();
+            Response.ClearContent();
+            Response.BinaryWrite(excel.GenerateExcel(GetProfData()));
+            Response.AddHeader("content-disposition", "attachment; filename=ScienceCenterData.xlsx");
+            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            Response.Flush();
+            Response.End();
+        }
+
+        /*
+         * This method gets all of the data for the "Data Excel"
+         */ 
+        private List<Data> GetData()
         {
             //Create an empty list.
             List<Data> datas = new List<Data>();
@@ -88,6 +106,17 @@ namespace ScienceCenter.Controllers
 
             //Return the list of the data.
             return datas;
+        }
+
+        /*
+         * This method gets all the ProfData for the "Prof" excel sheet
+         */ 
+         private List<ProfData> GetProfData()
+        {
+            //Create an empty list to be filled after the queries.
+            List<ProfData> pData = new List<ProfData>();
+
+            return pData;
         }
 
         /*

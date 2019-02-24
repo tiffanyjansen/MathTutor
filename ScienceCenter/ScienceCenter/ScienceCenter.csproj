@@ -152,6 +152,7 @@
     <Compile Include="Models\Student.cs" />
     <Compile Include="Models\ViewModels\Data.cs" />
     <Compile Include="Models\ViewModels\PersonWeek.cs" />
+    <Compile Include="Models\ViewModels\ProfData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -20,10 +20,12 @@ namespace ScienceCenter.Models
 
         [Required]
         [StringLength(10)]
+        [Display(Name ="Class Prefix")]
         public string DeptPrefix { get; set; }
 
         [Required]
         [StringLength(4)]
+        [Display(Name = "Class Number")]
         public string ClassNum { get; set; }
 
         [Required]
@@ -34,6 +36,7 @@ namespace ScienceCenter.Models
 
         [Required]
         [StringLength(25)]
+        [Display(Name = "Start Time")]
         public string StartTime { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
