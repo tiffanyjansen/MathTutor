@@ -52,6 +52,11 @@ namespace ScienceCenter.Controllers
             {
                 ClassExcel();
             }
+            if(download >= 6)
+            {
+                int num = (int)download - 5;
+                return RedirectToAction("Extra", new { num });
+            }
             return View();
         }
 
@@ -309,10 +314,39 @@ namespace ScienceCenter.Controllers
         }
 
         /*
-         * 
+         * This is the method for the 5 extra questions that Hamid wanted for the 
+         * Science Center.
          */
          [HttpGet]
-         public ActionResult DailyCount()
+         public ActionResult Extra(int num)
+        {
+            ViewBag.Id = num;
+            if (num == 1)
+            {
+                return View(DailyCount());
+            }
+            else if(num == 2)
+            {
+                return View(WeeklyCount());
+            }
+            else if(num == 3)
+            {
+                return View(HourlyCount());
+            }
+            else if(num == 4)
+            {
+                return View(AverageByDay());
+            }
+            else
+            {
+                return View(AverageByWeek());
+            }
+        }
+
+        /*
+         * This answers the first "extra" question.
+         */ 
+         private List<CountDay> DailyCount()
         {
             //Create an empty list
             List<CountDay> daily = new List<CountDay>();
@@ -340,8 +374,133 @@ namespace ScienceCenter.Controllers
                 i++;
             }
 
-            //Return the view.
-            return View(daily);
+            return daily;
+        }
+
+        /*
+         * This answers the second "extra" question.
+         */
+        private List<CountDay> WeeklyCount()
+        {
+            //Create an empty list
+            List<CountDay> weekly = new List<CountDay>();
+
+            //Get all the days in the tables.
+            List<SignIn> weeks = db.SignIns
+                .GroupBy(s => s.Week)
+                .Select(s => s.FirstOrDefault())
+                .ToList();
+
+            //ID Numbers
+            int i = 1;
+
+            //Go through all the weeks and count how many students there were.
+            foreach (SignIn week in weeks)
+            {
+                int weeklyCount = db.SignIns
+                    .Where(s => s.Week == week.Week)
+                    .Count();
+
+                //Add it to the list.
+                weekly.Add(new CountDay { WeekNum = week.Week, NumStudents = weeklyCount, ID = i });
+
+                //Increment the ID number
+                i++;
+            }
+
+            return weekly;
+        }
+
+        /*
+         * This answers the third "extra" question.
+         */ 
+         private List<CountDay> HourlyCount()
+        {
+            //create an empty list.
+            List<CountDay> hourly = new List<CountDay>();
+
+            //Get the list of all the hours on the specific date.
+            List<SignIn> hours = db.SignIns
+                .GroupBy(s => new { s.Hour, s.Date })               
+                .Select(s => s.FirstOrDefault())
+                .ToList();
+
+            //Id Numbers
+            int i = 1;
+
+            //Go through each one and count the number of students.
+            foreach (SignIn hour in hours)
+            {
+                int hourlyCount = db.SignIns
+                    .Where(s => s.Date == hour.Date)
+                    .Where(s => s.Hour == hour.Hour)
+                    .Count();
+
+                //Add the stuff to the list.
+                hourly.Add(new CountDay { Date = hour.Date, Hour = hour.Hour, NumStudents = hourlyCount, ID = i });
+
+                //increment the id number
+                i++;
+            }       
+
+            //return the list.
+            return hourly;
+        }
+
+        /*
+         * This answers the fourth "extra" question.
+         */
+        private List<CountDay> AverageByDay()
+        {
+            //get the total number of students per day.
+            List<CountDay> daysCount = DailyCount();
+
+            //create an empty number to be used to get the total number of students.
+            int total = 0;
+            
+            //go through the list and add all the students.
+            foreach (var day in daysCount)
+            {
+                total = total + day.NumStudents;
+            }
+
+            //get the average.
+            int average = (total / daysCount.Count());
+
+            //create a list and add the one number to it.
+            List<CountDay> averageStudents = new List<CountDay>();
+            averageStudents.Add(new CountDay { AverageNum = average });
+
+            //return the list.
+            return averageStudents;
+        }
+
+        /*
+         * This answers the fifth "extra" question.
+         */
+        private List<CountDay> AverageByWeek()
+        {
+            //get the total number of students per day.
+            List<CountDay> weekCount = WeeklyCount();
+
+            //create an empty number to be used to get the total number of students.
+            int total = 0;
+
+            //go through the list and add all the students.
+            foreach (var week in weekCount)
+            {
+                total = total + week.NumStudents;
+            }
+
+            //get the average.
+            int average = (total / weekCount.Count());
+
+            //create a list and add the one number to it.
+            List<CountDay> averageStudents = new List<CountDay>();
+            averageStudents.Add(new CountDay { AverageNum = average });
+
+            //return the list.
+            return averageStudents;
         }
 
         /*

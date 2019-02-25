@@ -1,0 +1,112 @@
+﻿@model IEnumerable<ScienceCenter.Models.ViewModels.CountDay>
+
+@{
+    ViewBag.Title = "Extra";
+}
+
+<div class="container">
+    <div class="center">
+        <h1>Here is the number of students who came in per day</h1>
+        <h3>Link to go back: @Html.ActionLink("Go Back to Home", "Index", "Faculty")</h3>
+    </div>
+</div>
+<br /><br />
+<table class="table container">
+    <tr>
+        @if (ViewBag.Id == 1)
+        {
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumStudents)
+            </th>            
+        }
+        @if (ViewBag.Id == 2)
+        {
+            <th>
+                @Html.DisplayNameFor(model => model.WeekNum)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumStudents)
+            </th>            
+        }
+        @if (ViewBag.Id == 3)
+        {
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Hour)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumStudents)
+            </th>            
+        }
+        @if (ViewBag.Id == 4)
+        {                  
+            <th>
+                @Html.DisplayNameFor(model => model.AverageNum)
+            </th>            
+        }
+        @if (ViewBag.Id == 5)
+        {
+            <th>
+                @Html.DisplayNameFor(model => model.WeekNum)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumStudents)
+            </th>            
+        }
+    </tr>
+    @foreach (var item in Model)
+    {
+    <tr>
+        @if (ViewBag.Id == 1)
+        {
+            <td>
+                @Html.DisplayFor(model => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.NumStudents)
+            </td>
+        }
+        @if (ViewBag.Id == 2)
+        {
+            <td>
+                @Html.DisplayFor(model => item.WeekNum)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.NumStudents)
+            </td>
+        }
+        @if (ViewBag.Id == 3)
+        {
+            <td>
+                @Html.DisplayFor(model => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Hour)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.NumStudents)
+            </td>
+        }
+        @if (ViewBag.Id == 4)
+        {
+            <td>
+                @Html.DisplayFor(model => item.AverageNum)
+            </td>
+        }
+        @if (ViewBag.Id == 5)
+        {
+            <td>
+                @Html.DisplayFor(model => item.WeekNum)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.NumStudents)
+            </td>
+        }
+    </tr>
+    }
+</table>
