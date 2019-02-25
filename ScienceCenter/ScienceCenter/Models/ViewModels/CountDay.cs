@@ -16,6 +16,15 @@ namespace ScienceCenter.Models.ViewModels
 
         [Display(Name = "Date")]
         public DateTime Date { get; set; }
+
+        [Display(Name = "Week Number")]
+        public int WeekNum { get; set; }
+
+        [Display(Name = "Hour")]
+        public int Hour { get; set; }
+
+        [Display(Name = "Average Number of Students")]
+        public int AverageNum { get; set; }
         
     }
 }
