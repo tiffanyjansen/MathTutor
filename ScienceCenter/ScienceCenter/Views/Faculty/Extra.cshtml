@@ -46,7 +46,7 @@
         @if (ViewBag.Id == 4)
         {                  
             <th>
-                @Html.DisplayNameFor(model => model.AverageNum)
+                Average Number of Students Per Day
             </th>            
         }
         @if (ViewBag.Id == 5)
@@ -65,7 +65,7 @@
         @if (ViewBag.Id == 1)
         {
             <td>
-                @Html.DisplayFor(model => item.Date)
+                @item.Date.ToString("d")
             </td>
             <td>
                 @Html.DisplayFor(model => item.NumStudents)
@@ -83,7 +83,7 @@
         @if (ViewBag.Id == 3)
         {
             <td>
-                @Html.DisplayFor(model => item.Date)
+                @item.Date.ToString("d")
             </td>
             <td>
                 @Html.DisplayFor(model => item.Hour)

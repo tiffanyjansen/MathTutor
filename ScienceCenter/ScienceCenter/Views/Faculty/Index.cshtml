@@ -17,11 +17,18 @@
             <h3>Sort By Professor: @Html.ActionLink("Professor Sort", "ProfData", "Faculty")</h3>
             <h3>Sort By Class Level: @Html.ActionLink("Class Sort", "ClassData", "Faculty")</h3>
             <h3>Add Classes to the Database: @Html.ActionLink("Add Classes", "Add", "Faculty")</h3>
-            <h3>Show all the Classes in the System: @Html.ActionLink("Classes", "Class", "Faculty")</h3>
+            <h3>Show all the Classes in the System: @Html.ActionLink("Classes", "Class", "Faculty")</h3>            
+            <h3>@Html.ActionLink("How many students came each day?", "Extra", "Faculty", new { num = 1 }, null)</h3>
+            <h3>@Html.ActionLink("How many students came in each week?", "Extra", "Faculty", new { num = 2 }, null)</h3>
+            <h3>@Html.ActionLink("What is the average number of students per week?", "Extra", "Faculty", new { num = 3 }, null)</h3>
+            <h3>@Html.ActionLink("What is the average number of students per day?", "Extra", "Faculty", new { num = 4 }, null)</h3>
+            <h3>@Html.ActionLink("How many students came in each hour of the day?", "Extra", "Faculty", new { num = 5 }, null)</h3>
         </div>
         <div class="col-md-6">
             <div class="center">
                 <img src="~/Images/science.jpg" style="height:175px;" />
+                <br /> <br /> <br />
+                <img src="~/Images/science-rocks.jpg" style="height:175px;" />
             </div>
         </div>
     </div>
@@ -35,58 +42,7 @@
                 </form>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="center">
-                <form method="post">
-                    <h3>
-                        <button name="download" value="6" type="submit">How many students came each day?</button>
-                    </h3>
-                </form>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="center">
-                <form method="post">
-                    <h3>
-                        <button name="download" value="7" type="submit">How many students came in each week?</button>
-                    </h3>
-                </form>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="center">
-                <form method="post">
-                    <h3>
-                        <button name="download" value="10" type="submit">What is the average number of students per week?</button>
-                    </h3>
-                </form>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="center">
-                <form method="post">
-                    <h3>
-                        <button name="download" value="9" type="submit">What is the average number of students per day?</button>
-                    </h3>
-                </form>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="center">
-                <form method="post">
-                    <h3>
-                        <button name="download" value="8" type="submit">How many students came in each hour of the day? </button>
-                    </h3>
-                </form>
-            </div>
-        </div>
-    </div>
+    </div>    
     <div class="row">
         <h3>
             This button is to be used at the end of the term to clear the database for the next one. Don't worry,
