@@ -172,6 +172,7 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Images\logo_horizontal.gif" />
+    <Content Include="Images\science-rocks.jpg" />
     <Content Include="Images\science.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -215,7 +216,7 @@
     <Content Include="Views\Faculty\Complete.cshtml" />
     <Content Include="Views\Faculty\ProfData.cshtml" />
     <Content Include="Views\Faculty\ClassData.cshtml" />
-    <Content Include="Views\Faculty\DailyCount.cshtml" />
+    <Content Include="Views\Faculty\Extra.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
