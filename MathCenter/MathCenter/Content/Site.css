@@ -12,13 +12,18 @@ h1 {
     color: #35373A;
 }
 
-li,
 h2,
 h3,
 h4,
 p {
     font-family: "Trebuchet MS", Helvetica, sans-serif;
     color: #35373A;
+}
+
+li {
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    color: #35373A;
+    font-size: 21px;
 }
 
 button,
@@ -56,8 +61,10 @@ select {
     background-color: #B1EDE8;
 }
 
-.table {
-    background-color: #AECDCF;
+table {
+    width: 75%;
+    background-color: #B1EDE8;
+    border: 1px solid #35373A;
 }
 
 th {
@@ -70,5 +77,6 @@ th {
 td {
     padding: 5px;
     border: 1px solid #35373A;
+    text-align: center;
     color: black;
 }

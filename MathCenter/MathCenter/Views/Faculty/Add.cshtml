@@ -5,11 +5,11 @@
 
 <div class="container">
     <div class="center">
-        <h1>Add Classes For the Current Term Here!</h1>
-        <h3>Link to go back: @Html.ActionLink("Go Back to Home", "Index", "Faculty")</h3>
+        <h1>Add classes for the current term here</h1>
+        <h2>Link to go back: @Html.ActionLink("Go back to home", "Index", "Faculty")</h2>
         <br />
-        <h3>The Order of the Data should be:</h3>
-        <p>CRN, Class Prefix, Class Number, Start Time, Days, Instructor</p>
+        <h2>The order of the data should be:</h2>
+        <h3>CRN, Class Prefix, Class Number, Start Time (Online), Days, Instructor</h3>
     </div>
     <h2>Instructions:</h2>
     <ol>
@@ -17,6 +17,7 @@
         <li>Copy and paste that data into Excel (Ctrl-A, Ctrl-C).</li>
         <li>Remove the unneccesary fields so that it matches the order and columns above.</li>
         <li>For classes that span multiple rows, make it so they are only on one row. (If it has M, W, and TF split up, put them all on the same line.)</li>
+        <li>If the class is online, please add "Online" to the Start Time column, you may leave the Days column empty.</li>
         <li>Copy and paste the data from Excel into the text box below.</li>
     </ol>
     <div class="center">

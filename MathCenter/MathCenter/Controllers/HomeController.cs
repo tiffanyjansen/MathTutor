@@ -281,11 +281,34 @@ namespace MathCenter.Controllers
         [HttpPost]
         public ActionResult ChooseProf(int WeekNum, string VNum, string Prof, int classN, string dept)
         {
-            //Check if the number selected was other.
-            if (Prof == "other")
+            //Check if the Professor selected was PCC.
+            if (Prof == "PCC")
             {
-                //Redirect to the Page to Type in the "other" info.
-                return RedirectToAction("Other", new { WeekNum, VNum });
+                //Add class to the Database with the correct "Instructor"
+                db.Classes.Add(new Class { ClassNum = classN, Instructor = "Portland Community College", DeptPrefix = dept });
+                db.SaveChanges();
+
+                //Get the class again
+                int classID = db.Classes
+                    .Where(m => m.Instructor == "Portland Community College")
+                    .Where(m => m.DeptPrefix == dept)
+                    .Where(m => m.ClassNum == classN)
+                    .Where(m => m.DeptPrefix == dept)
+                    .Select(c => c.ClassID).FirstOrDefault();
+
+                //Set the created class to the Student
+                Student currentStudent = db.Students.Find(VNum);
+                currentStudent.Class = classID;
+
+                //Create the sign in for the database.
+                SignIn signIn = new SignIn { Week = WeekNum, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, Sec = DateTime.Now.TimeOfDay.Seconds, StudentID = VNum };
+                db.SignIns.Add(signIn);
+
+                //Save Changes
+                db.SaveChanges();
+
+                //Redirect to the "finish" page.
+                return RedirectToAction("Finish", new { Week = WeekNum });
             }            
             else
             {
@@ -329,12 +352,6 @@ namespace MathCenter.Controllers
         [HttpPost]
         public ActionResult ChooseStartTime(int WeekNum, string VNum, int classID)
         {
-            Debug.WriteLine("classID = " + classID);
-            Debug.WriteLine("Id = " + VNum);
-            if (classID == -2)
-            {
-                return RedirectToAction("Other", new { WeekNum, VNum });
-            }            
             //Set the student's class to their actual class.
             Student currentStudent = db.Students.Find(VNum);
             currentStudent.Class = classID;
@@ -422,9 +439,13 @@ namespace MathCenter.Controllers
                 //Redirect to the "finish" page.
                 return RedirectToAction("Finish", new { Week });
             }
-            else
+            else if(approved == 0)
             {
                 //If it's not you redirect to Sign In page.
+                return RedirectToAction("NameInput", new { Week, VNum });
+            }
+            else
+            {
                 return RedirectToAction("SignIn", new { Week });
             }
         }

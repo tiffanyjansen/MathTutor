@@ -6,12 +6,12 @@
 
 <div class="container">
     <div class="center">
-        <h1>Here is all of the data from the Math Center Sign In</h1>
-        <h3>Link to go back: @Html.ActionLink("Go Back to Home", "Index", "Faculty")</h3>
+        <h1>Here is all of the data from the Math Center sign in</h1>
+        <h3>Link to go back: @Html.ActionLink("Go back to home", "Index", "Faculty")</h3>
     </div>
 </div>
 <br /><br />
-<table class="table container">
+<table align="center">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Week)
@@ -24,9 +24,6 @@
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Min)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Sec)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Student.VNum)
@@ -73,9 +70,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Min)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Sec)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Student.VNum)
