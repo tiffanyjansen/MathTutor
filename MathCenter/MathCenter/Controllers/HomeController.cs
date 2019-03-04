@@ -282,29 +282,17 @@ namespace MathCenter.Controllers
         public ActionResult ChooseProf(int WeekNum, string VNum, string Prof, int classN, string dept)
         {
             //Check if the Professor selected was PCC.
-            if (Prof == "PCC")
+            if (Prof == "PCC" || Prof == "ChCC" || Prof == "ClCC" || Prof == "MHCC" || Prof == "LBCC")
             {
-                //Add class to the Database with the correct "Instructor"
-                db.Classes.Add(new Class { ClassNum = classN, Instructor = "Portland Community College", DeptPrefix = dept });
-                db.SaveChanges();
+                int classID = CommunityCollegeSignIn(WeekNum, VNum, Prof, classN, dept);
 
-                //Get the class again
-                int classID = db.Classes
-                    .Where(m => m.Instructor == "Portland Community College")
-                    .Where(m => m.DeptPrefix == dept)
-                    .Where(m => m.ClassNum == classN)
-                    .Where(m => m.DeptPrefix == dept)
-                    .Select(c => c.ClassID).FirstOrDefault();
+                Student student = db.Students.Find(VNum);
+                student.Class = classID;
+                
+                //Create the Sign In to be added to the db.
+                db.SignIns.Add(new SignIn { Week = WeekNum, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, Sec = DateTime.Now.TimeOfDay.Seconds, StudentID = VNum });
 
-                //Set the created class to the Student
-                Student currentStudent = db.Students.Find(VNum);
-                currentStudent.Class = classID;
-
-                //Create the sign in for the database.
-                SignIn signIn = new SignIn { Week = WeekNum, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, Sec = DateTime.Now.TimeOfDay.Seconds, StudentID = VNum };
-                db.SignIns.Add(signIn);
-
-                //Save Changes
+                //Save the Changes to the db.
                 db.SaveChanges();
 
                 //Redirect to the "finish" page.
@@ -317,12 +305,66 @@ namespace MathCenter.Controllers
             }
         }
 
+        private int CommunityCollegeSignIn(int weekNum, string vNum, string prof, int classN, string dept)
+        {
+            //Find the "Professor" for the given Community College Selected.
+            string Instructor = "";
+            if (prof == "PCC")
+            {
+                Instructor = "Portland";
+            }
+            else if (prof == "ChCC")
+            {
+                Instructor = "Chemeketa";
+            }
+            else if(prof == "ClCC")
+            {
+                Instructor = "Clackamas";
+            }
+            else if(prof == "MHCC")
+            {
+                Instructor = "Mt. Hood";
+            }
+            else
+            {
+                Instructor = "Linn-Benton";
+            }
+
+            //Check if the class is already in the database.
+            int id = db.Classes
+                .Where(m => m.Instructor == Instructor)
+                .Where(m => m.DeptPrefix == dept)
+                .Where(m => m.ClassNum == classN)
+                .Select(i => i.ClassID).FirstOrDefault();
+
+            //If it's not add it and get the ID Number
+            if(id == 0)
+            {
+                //Create the class
+                Class @class = new Class { DeptPrefix = dept, ClassNum = classN, Instructor = Instructor };
+
+                //Add it to the database
+                db.Classes.Add(@class);
+                db.SaveChanges();
+
+                //Get the class again.
+                id = db.Classes
+                    .Where(c => c.Instructor == Instructor)
+                    .Where(m => m.DeptPrefix == dept)
+                    .Where(m => m.ClassNum == classN)
+                    .Select(c => c.ClassID).FirstOrDefault();
+            }
+
+            //Return the id Number.
+            return id;
+        }
+
         /*
          * This is the method where the student selects the startTime 
          * of their class. It will include 'online' for online classes and 
          * an other category, just in case.
-         */ 
-         [HttpGet]
+         */
+        [HttpGet]
          public ActionResult ChooseStartTime(int WeekNum, int VNum, int cNum, string Prof, string dept)
         {
             //Find all possible start times
@@ -396,9 +438,7 @@ namespace MathCenter.Controllers
 
             //Add the class to the current student.
             Student currentStudent = db.Students.Find(VNum);
-            currentStudent.Class = sClass.ClassID;
-
-            
+            currentStudent.Class = sClass.ClassID;            
 
             //Create the Sign In to be added to the db.
             db.SignIns.Add(new SignIn { Week = Week, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, Sec = DateTime.Now.TimeOfDay.Seconds, StudentID = VNum });
@@ -446,6 +486,7 @@ namespace MathCenter.Controllers
             }
             else
             {
+                //Redirect back to the page to input your V-Number
                 return RedirectToAction("SignIn", new { Week });
             }
         }
