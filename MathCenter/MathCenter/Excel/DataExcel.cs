@@ -22,22 +22,22 @@ namespace MathCenter.Excel
                 var sheet = excelPackage.Workbook.Worksheets.Add("Data");
                 sheet.Name = "Math Center Report";
                 //Sign In Info
-                sheet.Column(1).Width = 5; //Week
+                sheet.Column(1).Width = 7; //Week
                 sheet.Column(2).Width = 10; //Date
                 sheet.Column(3).Width = 5; //Hour
                 sheet.Column(4).Width = 7; //Min
                 //Student Info
-                sheet.Column(6).Width = 10; //VNum
-                sheet.Column(7).Width = 15; //FirstName
-                sheet.Column(8).Width = 15; //LastName
+                sheet.Column(5).Width = 12; //VNum
+                sheet.Column(6).Width = 15; //FirstName
+                sheet.Column(7).Width = 15; //LastName
                 //Class Info
-                sheet.Column(9).Width = 7; //CRN
-                sheet.Column(10).Width = 12; //DeptPrefix
-                sheet.Column(11).Width = 12; //ClassNum
-                sheet.Column(12).Width = 25; //Instructor
-                sheet.Column(13).Width = 5; //Days
-                sheet.Column(14).Width = 10; //StartTime
-                sheet.Column(15).Width = 10; //Other
+                sheet.Column(8).Width = 7; //CRN
+                sheet.Column(9).Width = 12; //DeptPrefix
+                sheet.Column(10).Width = 15; //ClassNum
+                sheet.Column(11).Width = 25; //Instructor
+                sheet.Column(12).Width = 5; //Days
+                sheet.Column(13).Width = 10; //StartTime
+                sheet.Column(14).Width = 10; //Other
 
                 //heading of the table
                 #region Table Header

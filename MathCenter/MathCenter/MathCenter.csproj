@@ -172,6 +172,7 @@
     <Content Include="Images\logo_horizontal.gif" />
     <Content Include="Images\logo_horizontal.jpg" />
     <Content Include="Images\mathheart.jpg" />
+    <Content Include="Images\WOULogo.PNG" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Properties\PublishProfiles\math-tutor-wou - Web Deploy.pubxml" />
