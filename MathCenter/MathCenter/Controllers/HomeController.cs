@@ -132,9 +132,14 @@ namespace MathCenter.Controllers
             else
             {
                 //Add the student to the database.
-                student = new Student { VNum = pWeek.VNum, FirstName = pWeek.FirstName, LastName = pWeek.LastName, Class = 1 };
+                student = new Student { VNum = pWeek.VNum, FirstName = pWeek.FirstName, LastName = pWeek.LastName, Class = db.Classes
+                    .Where(c => c.Other == "PlaceHolder")
+                    .Select(c => c.ClassID).First()};
                 db.Students.Add(student);
             }
+
+            string other = (db.Classes.Where(c => c.ClassID == 1).Select(c => c.Other).FirstOrDefault());
+            Debug.WriteLine("Placeholder Class: " + other);
 
             try
             {
@@ -144,7 +149,7 @@ namespace MathCenter.Controllers
             catch (Exception)
             {
                 ViewBag.Error = "There was an error with the database. Please try again.";
-                return View(pWeek.VNum, pWeek.Week);
+                return View(pWeek);
             }
             
             //Redirect to the select department method and slowly select the class.

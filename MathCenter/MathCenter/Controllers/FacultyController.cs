@@ -103,17 +103,7 @@ namespace MathCenter.Controllers
         public ActionResult Add(string data)
         {
             //Split the data by new line.
-            var dataList = data.Split(Environment.NewLine.ToCharArray());
-
-            //Check if the placeholder is in the database or not.
-            var placeholder = db.Classes.Where(c => c.Other == "Placeholder")
-                .Select(c => c).FirstOrDefault();
-            if (placeholder == null)
-            {
-                //Add the placeholder to the database.
-                db.Classes.Add(new Class { Other = "Placeholder" });
-                db.SaveChanges();
-            }
+            var dataList = data.Split(Environment.NewLine.ToCharArray());            
             
             //Try all this stuff.
             try
@@ -192,7 +182,7 @@ namespace MathCenter.Controllers
             }
             else if(reset == 2)
             {
-                ClearDB();
+                ClearDB();            
                 return RedirectToAction("Complete");
             }
             else if(reset == 3)
@@ -220,7 +210,11 @@ namespace MathCenter.Controllers
                 db.Classes.Remove(Class);
             }
             //Save changes to Database.
-            db.SaveChanges();            
+            db.SaveChanges();
+
+            //Add the placeholder to the database.
+            db.Classes.Add(new Class { Other = "Placeholder" });
+            db.SaveChanges();
         }
 
         /*
