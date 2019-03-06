@@ -5,11 +5,11 @@
 
 <div class="container">
     <div class="center">
-        <h1>Add Classes For the Current Term Here!</h1>
-        <h3>Link to go back: @Html.ActionLink("Go Back to Home", "Index", "Faculty")</h3>
+        <h1>Add classes for the current term here!</h1>
+        <h3>Link to go back: @Html.ActionLink("Go back to home", "Index", "Faculty")</h3>
         <br />
         <h3>The Order of the Data should be:</h3>
-        <p>CRN, Class Prefix, Class Number, Start Time, Days, Instructor</p>
+        <p>CRN, Class Prefix, Class Number, Start Time (Online), Days, Instructor</p>
     </div>
     <h2>Instructions:</h2>
     <ol>
@@ -17,12 +17,13 @@
         <li>Copy and paste that data into Excel (Ctrl-A, Ctrl-C).</li>
         <li>Remove the unneccesary fields so that it matches the order and columns above.</li>
         <li>For classes that span multiple rows, make it so they are only on one row. (If it has M, W, and TF split up, put them all on the same line.)</li>
+        <li>If the class is online, please add "Online" to the Start Time column, you may leave the Days column empty.</li>
         <li>Copy and paste the data from Excel into the text box below.</li>
     </ol>
     <div class="center">
         <form method="post">
             <h3>
-                <textarea rows="5" cols="75" name="data" style="color: #0D0A0B;" placeholder="Example: 12345 MTH 111 0500 MTWF Rosales, Kendal"></textarea>
+                <textarea rows="5" cols="75" name="data" style="color: #0D0A0B;" placeholder="Example: 12345 BI 101 0500 MTWF Dawson, Jim"></textarea>
             </h3>
             <h3>
                 <button type="submit">Submit</button>

@@ -4,12 +4,12 @@
 
 body {
     margin-top: 25px;
-    background-color: #EFF7CF;
+    background-color: #FFFFFF;
 }
 
 h1 {
     font-family: "Trebuchet MS", Helvetica, sans-serif;
-    color: #0D0A0B;
+    color: #272324;
 }
 
 li,
@@ -18,12 +18,12 @@ h3,
 h4,
 p {
     font-family: "Trebuchet MS", Helvetica, sans-serif;
-    color: #EFF7CF;
+    color: #272324;
 }
 
 button,
 .btn {
-    color: #EFF7CF;
+    color: #FFFFFF;
     background-color: #850915;
     border-radius: 5px;
 }
@@ -31,47 +31,54 @@ button,
     button:hover,
     .btn:hover {
         color: #850915;
-        background-color: #EFF7CF;
+        background-color: #FFFFFF;
         border-radius: 5px;
     }
 
 input {
-    width: 35%;
+    width: 30%;
     height: 35px;
     border-radius: 10px;
     border-color: #850915;
-    color: #0D0A0B;
+    border-width: 2px;
+    color: #272324;
+}
+
+select {
+    height: 35px;
+    border-radius: 10px;
+    border-color: #850915;
+    border-width: 2px;
+    color: #272324;
 }
 
 .container {
-    background-color: #902B33;
+    background-color: #E7E7E7;
     border-radius: 10px;
     padding-top: 25px;
     padding-left: 25px;
     padding-right: 25px;
     padding-bottom: 25px;
-    border-color: #0D0A0B;
+    border-color: #850915;
+    border-style: solid;
 }
 
-table,
-.table {
-    background-color: #EFF7CF;
-    border: 1px solid #0D0A0B;
+table {
+    width: 75%;
+    background-color: #C0C8D1;
+    border: 1px solid #850915;
 }
 
 th {
     padding: 5px;
-    border: 1px solid #0D0A0B;
+    border: 1px solid #850915;
     text-align: center;
-    color: #0D0A0B;
+    color: #272324;
 }
 
 td {
     padding: 5px;
-    border: 1px solid #0D0A0B;
-    color: #0D0A0B;
-}
-
-select {
-    color: #0D0A0B;
+    border: 1px solid #850915;
+    text-align: center;
+    color: #272324;
 }
