@@ -268,10 +268,31 @@ namespace MathCenter.Controllers
             //Remove the classes with "Other" not being null
             var remClasses = Instructors
                 .Where(c => c.Other != null)
-                .Select(c => c).ToList();
+                .Select(c => c).ToList();            
             foreach (var remClass in remClasses)
             {
                 Instructors.Remove(remClass);
+            }
+
+            //Remove the classes with Community Colleges as an Instructor
+            List<Class> ccClasses = Instructors
+                .Where(c => c.Instructor == "Portland")
+                .Select(c => c).ToList();
+            ccClasses.Add(
+                Instructors.Where(c => c.Instructor == "Chemeketa")
+                .Select(c => c).FirstOrDefault());
+            ccClasses.Add(
+                Instructors.Where(c => c.Instructor == "Clackamas")
+                .Select(c => c).FirstOrDefault());
+            ccClasses.Add(
+                Instructors.Where(c => c.Instructor == "Mt. Hood")
+                .Select(c => c).FirstOrDefault());
+            ccClasses.Add(
+                Instructors.Where(c => c.Instructor == "Linn-Benton")
+                .Select(c => c).FirstOrDefault());
+            foreach (var ccClass in ccClasses)
+            {
+                Instructors.Remove(ccClass);
             }
 
             //Keep these floating around so we can easily have the stuff working. 
