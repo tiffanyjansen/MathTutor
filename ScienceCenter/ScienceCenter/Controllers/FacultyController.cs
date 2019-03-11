@@ -235,17 +235,7 @@ namespace ScienceCenter.Controllers
         public ActionResult Add(string data)
         {
             //Split the data by new line.
-            var dataList = data.Split(Environment.NewLine.ToCharArray());
-
-            //Check if the placeholder is in the database or not.
-            var placeholder = db.Classes.Where(c => c.CRN == 0)
-                .Select(c => c).FirstOrDefault();
-            if (placeholder == null)
-            {
-                //Add the placeholder to the database.
-                db.Classes.Add(new Class { CRN = 0, DeptPrefix = "NaN", ClassNum = "NaN", Instructor = "NaN", Days = "None", StartTime = "NaN" });
-                db.SaveChanges();
-            }
+            var dataList = data.Split(Environment.NewLine.ToCharArray());            
 
             //Try all this stuff.
             try
@@ -553,6 +543,8 @@ namespace ScienceCenter.Controllers
             {
                 db.Classes.Remove(Class);
             }
+            //Add the placeholder to the database.
+            db.Classes.Add(new Class { CRN = 0, DeptPrefix = "NaN", ClassNum = "NaN", Instructor = "NaN", Days = "None", StartTime = "NaN" });
             //Save changes to Database.
             db.SaveChanges();
         }

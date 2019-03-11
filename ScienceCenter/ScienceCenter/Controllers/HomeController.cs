@@ -132,7 +132,7 @@ namespace ScienceCenter.Controllers
             {
                 //Add the student to the database.
                 student = new Student { VNum = pWeek.VNum, FirstName = pWeek.FirstName, LastName = pWeek.LastName, Class = 
-                    db.Classes.Where(c => c.CRN == 0).Select(c => c.ClassID).First()};
+                    db.Classes.Where(c => c.CRN == 0).Select(c => c.ClassID).FirstOrDefault()};
                 db.Students.Add(student);                
             }
 
@@ -146,7 +146,7 @@ namespace ScienceCenter.Controllers
             {
                 Debug.WriteLine("There was an error");
                 ViewBag.Error = "There was an error with the database. Please try again.";
-                return View(pWeek.VNum, pWeek.Week);
+                return View(pWeek);
             }
 
             //Redirect to the select department method and slowly select the class.
