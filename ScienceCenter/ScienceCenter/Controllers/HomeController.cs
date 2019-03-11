@@ -232,6 +232,27 @@ namespace ScienceCenter.Controllers
                 .Select(c => c.FirstOrDefault())
                 .ToList();
 
+            //Remove the classes with Community Colleges as an Instructor
+            List<Class> ccClasses = Instructors
+                .Where(c => c.Instructor == "Portland")
+                .Select(c => c).ToList();
+            ccClasses.Add(
+                Instructors.Where(c => c.Instructor == "Chemeketa")
+                .Select(c => c).FirstOrDefault());
+            ccClasses.Add(
+                Instructors.Where(c => c.Instructor == "Clackamas")
+                .Select(c => c).FirstOrDefault());
+            ccClasses.Add(
+                Instructors.Where(c => c.Instructor == "Mt. Hood")
+                .Select(c => c).FirstOrDefault());
+            ccClasses.Add(
+                Instructors.Where(c => c.Instructor == "Linn-Benton")
+                .Select(c => c).FirstOrDefault());
+            foreach (var ccClass in ccClasses)
+            {
+                Instructors.Remove(ccClass);
+            }
+
             //Keep these floating around so we can easily have the stuff working. 
             ViewBag.Id = VNum;
             ViewBag.WeekNum = NumWeek;
@@ -244,8 +265,82 @@ namespace ScienceCenter.Controllers
         [HttpPost]
         public ActionResult ChooseProf(int WeekNum, string VNum, string Prof, string classN, string dept)
         {
-            //Redirect to the Page to select the Professor
-            return RedirectToAction("ChooseStartTime", new { WeekNum, VNum, cNum = classN, Prof, dept });
+            //Check if the Professor selected was PCC.
+            if (Prof == "PCC" || Prof == "ChCC" || Prof == "ClCC" || Prof == "MHCC" || Prof == "LBCC")
+            {
+                int classID = CommunityCollegeSignIn(WeekNum, VNum, Prof, classN, dept);
+
+                Student student = db.Students.Find(VNum);
+                student.Class = classID;
+
+                //Create the Sign In to be added to the db.
+                db.SignIns.Add(new SignIn { Week = WeekNum, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, Sec = DateTime.Now.TimeOfDay.Seconds, StudentID = VNum });
+
+                //Save the Changes to the db.
+                db.SaveChanges();
+
+                //Redirect to the "finish" page.
+                return RedirectToAction("Finish", new { Week = WeekNum });
+            }
+            else
+            {
+                //Redirect to the Page to select the Professor
+                return RedirectToAction("ChooseStartTime", new { WeekNum, VNum, cNum = classN, Prof, dept });
+            }
+        }
+
+        private int CommunityCollegeSignIn(int weekNum, string vNum, string prof, string classN, string dept)
+        {
+            //Find the "Professor" for the given Community College Selected.
+            string Instructor = "";
+            if (prof == "PCC")
+            {
+                Instructor = "Portland";
+            }
+            else if (prof == "ChCC")
+            {
+                Instructor = "Chemeketa";
+            }
+            else if (prof == "ClCC")
+            {
+                Instructor = "Clackamas";
+            }
+            else if (prof == "MHCC")
+            {
+                Instructor = "Mt. Hood";
+            }
+            else
+            {
+                Instructor = "Linn-Benton";
+            }
+
+            //Check if the class is already in the database.
+            int id = db.Classes
+                .Where(m => m.Instructor == Instructor)
+                .Where(m => m.DeptPrefix == dept)
+                .Where(m => m.ClassNum == classN)
+                .Select(i => i.ClassID).FirstOrDefault();
+
+            //If it's not add it and get the ID Number
+            if (id == 0)
+            {
+                //Create the class
+                Class @class = new Class { DeptPrefix = dept, ClassNum = classN, Instructor = Instructor };
+
+                //Add it to the database
+                db.Classes.Add(@class);
+                db.SaveChanges();
+
+                //Get the class again.
+                id = db.Classes
+                    .Where(c => c.Instructor == Instructor)
+                    .Where(m => m.DeptPrefix == dept)
+                    .Where(m => m.ClassNum == classN)
+                    .Select(c => c.ClassID).FirstOrDefault();
+            }
+
+            //Return the id Number.
+            return id;
         }
 
         /*

@@ -34,7 +34,6 @@ namespace ScienceCenter.Models
         [StringLength(10)]
         public string Days { get; set; }
 
-        [Required]
         [StringLength(25)]
         [Display(Name = "Start Time")]
         public string StartTime { get; set; }

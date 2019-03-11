@@ -8,12 +8,12 @@
 CREATE TABLE [dbo].[Classes]
 (
 	[ClassID] INT IDENTITY(1,1) NOT NULL,
-	[CRN] INT NOT NULL,
+	[CRN] INT,
 	[DeptPrefix] NVARCHAR(10) NOT NULL,
 	[ClassNum] NVARCHAR(4) NOT NULL,
 	[Instructor] NVARCHAR(MAX) NOT NULL,
 	[Days] NVARCHAR(10),
-	[StartTime] NVARCHAR(25) NOT NULL,
+	[StartTime] NVARCHAR(25),
 
 	CONSTRAINT [PK_dbo.Classes] PRIMARY KEY (ClassID)
 );
