@@ -67,7 +67,7 @@ namespace MathCenter.Controllers
             //Go through the list of sign ins and add all the data to the list.
             foreach (var SignIn in db.SignIns.ToList())
             {
-                Data data = new Data { Week = SignIn.Week, Date = SignIn.Date, Hour = SignIn.Hour, Min = SignIn.Min, Sec = SignIn.Sec, VNum = SignIn.Student.VNum, FirstName = SignIn.Student.FirstName, LastName = SignIn.Student.LastName, CRN = SignIn.Student.Class1.CRN, DeptPrefix = SignIn.Student.Class1.DeptPrefix, ClassNum = SignIn.Student.Class1.ClassNum, Days = SignIn.Student.Class1.Days, Instructor = SignIn.Student.Class1.Instructor, Other = SignIn.Student.Class1.Other, StartTime = SignIn.Student.Class1.StartTime };
+                Data data = new Data { Week = SignIn.Week, Date = SignIn.Date, Hour = SignIn.Hour, Min = SignIn.Min, Sec = SignIn.Sec, VNum = SignIn.Student.VNum, FirstName = SignIn.Student.FirstName, LastName = SignIn.Student.LastName, CRN = SignIn.Student.Class1.CRN, DeptPrefix = SignIn.Student.Class1.DeptPrefix, ClassNum = SignIn.Student.Class1.ClassNum, Days = SignIn.Student.Class1.Days, Instructor = SignIn.Student.Class1.Instructor, Other = SignIn.Student.Class1.Other, StartTime = SignIn.Student.Class1.Time };
 
                 datas.Add(data);
             }
@@ -113,7 +113,7 @@ namespace MathCenter.Controllers
                 {
                     //Split each row by space or tab.
                     var rowList = row.Split();
-                    if (rowList.Length >= 7)
+                    if (rowList.Length >= 8)
                     {
                         //Go through the list created by above and make variables with the names.
                         int CRN = Convert.ToInt32(rowList[0]);
@@ -121,14 +121,14 @@ namespace MathCenter.Controllers
                         int ClassNum = Convert.ToInt32(rowList[3]);
                         string StartTime = rowList[4];
                         string Days = "";
-                        if(StartTime != "Online")
+                        if(StartTime != "online")
                         {
-                            Days = rowList[5];
+                            Days = rowList[6];
                         }                        
-                        string Instructor = rowList[rowList.Length - 1];
+                        string Instructor = rowList[rowList.Length - 2] + " " + rowList[rowList.Length - 1];
 
                         //Add the class to the database with the info above.
-                        db.Classes.Add(new Class { CRN = CRN, DeptPrefix = DeptPrefix, ClassNum = ClassNum, StartTime = StartTime, Days = Days, Instructor = Instructor });
+                        db.Classes.Add(new Class { CRN = CRN, DeptPrefix = DeptPrefix, ClassNum = ClassNum, Time = StartTime, Days = Days, Instructor = Instructor });
                     }
                 }
                 //After going through all the rows, save changes.

@@ -34,8 +34,8 @@ namespace MathCenter.Models
         public string Days { get; set; }
 
         [StringLength(25)]
-        [Display(Name = "Start Time")]
-        public string StartTime { get; set; }
+        [Display(Name = "Time")]
+        public string Time { get; set; }
 
         [Display(Name = "Other")]
         public string Other { get; set; }
