@@ -114,7 +114,7 @@ namespace ScienceCenter.Controllers
             //Go through the list of sign ins and add all the data to the list.
             foreach (var SignIn in db.SignIns.ToList())
             {
-                Data data = new Data { Week = SignIn.Week, Date = SignIn.Date, Hour = SignIn.Hour, Min = SignIn.Min, Sec = SignIn.Sec, VNum = SignIn.Student.VNum, FirstName = SignIn.Student.FirstName, LastName = SignIn.Student.LastName, CRN = SignIn.Student.Class1.CRN, DeptPrefix = SignIn.Student.Class1.DeptPrefix, ClassNum = SignIn.Student.Class1.ClassNum, Days = SignIn.Student.Class1.Days, Instructor = SignIn.Student.Class1.Instructor, StartTime = SignIn.Student.Class1.StartTime };
+                Data data = new Data { Week = SignIn.Week, Date = SignIn.Date, Hour = SignIn.Hour, Min = SignIn.Min, Sec = SignIn.Sec, VNum = SignIn.Student.VNum, FirstName = SignIn.Student.FirstName, LastName = SignIn.Student.LastName, CRN = SignIn.Student.Class1.CRN, DeptPrefix = SignIn.Student.Class1.DeptPrefix, ClassNum = SignIn.Student.Class1.ClassNum, Days = SignIn.Student.Class1.Days, Instructor = SignIn.Student.Class1.Instructor, StartTime = SignIn.Student.Class1.Time };
 
                 datas.Add(data);
             }
@@ -147,7 +147,7 @@ namespace ScienceCenter.Controllers
                 if (numTimes != 0)
                 {
                     //Create the data to be added.
-                    ProfData data = new ProfData { FirstName = student.FirstName, LastName = student.LastName, CRN = student.Class1.CRN, DeptPrefix = student.Class1.DeptPrefix, Instructor = student.Class1.Instructor, Days = student.Class1.Days, ClassNum = student.Class1.ClassNum, StartTime = student.Class1.StartTime, TimesIn = numTimes };
+                    ProfData data = new ProfData { FirstName = student.FirstName, LastName = student.LastName, CRN = student.Class1.CRN, DeptPrefix = student.Class1.DeptPrefix, Instructor = student.Class1.Instructor, Days = student.Class1.Days, ClassNum = student.Class1.ClassNum, StartTime = student.Class1.Time, TimesIn = numTimes };
 
                     //Add the data to the list.
                     pData.Add(data);
@@ -247,29 +247,31 @@ namespace ScienceCenter.Controllers
                     var rowList = row.Split();
                     if (rowList.Length >= 8)
                     {
-                        int counter = 0;                        
                         //Go through the list created by above and make variables with the names.
+                        int counter = 0;
                         int CRN = Convert.ToInt32(rowList[counter]);
                         counter++;
+                        if (rowList[counter] == "") { counter++; }
                         string DeptPrefix = rowList[counter];
                         counter++;
+                        if (rowList[counter] == "") { counter++; }
                         string ClassNum = rowList[counter];
                         counter++;
-                        if(rowList[counter] == "")
-                        {
-                            counter++;
-                        }
+                        if (rowList[counter] == "") { counter++; }
                         string StartTime = rowList[counter];
                         counter++;
+                        if (rowList[counter] == "") { counter++; }
                         string Days = "";
-                        if (StartTime != "ONLINE")
+                        if (StartTime != "Online")
                         {
                             Days = rowList[counter];
                         }
-                        string Instructor = rowList[rowList.Length - 3] + " " + rowList[rowList.Length - 2];
+                        counter++;
+                        if (rowList[counter] == "") { counter++; }
+                        string Instructor = rowList[counter] + " " + rowList[counter + 1];
 
                         //Add the class to the database with the info above.
-                        db.Classes.Add(new Class { CRN = CRN, DeptPrefix = DeptPrefix, ClassNum = ClassNum, StartTime = StartTime, Days = Days, Instructor = Instructor });
+                        db.Classes.Add(new Class { CRN = CRN, DeptPrefix = DeptPrefix, ClassNum = ClassNum, Time = StartTime, Days = Days, Instructor = Instructor });
                     }
                 }
                 //After going through all the rows, save changes.
@@ -544,7 +546,7 @@ namespace ScienceCenter.Controllers
                 db.Classes.Remove(Class);
             }
             //Add the placeholder to the database.
-            db.Classes.Add(new Class { CRN = 0, DeptPrefix = "NaN", ClassNum = "NaN", Instructor = "NaN", Days = "None", StartTime = "NaN" });
+            db.Classes.Add(new Class { CRN = 0, DeptPrefix = "NaN", ClassNum = "NaN", Instructor = "NaN", Days = "None", Time = "NaN" });
             //Save changes to Database.
             db.SaveChanges();
         }

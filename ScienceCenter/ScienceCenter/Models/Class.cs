@@ -35,8 +35,8 @@ namespace ScienceCenter.Models
         public string Days { get; set; }
 
         [StringLength(25)]
-        [Display(Name = "Start Time")]
-        public string StartTime { get; set; }
+        [Display(Name = "Time")]
+        public string Time { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Student> Students { get; set; }
