@@ -113,19 +113,19 @@ namespace MathCenter.Controllers
                 {
                     //Split each row by space or tab.
                     var rowList = row.Split();
-                    if (rowList.Length >= 8)
+                    if (rowList.Length >= 7)
                     {
                         //Go through the list created by above and make variables with the names.
                         int CRN = Convert.ToInt32(rowList[0]);
                         string DeptPrefix = rowList[1];
-                        int ClassNum = Convert.ToInt32(rowList[2]);
-                        string StartTime = rowList[3];
+                        int ClassNum = Convert.ToInt32(rowList[3]);
+                        string StartTime = rowList[4];
                         string Days = "";
                         if(StartTime != "Online")
                         {
-                            Days = rowList[4];
+                            Days = rowList[5];
                         }                        
-                        string Instructor = rowList[rowList.Length - 3] + " " + rowList[rowList.Length - 2];
+                        string Instructor = rowList[rowList.Length - 1];
 
                         //Add the class to the database with the info above.
                         db.Classes.Add(new Class { CRN = CRN, DeptPrefix = DeptPrefix, ClassNum = ClassNum, StartTime = StartTime, Days = Days, Instructor = Instructor });
