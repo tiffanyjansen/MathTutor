@@ -11,7 +11,7 @@
                 <select name="classID">
                     @foreach (var item in Model)
                     {
-                        <option value="@Html.DisplayFor(modelItem => item.ClassID)">@Html.DisplayFor(modelItem => item.StartTime) @Html.DisplayFor(modelItem => item.Days)</option>
+                        <option value="@Html.DisplayFor(modelItem => item.ClassID)">@Html.DisplayFor(modelItem => item.Time) @Html.DisplayFor(modelItem => item.Days)</option>
                     }
                 </select>
                 <input type="hidden" name="WeekNum" value=@ViewBag.WeekNum />
