@@ -1,0 +1,48 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="center">
+            <h4 style="color: darkblue;">@ViewBag.Error</h4>
+        </div>
+        <form method="post">
+            <div class="col-md-6">
+                <h1>Tutors:</h1>
+                <div class="center">
+                    <h2>
+                        Week Number:
+                        <select name="Week">
+                            <option value="-1" selected>-</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                        </select><br /><br />
+                        Password: <input type="password" name="tutorPwd" /><br /><br />
+                    </h2>
+                    <h3><button type="submit" name="button" value="tutor">Submit</button></h3>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="center">
+                    <h3>"The only way to learn mathematics is to do mathematics" ~Paul Halmos</h3>
+                </div>
+                <h1>Faculty: </h1>
+                <div class="center">
+                    <h2>
+                        Password: <input type="password" name="facultyPwd" /><br /><br />
+                    </h2>
+                    <h3><button type="submit" name="button" value="faculty">Submit</button></h3>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

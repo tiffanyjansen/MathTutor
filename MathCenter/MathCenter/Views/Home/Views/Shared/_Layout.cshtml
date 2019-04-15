@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Center</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>    
+    <div class="center" style="margin-top:25px; margin-bottom:25px;">
+        <img src="~/Images/logo_horizontal.gif" style="height: 75%;" />
+    </div>
+    <div class="body-content">
+        <br />
+        @RenderBody()
+        <br />
+        <footer>
+            <img src="~/Images/WOULogo.PNG" style="height: 15%;" />
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

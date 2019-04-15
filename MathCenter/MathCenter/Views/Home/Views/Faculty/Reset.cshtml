@@ -1,0 +1,51 @@
+﻿
+@{
+    ViewBag.Title = "Reset";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="center">
+            <h1>Welcome to the Reset page!</h1>
+            <h2>This page allows you to reset the database at the end of the term.</h2>
+        </div>
+    </div>
+    <div class="row">
+        <h3><b>Download First</b> Button:</h3>
+        <h4>This button downloads the data onto an excel sheet for you and <b>then</b> resets the database.</h4>
+        <h3><b>Just Reset</b> Button:</h3>
+        <h4>This button just resets the data, no download.</h4>
+        <h3><b>Go Back</b> Button:</h3>
+        <h4>This button allows you to go back to the previous page in case you pressed it on accident.</h4>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="center">
+                <form method="post">
+                    <h3>
+                        <button name="reset" value="1" type="submit">Download First</button>
+                    </h3>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="center">
+                <form method="post">
+                    <h3>
+                        <button name="reset" value="2" type="submit">Just Reset</button>
+                    </h3>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="center">
+                <form method="post">
+                    <h3>
+                        <button name="reset" value="3" type="submit">Go Back</button>
+                    </h3>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

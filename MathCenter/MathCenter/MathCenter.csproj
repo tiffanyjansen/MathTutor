@@ -168,6 +168,15 @@
     <Content Include="Images\WOULogo.PNG" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\Default Settings.pubxml" />
+    <None Include="Properties\PublishProfiles\Default Settings1.pubxml" />
+    <None Include="Properties\PublishProfiles\Default Settings2.pubxml" />
+    <None Include="Properties\PublishProfiles\Default Settings3.pubxml" />
+    <None Include="Properties\PublishProfiles\Default Settings4.pubxml" />
+    <None Include="Properties\PublishProfiles\Default Settings5.pubxml" />
+    <None Include="Properties\PublishProfiles\Default Settings6.pubxml" />
+    <None Include="Properties\PublishProfiles\Default Settings7.pubxml" />
     <None Include="Properties\PublishProfiles\math-tutor-wou - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />

@@ -197,7 +197,14 @@ namespace MathCenter.Excel
 
                         //Info for Start Time
                         cell = sheet.Cells[rowIndex, 13];
-                        cell.Value = dat.StartTime;
+                        if(dat.StartTime == "Online" | dat.StartTime == "ONLINE")
+                        { 
+                            cell.Value = dat.StartTime;
+                        }
+                        else
+                        {
+                            cell.Value = Convert.ToInt32(dat.StartTime);
+                        }
                         cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                         //Info for Other
