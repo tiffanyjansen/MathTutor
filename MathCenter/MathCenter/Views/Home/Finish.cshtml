@@ -9,9 +9,10 @@
         <h3>"There is a difference between not knowing and not knowing yet." -Shelia Tobias</h3>
         <h2>Good luck with your math endeavors!</h2>
         <h3>
-            <button type="submit">
+            <input class="btn btn-default" type="button" value="Done" onclick="location.href='@Url.Action("SignIn", "Home", new { Week = ViewBag.Week }, null)'" />
+            @*<button type="submit">
                 @Html.ActionLink("Done", "SignIn", "Home", new { Week = ViewBag.Week }, null)
-            </button>
+            </button>*@
         </h3>
     </div>
 </div>

@@ -1,0 +1,55 @@
+﻿@model IEnumerable<MathCenter.Models.Class>
+@{
+    ViewBag.Title = "Select Your Class";
+}
+@section Scripts{
+    <script type="text/javascript" src="~/Scripts/SelectClass.js"></script>
+}
+
+    <div class="container">
+        <h1>Please select your class:</h1>
+        <form method="post">
+            <div class="row">
+                <div class="col-md-2">
+                    <h3>Department</h3>
+                    <div class="col-md-10">
+                        <select style="width:inherit;" name="Departments" id="Departments">
+                            @foreach (var dept in Model)
+                            {
+                                <option>@Html.DisplayFor(m => dept.DeptPrefix)</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <h3>Class Number</h3>
+                    <div class="col-md-10">
+                        <!--This will be added with JavaScript-->
+                        <select style="width:inherit;" name="Numbers" id="Numbers"></select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h3>Instructor</h3>
+                    <div class="col-md-10">
+                        <!--This will be added with JavaScript-->
+                        <select style="width:inherit;" name="Instructors" id="Instructors"></select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h3 id="LabelTimes">Class Time</h3>
+                    <div class="col-md-10">
+                        <!--This will be added with JavaScript-->
+                        <select style="width:inherit;" name="ClassID" id="Times"></select>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" name="Week" value=@ViewBag.Week />
+            <input type="hidden" name="Id" value=@ViewBag.Id />
+            <div class="center">
+                <h3>
+                    <button name="button" value="Other" type="submit">Other</button>
+                    <button name="button" value="Submit" type="submit">Submit</button>
+                </h3>
+            </div>
+        </form>
+    </div>

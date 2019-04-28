@@ -39,7 +39,6 @@ CREATE TABLE [dbo].[SignIns]
 	[Date] DATE NOT NULL,
 	[Hour] INT NOT NULL,
 	[Min] INT NOT NUll,
-	[Sec] INT NOT NULL,
 	[StudentID] NVARCHAR(8) NOT Null,
 
 	CONSTRAINT [PK_dbo.SignIns] PRIMARY KEY CLUSTERED (ID ASC),

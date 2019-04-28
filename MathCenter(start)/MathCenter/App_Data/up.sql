@@ -25,10 +25,20 @@ CREATE TABLE [dbo].[Students]
 	[VNum] NVARCHAR(8) NOT NULL,
 	[FirstName] NVARCHAR(MAX) NOT NULL,
 	[LastName] NVARCHAR(MAX) NOT NULL,
-	[Class] INT NOT NULL,
 
 	CONSTRAINT [PK_dbo.Students] PRIMARY KEY (VNum),
-	CONSTRAINT [FK_dbo.Students] FOREIGN KEY (Class) REFERENCES [dbo].[Classes] (ClassID)
+);
+
+/* StudentClass Table */
+/* Note: this is the table that will allow students to sign in for more than one class. */
+CREATE TABLE [dbo].[StudentClasses]
+(
+	[VNum] NVARCHAR(8) NOT NULL,
+	[ClassID] INT NOT NULL,
+
+	CONSTRAINT [FK_dbo.StudentClasses] FOREIGN KEY (VNum) REFERENCES [dbo].[Students] (VNum),
+	CONSTRAINT [FK_dbo.StudentClasses1] FOREIGN KEY (ClassID) REFERENCES [dbo].[Classes] (ClassID),
+	UNIQUE(VNum, ClassID)
 );
 
 /* SignIn Table (For Logging Information) */
@@ -39,7 +49,6 @@ CREATE TABLE [dbo].[SignIns]
 	[Date] DATE NOT NULL,
 	[Hour] INT NOT NULL,
 	[Min] INT NOT NUll,
-	[Sec] INT NOT NULL,
 	[StudentID] NVARCHAR(8) NOT Null,
 
 	CONSTRAINT [PK_dbo.SignIns] PRIMARY KEY CLUSTERED (ID ASC),

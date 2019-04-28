@@ -1,3 +1,5 @@
+/* This is the auto-generated class for accessing the Database. */
+
 namespace MathCenter.Models
 {
     using System;
@@ -18,17 +20,16 @@ namespace MathCenter.Models
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Class>()
-                .HasMany(e => e.Students)
-                .WithRequired(e => e.Class1)
-                .HasForeignKey(e => e.Class)
-                .WillCascadeOnDelete(false);
-
             modelBuilder.Entity<Student>()
                 .HasMany(e => e.SignIns)
                 .WithRequired(e => e.Student)
                 .HasForeignKey(e => e.StudentID)
                 .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Student>()
+                .HasMany(e => e.Classes)
+                .WithMany(e => e.Students)
+                .Map(m => m.ToTable("StudentClasses").MapLeftKey("VNum").MapRightKey("ClassID"));
         }
     }
 }

@@ -64,13 +64,13 @@ namespace MathCenter.Controllers
             //Create an empty list.
             List<Data> datas = new List<Data>();
 
-            //Go through the list of sign ins and add all the data to the list.
-            foreach (var SignIn in db.SignIns.ToList())
-            {
-                Data data = new Data { Week = SignIn.Week, Date = SignIn.Date, Hour = SignIn.Hour, Min = SignIn.Min, Sec = SignIn.Sec, VNum = SignIn.Student.VNum, FirstName = SignIn.Student.FirstName, LastName = SignIn.Student.LastName, CRN = SignIn.Student.Class1.CRN, DeptPrefix = SignIn.Student.Class1.DeptPrefix, ClassNum = SignIn.Student.Class1.ClassNum, Days = SignIn.Student.Class1.Days, Instructor = SignIn.Student.Class1.Instructor, Other = SignIn.Student.Class1.Other, StartTime = SignIn.Student.Class1.Time };
+            ////Go through the list of sign ins and add all the data to the list.
+            //foreach (var SignIn in db.SignIns.ToList())
+            //{
+            //    Data data = new Data { Week = SignIn.Week, Date = SignIn.Date, Hour = SignIn.Hour, Min = SignIn.Min, Sec = SignIn.Sec, VNum = SignIn.Student.VNum, FirstName = SignIn.Student.FirstName, LastName = SignIn.Student.LastName, CRN = SignIn.Student.Class1.CRN, DeptPrefix = SignIn.Student.Class1.DeptPrefix, ClassNum = SignIn.Student.Class1.ClassNum, Days = SignIn.Student.Class1.Days, Instructor = SignIn.Student.Class1.Instructor, Other = SignIn.Student.Class1.Other, StartTime = SignIn.Student.Class1.Time };
 
-                datas.Add(data);
-            }
+            //    datas.Add(data);
+            //}
 
             //Remove the Placeholder class.
             var remClass = datas.Where(d => d.Other == "Placeholder").Select(d => d).FirstOrDefault();

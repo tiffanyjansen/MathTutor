@@ -135,6 +135,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AjaxController.cs" />
     <Compile Include="Controllers\FacultyController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Excel\DataExcel.cs" />
@@ -151,6 +152,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\down.sql" />
+    <Content Include="App_Data\downOne.sql" />
+    <Content Include="App_Data\MathDB.mdf" />
+    <Content Include="App_Data\MathDB_log.ldf">
+      <DependentUpon>MathDB.mdf</DependentUpon>
+    </Content>
     <Content Include="App_Data\up.sql" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -181,6 +187,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\reloadPage.js" />
+    <Content Include="Scripts\SelectClass.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -195,12 +202,9 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Home\SignIn.cshtml" />
-    <Content Include="Views\Home\NameInput.cshtml" />
-    <Content Include="Views\Home\ClassDept.cshtml" />
-    <Content Include="Views\Home\ClassNum.cshtml" />
-    <Content Include="Views\Home\ChooseProf.cshtml" />
-    <Content Include="Views\Home\ChooseStartTime.cshtml" />
+    <Content Include="Views\Home\Welcome.cshtml" />
+    <Content Include="Views\Home\Name.cshtml" />
+    <Content Include="Views\Home\SelectClass.cshtml" />
     <Content Include="Views\Home\Done.cshtml" />
     <Content Include="Views\Home\Finish.cshtml" />
     <Content Include="Views\Home\Other.cshtml" />
@@ -210,8 +214,11 @@
     <Content Include="Views\Faculty\Class.cshtml" />
     <Content Include="Views\Faculty\Reset.cshtml" />
     <Content Include="Views\Faculty\Complete.cshtml" />
+    <Content Include="Views\Home\More.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Views\Ajax\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

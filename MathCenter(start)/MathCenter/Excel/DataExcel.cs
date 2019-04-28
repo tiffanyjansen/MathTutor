@@ -115,7 +115,7 @@ namespace MathCenter.Excel
 
                 //Heading for Start Time
                 cell = sheet.Cells[rowIndex, 13];
-                cell.Value = "Start Time";
+                cell.Value = "Time";
                 cell.Style.Font.Bold = true;
                 cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
@@ -197,14 +197,7 @@ namespace MathCenter.Excel
 
                         //Info for Start Time
                         cell = sheet.Cells[rowIndex, 13];
-                        if(dat.StartTime == "Online" | dat.StartTime == "ONLINE")
-                        { 
-                            cell.Value = dat.StartTime;
-                        }
-                        else
-                        {
-                            cell.Value = Convert.ToInt32(dat.StartTime);
-                        }
+                        cell.Value = dat.Time;
                         cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                         //Info for Other
@@ -213,7 +206,7 @@ namespace MathCenter.Excel
                         cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                         //Go to the next row
-                        rowIndex = rowIndex + 1;
+                        rowIndex += 1;
                     }
                 }
                 #endregion

@@ -22,9 +22,6 @@ namespace MathCenter.Models.ViewModels
         [Display(Name = "Minute")]
         public int Min { get; set; }
 
-        [Display(Name = "Second")]
-        public int Sec { get; set; }
-
         [StringLength(8)]
         [Display(Name = "VNumber")]
         public string VNum { get; set; }
@@ -55,8 +52,8 @@ namespace MathCenter.Models.ViewModels
         public string Days { get; set; }
 
         [StringLength(25)]
-        [Display(Name = "Start Time")]
-        public string StartTime { get; set; }
+        [Display(Name = "Time")]
+        public string Time { get; set; }
 
         [Display(Name = "Other")]
         public string Other { get; set; }
