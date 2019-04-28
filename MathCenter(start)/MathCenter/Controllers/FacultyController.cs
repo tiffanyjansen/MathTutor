@@ -13,7 +13,7 @@ namespace MathCenter.Controllers
     public class FacultyController : Controller
     {
         //Database Connection
-        MathContext db = new MathContext();
+        private readonly MathContext db = new MathContext();
         
         /*
          * This method returns a welcome page for Faculty users.

@@ -5,19 +5,40 @@
 
 <div class="container">
     <div class="center">
-        <h2>Is this you?</h2>
-        <h3>
-            @Html.DisplayFor(m => m.FirstName)
-            @Html.DisplayFor(m => m.LastName)
-        </h3>
+        <div class="row">
+            <h2>Is this you?</h2>
+            <h3>
+                @Html.DisplayFor(m => m.FirstName)
+                @Html.DisplayFor(m => m.LastName)
+            </h3>
+        </div>
+        <hr />
+        <div class="row">
+            <h2>These are the classes we have for you in the database.</h2>
+            <h2>Would you like to add more?</h2>
+            @foreach (var modelClass in Model.Classes)
+            {
+                <h3>
+                    @Html.DisplayFor(m => modelClass.DeptPrefix)&nbsp;
+                    @Html.DisplayFor(m => modelClass.ClassNum)&nbsp;
+                    @Html.DisplayFor(m => modelClass.Instructor)&nbsp;
+                    @Html.DisplayFor(m => modelClass.Other)
+                    <br />
+                </h3>
+             }                        
+        </div>        
         <form method="post">
             <h3>
                 <input type="hidden" name="Week" value=@ViewBag.Week />
                 <input type="hidden" name="VNum" value=@ViewBag.VNum />
                 <button type="submit" name="approved" value="1">Yes</button>
                 <button type="submit" name="approved" value="0">No</button>
+                <button type="submit" name="approved" value="3">Add More Classes</button>
                 <button type="submit" name="approved" value="2">Go Back</button>
             </h3>
+            <div class="center">
+                <h4 style="color: darkblue;">@ViewBag.Error</h4>
+            </div>
         </form>
     </div>
 </div>

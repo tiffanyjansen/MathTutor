@@ -226,6 +226,24 @@ namespace MathCenter.Controllers
                     catch (Exception)
                     {
                         //There was an error.
+                        //Find all of the distict Class Prefixes and use that for the drop down.
+                        var ClassDepts = db.Classes
+                            .GroupBy(c => c.DeptPrefix)
+                            .Select(c => c.FirstOrDefault())
+                            .ToList();
+
+                        //Remove the classes with Other having something in it.
+                        var remClasses = ClassDepts
+                            .Where(c => c.Other != null)
+                            .Select(c => c).ToList();
+                        foreach (var remClass in remClasses)
+                        {
+                            ClassDepts.Remove(remClass);
+                        }
+                        ViewBag.Id = VNum;
+                        ViewBag.Week = Week;
+                        ViewBag.Error = "There was an error with the database. Please try again.";
+                        return View(ClassDepts);
                     }
                     return RedirectToAction("More", new { VNum, Week });
                 }
@@ -255,6 +273,10 @@ namespace MathCenter.Controllers
                 catch (Exception)
                 {
                     //There was an error
+                    ViewBag.Error = "There was an error with the database. Please try again.";
+                    ViewBag.Id = VNum;
+                    ViewBag.Week = Week;
+                    return View();
                 }
                 return RedirectToAction("Finish", new { Week });
             }            
@@ -266,8 +288,7 @@ namespace MathCenter.Controllers
         public ActionResult Other(int Week, string VNum)
         {
             //Keep the data floating.
-            ViewBag.Week = Week;
-            ViewBag.Id = VNum;
+            
 
             //Return the View.
             return View();
@@ -286,6 +307,10 @@ namespace MathCenter.Controllers
             catch (Exception)
             {
                 //There was an error.
+                ViewBag.Error = "There was an error with the database. Please try again.";
+                ViewBag.Week = Week;
+                ViewBag.Id = VNum;
+                return View();
             }
 
             //Get the class again.
@@ -308,6 +333,10 @@ namespace MathCenter.Controllers
             catch(Exception)
             {
                 //There was an error.
+                ViewBag.Error = "There was an error with the database. Please try again.";
+                ViewBag.Week = Week;
+                ViewBag.Id = VNum;
+                return View();
             }
 
             //Redirect to the finish page.
@@ -343,6 +372,13 @@ namespace MathCenter.Controllers
                 catch (Exception)
                 {
                     //There was an error.
+                    ViewBag.Error = "There was an error with the database. Please try again.";
+                    //Keep the data floating
+                    ViewBag.VNum = VNum;
+                    ViewBag.Week = Week;
+
+                    //Return the View with the current student.
+                    return View(db.Students.Find(VNum));
                 }                
 
                 //Redirect to the "finish" page.
@@ -352,6 +388,11 @@ namespace MathCenter.Controllers
             {
                 //If it's not you redirect to Sign In page.
                 return RedirectToAction("Name", new { Week, VNum });
+            }
+            else if(approved == 3)
+            {
+                //Redirect back to the page to add more classes
+                return RedirectToAction("SelectClass", new { VNum, Week });
             }
             else
             {
