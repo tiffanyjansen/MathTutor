@@ -83,10 +83,6 @@ namespace MathCenter.Controllers
             //    datas.Add(data);
             //}
 
-            //Remove the Placeholder class.
-            var remClass = datas.Where(d => d.Other == "Placeholder").Select(d => d).FirstOrDefault();
-            datas.Remove(remClass);
-
             //Return the list of the data.
             return datas;
         }
@@ -102,8 +98,7 @@ namespace MathCenter.Controllers
 
         /*
          * This method returns a page with a box where users can add classes to the database.
-         * It will allow users to add classes whenever they want to and will always have the 
-         * placeholder class automatically get added to the db.
+         * It will allow users to add classes whenever they want.
          */
         [HttpGet]
          public ActionResult Add()
@@ -165,10 +160,6 @@ namespace MathCenter.Controllers
             //Get the entire list of classes.
             var Classes = db.Classes.ToList();
 
-            //Remove the Placeholder Class
-            var remClass = Classes.Where(c => c.Other == "Placeholder").Select(c => c).FirstOrDefault();
-            Classes.Remove(remClass);
-
             //Return the View with only the classes you actually want.
             return View(Classes);
         }
@@ -221,10 +212,6 @@ namespace MathCenter.Controllers
                 db.Classes.Remove(Class);
             }
             //Save changes to Database.
-            db.SaveChanges();
-
-            //Add the placeholder to the database.
-            db.Classes.Add(new Class { Other = "Placeholder" });
             db.SaveChanges();
         }
 
