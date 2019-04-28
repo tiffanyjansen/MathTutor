@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewBag.Title = "SelectDates";
+}
+<!--The Script for the "DatePickers"-->
+<script type="text/javascript">
+    $(function () {
+        var dateFormat = "mm/dd/yy",
+            from = $("#from")
+                .datepicker({
+                    minDate: "-77",
+                })
+                .on("change", function () {
+                    to.datepicker("option", "minDate", getDate(this));
+                }),
+            to = $("#to").datepicker({
+                minDate: "+1",
+            })
+                .on("change", function () {
+                    from.datepicker("option", "maxDate", getDate(this));
+                });
+        function getDate(element) {
+            var date;
+            try {
+                date = $.datepicker.parseDate(dateFormat, element.value);
+            } catch (error) {
+                date = null;
+            }
+            return date;
+        }
+    });
+</script>
+
+<div class="container">
+    <h2>Please select the date range for the data downloaded</h2>
+    <input type="text" placeholder="mm/dd/yyyy" id="from" />
+    <input type="text" placeholder="mm/dd/yyyy" id="to" />
+
+</div>
+
+

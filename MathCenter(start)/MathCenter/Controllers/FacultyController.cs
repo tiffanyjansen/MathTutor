@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace MathCenter.Controllers
@@ -30,7 +29,7 @@ namespace MathCenter.Controllers
             //if you press the download button, the excel sheet will be created.
             if (download == 1)
             {
-                Excel();
+                return RedirectToAction("SelectDates");
             }
             //If you press the reset button, it will redirect you to another page.
             if(download == 2)
@@ -43,23 +42,35 @@ namespace MathCenter.Controllers
                 return RedirectToAction("Index", "Home");
             }
             return View();
-        }        
+        }
 
+        [HttpGet]
+        public ActionResult SelectDates()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult SelectDates(DateTime start, DateTime end)
+        {
+            Excel(start, end);
+            return RedirectToAction("Index");
+        }
+        
         /*
          * This method will do the work of downloading the excel file with 'hopefully'
          * all the data.
          */ 
-         public void Excel()
+         public void Excel(DateTime? start, DateTime? end)
         {
             DataExcel excel = new DataExcel();
             Response.ClearContent();
-            Response.BinaryWrite(excel.GenerateExcel(GetData()));
+            Response.BinaryWrite(excel.GenerateExcel(GetData(start, end)));
             Response.AddHeader("content-disposition", "attachment; filename=MathCenterData.xlsx");
             Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             Response.Flush();
             Response.End();
         }
-        public List<Data> GetData()
+        public List<Data> GetData(DateTime? start, DateTime? end)
         {
             //Create an empty list.
             List<Data> datas = new List<Data>();
@@ -176,7 +187,7 @@ namespace MathCenter.Controllers
         {
             if(reset == 1)
             {
-                Excel();
+                Excel(null, null);
                 ClearDB();
                 return RedirectToAction("Complete");
             }
