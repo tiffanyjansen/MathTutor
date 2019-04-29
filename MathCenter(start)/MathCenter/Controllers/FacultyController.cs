@@ -74,14 +74,22 @@ namespace MathCenter.Controllers
         {
             //Create an empty list.
             List<Data> datas = new List<Data>();
+                       
+            //Go through the list of sign ins and add all the data to the list.
+            foreach (var SignIn in db.SignIns.ToList())
+            {
 
-            ////Go through the list of sign ins and add all the data to the list.
-            //foreach (var SignIn in db.SignIns.ToList())
-            //{
-            //    Data data = new Data { Week = SignIn.Week, Date = SignIn.Date, Hour = SignIn.Hour, Min = SignIn.Min, Sec = SignIn.Sec, VNum = SignIn.Student.VNum, FirstName = SignIn.Student.FirstName, LastName = SignIn.Student.LastName, CRN = SignIn.Student.Class1.CRN, DeptPrefix = SignIn.Student.Class1.DeptPrefix, ClassNum = SignIn.Student.Class1.ClassNum, Days = SignIn.Student.Class1.Days, Instructor = SignIn.Student.Class1.Instructor, Other = SignIn.Student.Class1.Other, StartTime = SignIn.Student.Class1.Time };
+               Data data = new Data { Week = SignIn.Week, Date = SignIn.Date, Hour = SignIn.Hour, Min = SignIn.Min, VNum = SignIn.Student.VNum, FirstName = SignIn.Student.FirstName, LastName = SignIn.Student.LastName, Class1 = SignIn.Student.Classes.FirstOrDefault(), Class2 = SignIn.Student.Classes.Skip(1).FirstOrDefault(), Class3 = SignIn.Student.Classes.Skip(2).FirstOrDefault(), Class4 = SignIn.Student.Classes.Skip(3).FirstOrDefault() };
 
-            //    datas.Add(data);
-            //}
+                if (data.Date <= end && data.Date >= start)
+                {
+                    datas.Add(data);
+                }
+                else if(start == null && end == null)
+                {
+                    datas.Add(data);
+                }
+            }
 
             //Return the list of the data.
             return datas;

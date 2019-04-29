@@ -34,28 +34,13 @@ namespace MathCenter.Models.ViewModels
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
-        [Display(Name = "CRN")]
-        public int? CRN { get; set; }
+        [Required]
+        public Class Class1 { get; set; }
 
-        [StringLength(10)]
-        [Display(Name = "Class Prefix")]
-        public string DeptPrefix { get; set; }
+        public Class Class2 { get; set; }
 
-        [Display(Name = "Class Number")]
-        public int? ClassNum { get; set; }
+        public Class Class3 { get; set; }
 
-        [Display(Name = "Instructor")]
-        public string Instructor { get; set; }
-
-        [StringLength(10)]
-        [Display(Name = "Days")]
-        public string Days { get; set; }
-
-        [StringLength(25)]
-        [Display(Name = "Time")]
-        public string Time { get; set; }
-
-        [Display(Name = "Other")]
-        public string Other { get; set; }
+        public Class Class4 { get; set; }
     }
 }
