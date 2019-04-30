@@ -49,8 +49,10 @@ CREATE TABLE [dbo].[SignIns]
 	[Date] DATE NOT NULL,
 	[Hour] INT NOT NULL,
 	[Min] INT NOT NUll,
-	[StudentID] NVARCHAR(8) NOT Null,
+	[StudentID] NVARCHAR(8) NOT NULL,
+	[ClassID] INT NOT NULL,
 
 	CONSTRAINT [PK_dbo.SignIns] PRIMARY KEY CLUSTERED (ID ASC),
-	CONSTRAINT [FK_dbo.SignIns] FOREIGN KEY (StudentID) REFERENCES [dbo].[Students] (VNum)
+	CONSTRAINT [FK_dbo.SignIns1] FOREIGN KEY (StudentID) REFERENCES [dbo].[Students] (VNum),
+	CONSTRAINT [FK_dbo.SignIns2] FOREIGN KEY (ClassID) REFERENCES [dbo].[Classes] (ClassID)
 );

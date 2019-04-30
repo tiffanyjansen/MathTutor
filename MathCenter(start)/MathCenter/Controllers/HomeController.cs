@@ -1,6 +1,7 @@
 ﻿using MathCenter.Models;
 using MathCenter.Models.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -69,8 +70,13 @@ namespace MathCenter.Controllers
         * add them to the database.
         */
         [HttpGet]
-        public ActionResult Welcome(int Week)
+        public ActionResult Welcome(int? Week)
         {
+            //Check for no input. This just adds extra error-handling.
+            if (Week == null)
+            { 
+                return RedirectToAction("Index");
+            }
             ViewBag.Num = Week;
             return View();
         }
@@ -101,8 +107,21 @@ namespace MathCenter.Controllers
         * It will also add the student to the database.
         */
         [HttpGet]
-        public ActionResult Name(string VNum, int Week)
+        public ActionResult Name(string VNum, int? Week)
         {
+            //Check for no input. This just adds extra error-handling.
+            if (Week == null || VNum == null)
+            {
+                if (Week == null)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return RedirectToAction("Welcome", new { Week });
+                }
+            }
+
             //Use the VNum and Week in the View.
             ViewBag.VNum = VNum;
             ViewBag.Week = Week;
@@ -138,14 +157,14 @@ namespace MathCenter.Controllers
             }
             catch (Exception)
             {
-                ViewBag.Error = "There was an error with the database. Please try again.";
+                ViewBag.Error = "There was an error adding you to the database. Please ask a tutor for help.";
                 return View(pWeek);
             }
 
             //Redirect to the select department method and slowly select the class.
             return RedirectToAction("SelectClass", new { pWeek.Week, pWeek.VNum });
         }
-
+        
         /*
          * This is the method for selecting the class. It will use JavaScript to do most of the functionality.
          */
@@ -165,6 +184,65 @@ namespace MathCenter.Controllers
                 }
             }
 
+            //Keep these floating around so we can easily have the stuff working. 
+            ViewBag.Id = VNum;
+            ViewBag.Week = Week;
+
+            //Return the View so students can select their DeptPrefix.
+            return View(GetClassDepts());
+        }
+        [HttpPost]
+        public ActionResult SelectClass(int? ClassID, int Week, string VNum, string button)
+        {
+            if(button == "Other")
+            {
+                return RedirectToAction("Other", new { VNum, Week });
+            }
+            else
+            {
+                if (ClassID == null)
+                {
+                    ViewBag.Id = VNum;
+                    ViewBag.Week = Week;
+                    return View(GetClassDepts());
+                }
+                else
+                {
+                    Student currentStudent = db.Students.Find(VNum);
+                    currentStudent.Classes.Add(db.Classes.Find(ClassID));
+                    try { 
+                        db.SaveChanges();
+                    }
+                    catch (Exception)
+                    {
+                        //There was an error.                        
+                        ViewBag.Id = VNum;
+                        ViewBag.Week = Week;
+                        ViewBag.Error = "There was an error with the database. Please try again.";
+                        return View(GetClassDepts());
+                    }
+
+                    //Add the SignIn to the Database
+                    try
+                    {
+                        db.SignIns.Add(new SignIn { Week = Week, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, StudentID = VNum, ClassID = (int)ClassID });
+                        db.SaveChanges();
+                    }
+                    catch (Exception)
+                    {
+                        //There was an error
+                        ViewBag.Error = "There was an error with the database. Please try again.";
+                        ViewBag.Id = VNum;
+                        ViewBag.Week = Week;
+                        return View(GetClassDepts());
+                    }
+                    return RedirectToAction("Finish", new { VNum, Week });
+                }
+            }           
+        }
+
+        public List<Class> GetClassDepts()
+        {
             //Find all of the distict Class Prefixes and use that for the drop down.
             var ClassDepts = db.Classes
                 .GroupBy(c => c.DeptPrefix)
@@ -180,115 +258,31 @@ namespace MathCenter.Controllers
                 ClassDepts.Remove(remClass);
             }
 
-            //Keep these floating around so we can easily have the stuff working. 
-            ViewBag.Id = VNum;
-            ViewBag.Week = Week;
+            return ClassDepts;
+        }
 
-            //Return the View so students can select their DeptPrefix.
-            return View(ClassDepts);
-        }
-        [HttpPost]
-        public ActionResult SelectClass(int? ClassID, int Week, string VNum, string button)
-        {
-            if(button == "Other")
-            {
-                return RedirectToAction("Other", new { VNum, Week });
-            }
-            else
-            {
-                if (ClassID == null)
-                {
-                    //Find all of the distict Class Prefixes and use that for the drop down.
-                    var ClassDepts = db.Classes
-                        .GroupBy(c => c.DeptPrefix)
-                        .Select(c => c.FirstOrDefault())
-                        .ToList();
-
-                    //Remove the classes with Other having something in it.
-                    var remClasses = ClassDepts
-                        .Where(c => c.Other != null)
-                        .Select(c => c).ToList();
-                    foreach (var remClass in remClasses)
-                    {
-                        ClassDepts.Remove(remClass);
-                    }
-                    ViewBag.Id = VNum;
-                    ViewBag.Week = Week;
-                    return View(ClassDepts);
-                }
-                else
-                {
-                    Student currentStudent = db.Students.Find(VNum);
-                    currentStudent.Classes.Add(db.Classes.Find(ClassID));
-                    try { 
-                        db.SaveChanges();
-                    }
-                    catch (Exception)
-                    {
-                        //There was an error.
-                        //Find all of the distict Class Prefixes and use that for the drop down.
-                        var ClassDepts = db.Classes
-                            .GroupBy(c => c.DeptPrefix)
-                            .Select(c => c.FirstOrDefault())
-                            .ToList();
-
-                        //Remove the classes with Other having something in it.
-                        var remClasses = ClassDepts
-                            .Where(c => c.Other != null)
-                            .Select(c => c).ToList();
-                        foreach (var remClass in remClasses)
-                        {
-                            ClassDepts.Remove(remClass);
-                        }
-                        ViewBag.Id = VNum;
-                        ViewBag.Week = Week;
-                        ViewBag.Error = "There was an error with the database. Please try again.";
-                        return View(ClassDepts);
-                    }
-                    return RedirectToAction("More", new { VNum, Week });
-                }
-            }           
-        }
-        [HttpGet]
-        public ActionResult More(string VNum, int Week)
-        {
-            ViewBag.Id = VNum;
-            ViewBag.Week = Week;
-            return View();
-        }
-        [HttpPost]
-        public ActionResult More(string VNum, int Week, bool addClass)
-        {
-            if (addClass)
-            {
-                return RedirectToAction("SelectClass", new { VNum, Week });
-            }
-            else
-            {
-                //Create and add the SignIn to the database
-                try { 
-                    db.SignIns.Add(new SignIn { Week = Week, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, StudentID = VNum });
-                    db.SaveChanges();
-                }
-                catch (Exception)
-                {
-                    //There was an error
-                    ViewBag.Error = "There was an error with the database. Please try again.";
-                    ViewBag.Id = VNum;
-                    ViewBag.Week = Week;
-                    return View();
-                }
-                return RedirectToAction("Finish", new { Week });
-            }            
-        }
         /*
          * The method for when the student selects Other.
          */
         [HttpGet]
-        public ActionResult Other(int Week, string VNum)
+        public ActionResult Other(int? Week, string VNum)
         {
+            //Check for no input. This just adds extra error-handling.
+            if (Week == null || VNum == null)
+            {
+                if (Week == null)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return RedirectToAction("Welcome", new { Week });
+                }
+            }
+
             //Keep the data floating.
-            
+            ViewBag.Week = Week;
+            ViewBag.Id = VNum;
 
             //Return the View.
             return View();
@@ -296,7 +290,6 @@ namespace MathCenter.Controllers
         [HttpPost]
         public ActionResult Other(int Week, string VNum, string other)
         {
-
             try { 
                 //Create the class to be connected to the student.
                 db.Classes.Add(new Class { Other = other });
@@ -307,7 +300,7 @@ namespace MathCenter.Controllers
             catch (Exception)
             {
                 //There was an error.
-                ViewBag.Error = "There was an error with the database. Please try again.";
+                ViewBag.Error = "There was an error with the database. Please try again. (1)";
                 ViewBag.Week = Week;
                 ViewBag.Id = VNum;
                 return View();
@@ -325,7 +318,7 @@ namespace MathCenter.Controllers
             try
             {
                 //Create the Sign In to be added to the db.
-                db.SignIns.Add(new SignIn { Week = Week, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, StudentID = VNum });
+                db.SignIns.Add(new SignIn { Week = Week, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, StudentID = VNum, ClassID = sClass.ClassID });
 
                 //Save the Changes to the db.
                 db.SaveChanges();
@@ -333,21 +326,34 @@ namespace MathCenter.Controllers
             catch(Exception)
             {
                 //There was an error.
-                ViewBag.Error = "There was an error with the database. Please try again.";
+                ViewBag.Error = "There was an error with the database. Please try again. (2)";
                 ViewBag.Week = Week;
                 ViewBag.Id = VNum;
                 return View();
             }
 
             //Redirect to the finish page.
-            return RedirectToAction("More", new { VNum, Week });
+            return RedirectToAction("Finish", new { VNum, Week });
         }
         /*
          * The method for when you are already in the DB and just need to approve the sign in.
          */
         [HttpGet]
-        public ActionResult Done(string VNum, int Week)
+        public ActionResult Done(string VNum, int? Week)
         {
+            //Check for no input. This just adds extra error-handling.
+            if (Week == null || VNum == null)
+            {
+                if (Week == null)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return RedirectToAction("Welcome", new { Week });
+                }
+            }
+
             //Get the info from the Database about the current student.
             Student currentStudent = db.Students.Find(VNum);
 
@@ -359,14 +365,14 @@ namespace MathCenter.Controllers
             return View(currentStudent);
         }
         [HttpPost]
-        public ActionResult Done(string VNum, int Week, int approved)
+        public ActionResult Done(string VNum, int Week, int approved, int? classID)
         {
-            if (approved == 1)
+            if (approved == 1 && classID != null)
             {
                 try
                 {
                     //Create the Sign In and add it to the database.
-                    db.SignIns.Add(new SignIn { Week = Week, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, StudentID = VNum });
+                    db.SignIns.Add(new SignIn { Week = Week, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, StudentID = VNum, ClassID = (int)classID });
                     db.SaveChanges();
                 }
                 catch (Exception)
@@ -379,7 +385,7 @@ namespace MathCenter.Controllers
 
                     //Return the View with the current student.
                     return View(db.Students.Find(VNum));
-                }                
+                }
 
                 //Redirect to the "finish" page.
                 return RedirectToAction("Finish", new { Week });
@@ -389,23 +395,33 @@ namespace MathCenter.Controllers
                 //If it's not you redirect to Sign In page.
                 return RedirectToAction("Name", new { Week, VNum });
             }
-            else if(approved == 3)
+            else if (approved == 3)
             {
                 //Redirect back to the page to add more classes
                 return RedirectToAction("SelectClass", new { VNum, Week });
             }
-            else
+            else if (approved == 2)
             {
                 //Redirect back to the page to input your V-Number
                 return RedirectToAction("Welcome", new { Week });
+            }
+            else
+            {
+                ViewBag.ClassError = "Please select the class you would like to Sign In for.";
+                return View();
             }
         }
         /*
          * The last page that gives a good message.
          */
         [HttpGet]
-        public ActionResult Finish(int Week)
+        public ActionResult Finish(int? Week)
         {
+            //Check for no input. This just adds extra error-handling.
+            if (Week == null)
+            {
+                return RedirectToAction("Index");
+            }
             //The Week Continues to float.
             ViewBag.Week = Week;
 

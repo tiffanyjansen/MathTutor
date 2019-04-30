@@ -78,14 +78,22 @@ namespace MathCenter.Controllers
             //Go through the list of sign ins and add all the data to the list.
             foreach (var SignIn in db.SignIns.ToList())
             {
+                Data data = new Data { Week = SignIn.Week, Date = SignIn.Date, Hour = SignIn.Hour, Min = SignIn.Min, VNum = SignIn.Student.VNum, FirstName = SignIn.Student.FirstName, LastName = SignIn.Student.LastName, SignedClass = db.Classes.Find(SignIn.ClassID) };
 
-               Data data = new Data { Week = SignIn.Week, Date = SignIn.Date, Hour = SignIn.Hour, Min = SignIn.Min, VNum = SignIn.Student.VNum, FirstName = SignIn.Student.FirstName, LastName = SignIn.Student.LastName, Class1 = SignIn.Student.Classes.FirstOrDefault(), Class2 = SignIn.Student.Classes.Skip(1).FirstOrDefault(), Class3 = SignIn.Student.Classes.Skip(2).FirstOrDefault(), Class4 = SignIn.Student.Classes.Skip(3).FirstOrDefault() };
-
+                //Only add if they are in the selected dates.
                 if (data.Date <= end && data.Date >= start)
                 {
                     datas.Add(data);
                 }
                 else if(start == null && end == null)
+                {
+                    datas.Add(data);
+                }
+                else if(start == null && data.Date <= end)
+                {
+                    datas.Add(data);
+                }
+                else
                 {
                     datas.Add(data);
                 }
@@ -143,6 +151,10 @@ namespace MathCenter.Controllers
 
                         //Add the class to the database with the info above.
                         db.Classes.Add(new Class { CRN = CRN, DeptPrefix = DeptPrefix, ClassNum = ClassNum, Time = StartTime, Days = Days, Instructor = Instructor });
+                    }
+                    else
+                    {
+                        throw new ArgumentOutOfRangeException();
                     }
                 }
                 //After going through all the rows, save changes.
@@ -203,7 +215,7 @@ namespace MathCenter.Controllers
         }
 
         private void ClearDB()
-        {
+        {            
             //Delete all the SignIns from the DB.
             foreach (var SignIn in db.SignIns.ToList())
             {

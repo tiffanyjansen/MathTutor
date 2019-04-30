@@ -50,12 +50,13 @@ input {
 }
 
 select {
-    height: 35px;
+    height: 40px;
     font-family: "Trebuchet MS", Helvetica, sans-serif;
     border-radius: 10px;
     border-color: #DB0A29;
     border-width: 2px;
     color: #272324;
+    font-size:25px;
 }
 
 select option{

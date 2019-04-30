@@ -11,6 +11,7 @@ namespace MathCenter.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Class()
         {
+            SignIns = new HashSet<SignIn>();
             Students = new HashSet<Student>();
         }
 
@@ -32,6 +33,9 @@ namespace MathCenter.Models
         public string Time { get; set; }
 
         public string Other { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SignIn> SignIns { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Student> Students { get; set; }

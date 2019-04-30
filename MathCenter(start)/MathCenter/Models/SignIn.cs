@@ -23,6 +23,10 @@ namespace MathCenter.Models
         [StringLength(8)]
         public string StudentID { get; set; }
 
+        public int ClassID { get; set; }
+
+        public virtual Class Class { get; set; }
+
         public virtual Student Student { get; set; }
     }
 }

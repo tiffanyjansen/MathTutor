@@ -35,12 +35,6 @@ namespace MathCenter.Models.ViewModels
         public string LastName { get; set; }
 
         [Required]
-        public Class Class1 { get; set; }
-
-        public Class Class2 { get; set; }
-
-        public Class Class3 { get; set; }
-
-        public Class Class4 { get; set; }
+        public Class SignedClass { get; set; }
     }
 }

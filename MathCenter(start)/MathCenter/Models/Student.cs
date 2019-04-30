@@ -20,11 +20,9 @@ namespace MathCenter.Models
         public string VNum { get; set; }
 
         [Required]
-        [Display(Name = "First Name")]
         public string FirstName { get; set; }
 
         [Required]
-        [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

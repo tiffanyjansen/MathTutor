@@ -1,22 +1,27 @@
 ﻿
 @{
-    ViewBag.Title = "SelectDates";
+    ViewBag.Title = "Select Dates";
 }
 
 <div class="container">
-    <h2>Please select the date range for the data downloaded</h2>
+    <h2>Please select the date range for the data download</h2>
     <form method="post">
         <div class="row">
+            <div class="col-md-3"></div>
             <div class="col-md-6">
-                <input style="width:inherit;" name="start" type="text" placeholder="mm/dd/yyyy" id="start" />
+                <h3>Start Date:&nbsp;<input style="width:inherit;" name="start" type="text" placeholder="mm/dd/yyyy" id="start" /></h3>
             </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"></div>
             <div class="col-md-6">
-                <input style="width:inherit;" name="end" type="text" placeholder="mm/dd/yyyy" id="end" />
+                <h3>&nbsp;&nbsp;End Date:&nbsp;<input style="width:inherit;" name="end" type="text" placeholder="mm/dd/yyyy" id="end" /></h3>
             </div>
         </div>
         <div class="row">
             <div class="center">
-                <button type="submit">Submit</button>
+                <h3><button type="submit">Submit</button> </h3>
+                <h3>@Html.ActionLink("Go Back", "Index", "Faculty")</h3>
             </div>
         </div>
     </form>
