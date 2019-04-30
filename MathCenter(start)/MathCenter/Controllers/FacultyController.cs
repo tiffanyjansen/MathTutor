@@ -52,6 +52,12 @@ namespace MathCenter.Controllers
         [HttpPost]
         public ActionResult SelectDates(DateTime start, DateTime end)
         {
+            if(start.Month > end.Month || (start.Month == end.Month && start.Day > end.Day) || start.Year > end.Year)
+            {
+                ViewBag.Error = "Please make sure your start date is before your end date.";
+                return View();
+            }
+
             Excel(start, end);
             return RedirectToAction("Index");
         }
@@ -74,26 +80,21 @@ namespace MathCenter.Controllers
         {
             //Create an empty list.
             List<Data> datas = new List<Data>();
-                       
+
+            DateTime startDate = (DateTime)start;
+            DateTime endDate = (DateTime)end;
+
             //Go through the list of sign ins and add all the data to the list.
             foreach (var SignIn in db.SignIns.ToList())
             {
-                Data data = new Data { Week = SignIn.Week, Date = SignIn.Date, Hour = SignIn.Hour, Min = SignIn.Min, VNum = SignIn.Student.VNum, FirstName = SignIn.Student.FirstName, LastName = SignIn.Student.LastName, SignedClass = db.Classes.Find(SignIn.ClassID) };
+                Data data = new Data { Week = SignIn.Week, Date = SignIn.Date, Hour = SignIn.Hour, Min = SignIn.Min, VNum = SignIn.Student.VNum, FirstName = SignIn.Student.FirstName, LastName = SignIn.Student.LastName, SignedClass = db.Classes.Find(SignIn.ClassID) };                        
 
                 //Only add if they are in the selected dates.
-                if (data.Date <= end && data.Date >= start)
+                if (data.Date.Month >= startDate.Month && data.Date.Day >= startDate.Day && data.Date.Year >= startDate.Year && data.Date.Month <= endDate.Month && data.Date.Day <= endDate.Day && data.Date.Year <= endDate.Year)
                 {
                     datas.Add(data);
                 }
-                else if(start == null && end == null)
-                {
-                    datas.Add(data);
-                }
-                else if(start == null && data.Date <= end)
-                {
-                    datas.Add(data);
-                }
-                else
+                else if(startDate == null && endDate == null)
                 {
                     datas.Add(data);
                 }
@@ -231,6 +232,7 @@ namespace MathCenter.Controllers
             {
                 db.Classes.Remove(Class);
             }
+
             //Save changes to Database.
             db.SaveChanges();
         }

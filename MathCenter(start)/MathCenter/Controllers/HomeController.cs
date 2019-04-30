@@ -67,7 +67,7 @@ namespace MathCenter.Controllers
         /*
         * The method for signing a student in. This page will just have the student
         * enter their V Number, then it will direct them to select their class and 
-        * add them to the database.
+        * add them to the database
         */
         [HttpGet]
         public ActionResult Welcome(int? Week)
@@ -408,7 +408,7 @@ namespace MathCenter.Controllers
             else
             {
                 ViewBag.ClassError = "Please select the class you would like to Sign In for.";
-                return View();
+                return View(db.Students.Find(VNum));
             }
         }
         /*
