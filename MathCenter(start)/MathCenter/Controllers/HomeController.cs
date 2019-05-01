@@ -209,7 +209,7 @@ namespace MathCenter.Controllers
                 else
                 {
                     Student currentStudent = db.Students.Find(VNum);
-                    currentStudent.Classes.Add(db.Classes.Find(ClassID));
+                    db.StudentClasses.Add(new StudentClass { VNum = currentStudent.VNum, ClassID = (int)ClassID });
                     try { 
                         db.SaveChanges();
                     }
@@ -313,7 +313,7 @@ namespace MathCenter.Controllers
 
             //Add the class to the current student.
             Student currentStudent = db.Students.Find(VNum);
-            currentStudent.Classes.Add(sClass);
+            db.StudentClasses.Add(new StudentClass { VNum = VNum, ClassID = sClass.ClassID });
 
             try
             {

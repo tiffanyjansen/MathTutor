@@ -153,10 +153,10 @@ namespace MathCenter.Controllers
                         //Add the class to the database with the info above.
                         db.Classes.Add(new Class { CRN = CRN, DeptPrefix = DeptPrefix, ClassNum = ClassNum, Time = StartTime, Days = Days, Instructor = Instructor });
                     }
-                    else
-                    {
-                        throw new ArgumentOutOfRangeException();
-                    }
+                    //else
+                    //{
+                    //    throw new ArgumentOutOfRangeException();
+                    //}
                 }
                 //After going through all the rows, save changes.
                 db.SaveChanges();
@@ -231,6 +231,11 @@ namespace MathCenter.Controllers
             foreach (var Class in db.Classes.ToList())
             {
                 db.Classes.Remove(Class);
+            }
+            //Delete all the StudentClasses from the DB.
+            foreach(var StudentClass in db.StudentClasses.ToList())
+            {
+                db.StudentClasses.Remove(StudentClass);
             }
 
             //Save changes to Database.

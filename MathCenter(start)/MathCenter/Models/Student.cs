@@ -12,7 +12,7 @@ namespace MathCenter.Models
         public Student()
         {
             SignIns = new HashSet<SignIn>();
-            Classes = new HashSet<Class>();
+            StudentClasses = new HashSet<StudentClass>();
         }
 
         [Key]
@@ -29,6 +29,6 @@ namespace MathCenter.Models
         public virtual ICollection<SignIn> SignIns { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Class> Classes { get; set; }
+        public virtual ICollection<StudentClass> StudentClasses { get; set; }
     }
 }

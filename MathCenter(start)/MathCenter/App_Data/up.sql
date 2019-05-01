@@ -33,12 +33,13 @@ CREATE TABLE [dbo].[Students]
 /* Note: this is the table that will allow students to sign in for more than one class. */
 CREATE TABLE [dbo].[StudentClasses]
 (
+	[ID] INT IDENTITY(1,1) NOT NULL,
 	[VNum] NVARCHAR(8) NOT NULL,
 	[ClassID] INT NOT NULL,
 
+	CONSTRAINT [PK_dbo.StudentClasses] PRIMARY KEY (ID),
 	CONSTRAINT [FK_dbo.StudentClasses] FOREIGN KEY (VNum) REFERENCES [dbo].[Students] (VNum),
-	CONSTRAINT [FK_dbo.StudentClasses1] FOREIGN KEY (ClassID) REFERENCES [dbo].[Classes] (ClassID),
-	UNIQUE(VNum, ClassID)
+	CONSTRAINT [FK_dbo.StudentClasses1] FOREIGN KEY (ClassID) REFERENCES [dbo].[Classes] (ClassID)
 );
 
 /* SignIn Table (For Logging Information) */
