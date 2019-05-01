@@ -3,6 +3,7 @@ using MathCenter.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web.Mvc;
 
 namespace MathCenter.Controllers
@@ -290,50 +291,62 @@ namespace MathCenter.Controllers
         [HttpPost]
         public ActionResult Other(int Week, string VNum, string other)
         {
-            try { 
-                //Create the class to be connected to the student.
-                db.Classes.Add(new Class { Other = other });
-
-                //Save the class into the database.
-                db.SaveChanges();
-            }
-            catch (Exception)
+            Regex rx = new Regex(@"\w\w?\w?\s\d\d\d?", RegexOptions.IgnoreCase);
+            if (rx.IsMatch(other))
             {
-                //There was an error.
-                ViewBag.Error = "There was an error with the database. Please try again. (1)";
+                try
+                {
+                    //Create the class to be connected to the student.
+                    db.Classes.Add(new Class { Other = other });
+
+                    //Save the class into the database.
+                    db.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    //There was an error.
+                    ViewBag.Error = "There was an error with the database. Please try again.";
+                    ViewBag.Week = Week;
+                    ViewBag.Id = VNum;
+                    return View();
+                }
+
+                //Get the class again.
+                Class sClass = db.Classes
+                    .Where(c => c.Other == other)
+                    .Select(c => c).FirstOrDefault();
+
+                //Add the class to the current student.
+                Student currentStudent = db.Students.Find(VNum);
+                db.StudentClasses.Add(new StudentClass { VNum = VNum, ClassID = sClass.ClassID });
+
+                try
+                {
+                    //Create the Sign In to be added to the db.
+                    db.SignIns.Add(new SignIn { Week = Week, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, StudentID = VNum, ClassID = sClass.ClassID });
+
+                    //Save the Changes to the db.
+                    db.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    //There was an error.
+                    ViewBag.Error = "There was an error with the database. Please try again.";
+                    ViewBag.Week = Week;
+                    ViewBag.Id = VNum;
+                    return View();
+                }
+
+                //Redirect to the finish page.
+                return RedirectToAction("Finish", new { VNum, Week });
+            }
+            else
+            {
+                ViewBag.Error = "Please input an actual class.";
                 ViewBag.Week = Week;
                 ViewBag.Id = VNum;
                 return View();
             }
-
-            //Get the class again.
-            Class sClass = db.Classes
-                .Where(c => c.Other == other)
-                .Select(c => c).FirstOrDefault();
-
-            //Add the class to the current student.
-            Student currentStudent = db.Students.Find(VNum);
-            db.StudentClasses.Add(new StudentClass { VNum = VNum, ClassID = sClass.ClassID });
-
-            try
-            {
-                //Create the Sign In to be added to the db.
-                db.SignIns.Add(new SignIn { Week = Week, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, StudentID = VNum, ClassID = sClass.ClassID });
-
-                //Save the Changes to the db.
-                db.SaveChanges();
-            }
-            catch(Exception)
-            {
-                //There was an error.
-                ViewBag.Error = "There was an error with the database. Please try again. (2)";
-                ViewBag.Week = Week;
-                ViewBag.Id = VNum;
-                return View();
-            }
-
-            //Redirect to the finish page.
-            return RedirectToAction("Finish", new { VNum, Week });
         }
         /*
          * The method for when you are already in the DB and just need to approve the sign in.
@@ -365,14 +378,14 @@ namespace MathCenter.Controllers
             return View(currentStudent);
         }
         [HttpPost]
-        public ActionResult Done(string VNum, int Week, int approved, int? classID)
+        public ActionResult Done(string VNum, int? Week, int approved, int? classID)
         {
             if (approved == 1 && classID != null)
             {
                 try
                 {
                     //Create the Sign In and add it to the database.
-                    db.SignIns.Add(new SignIn { Week = Week, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, StudentID = VNum, ClassID = (int)classID });
+                    db.SignIns.Add(new SignIn { Week = (int)Week, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, StudentID = VNum, ClassID = (int)classID });
                     db.SaveChanges();
                 }
                 catch (Exception)
@@ -407,6 +420,8 @@ namespace MathCenter.Controllers
             }
             else
             {
+                ViewBag.VNum = VNum;
+                ViewBag.Week = Week;
                 ViewBag.ClassError = "Please select the class you would like to Sign In for.";
                 return View(db.Students.Find(VNum));
             }
