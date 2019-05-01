@@ -291,7 +291,7 @@ namespace MathCenter.Controllers
         [HttpPost]
         public ActionResult Other(int Week, string VNum, string other)
         {
-            Regex rx = new Regex(@"\w\w?\w?\s\d\d\d?", RegexOptions.IgnoreCase);
+            Regex rx = new Regex(@"^[a-zA-Z]{1,3}\s\d\d\d?", RegexOptions.IgnoreCase);
             if (rx.IsMatch(other))
             {
                 try
