@@ -37,8 +37,14 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3"></div>
-                <div class="col-md-8">
+                <div class="col-md-5">
+                    <div class="center">
+                        <br />
+                        <h3>Class not found? Click <button name="button" value="Other" type="submit">Here</button></h3>
+                    </div>
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-6">
                     <h3 id="LabelTimes">Class Time</h3>
                     <div class="col-md-10">
                         <!--This will be added with JavaScript-->
@@ -47,14 +53,17 @@
                 </div>
             </div>
             <br />
+            <div class="row">
+                <input type="hidden" name="Week" value=@ViewBag.Week />
+                <input type="hidden" name="Id" value=@ViewBag.Id />
+                <div class="center">
+                    <h3><button name="button" value="Submit" type="submit">Submit</button></h3>
+                </div>
             </div>
-            <input type="hidden" name="Week" value=@ViewBag.Week />
-            <input type="hidden" name="Id" value=@ViewBag.Id />
-            <div class="center">
-                <h3>
-                    <button name="button" value="Other" type="submit">Other</button>
-                    <button name="button" value="Submit" type="submit">Submit</button>
-                </h3>
+            <div class="row">
+                <div class="center">
+                    
+                </div>
             </div>
             <div class="center">
                 <h4 style="color: darkblue;">@ViewBag.Error</h4>

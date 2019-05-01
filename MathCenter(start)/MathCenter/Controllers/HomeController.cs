@@ -248,6 +248,7 @@ namespace MathCenter.Controllers
             var ClassDepts = db.Classes
                 .GroupBy(c => c.DeptPrefix)
                 .Select(c => c.FirstOrDefault())
+                .OrderBy(c => c.ClassNum)
                 .ToList();
 
             //Remove the classes with Other having something in it.
@@ -291,7 +292,7 @@ namespace MathCenter.Controllers
         [HttpPost]
         public ActionResult Other(int Week, string VNum, string other)
         {
-            Regex rx = new Regex(@"^[a-zA-Z]{1,3}\s\d\d\d?", RegexOptions.IgnoreCase);
+            Regex rx = new Regex(@"^[A-Z]{1,3}\s\d{2,3}", RegexOptions.IgnoreCase);
             if (rx.IsMatch(other))
             {
                 try
