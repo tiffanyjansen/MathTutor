@@ -1,3 +1,3 @@
 # Math Center
-##Tiffany Jansen
+## Tiffany Jansen
 This is the Repository for the Sign In site for WOU's Math Center.
