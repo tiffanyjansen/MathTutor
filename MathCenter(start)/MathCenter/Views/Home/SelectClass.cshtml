@@ -25,14 +25,25 @@
                     <h3>Class Number</h3>
                     <div class="col-md-10">
                         <!--This will be added with JavaScript-->
-                        <select style="width:inherit;" name="Numbers" id="Numbers"></select>
+                        <select style="width:inherit;" name="Numbers" id="Numbers">
+                            @foreach (var num in ViewBag.Numbers)
+                            {
+                                <option>@num.ClassNum</option>
+                            }
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <h3>Instructor</h3>
                     <div class="col-md-10">
                         <!--This will be added with JavaScript-->
-                        <select style="width:inherit;" name="Instructors" id="Instructors"></select>
+                        <select style="width:inherit;" name="Instructors" id="Instructors">
+                            @foreach(var instructor in ViewBag.Instructors)
+                            {
+                                <option>@instructor.Instructor</option>
+                            }
+                            <option>Community College</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -48,7 +59,12 @@
                     <h3 id="LabelTimes">Class Time</h3>
                     <div class="col-md-10">
                         <!--This will be added with JavaScript-->
-                        <select style="width:inherit;" name="ClassID" id="Times"></select>
+                        <select style="width:inherit;" name="ClassID" id="Times">
+                            @foreach(var time in ViewBag.Times)
+                            {
+                                <option value=@time.ClassID>@time.Time</option>
+                            }
+                        </select>
                     </div>
                 </div>
             </div>

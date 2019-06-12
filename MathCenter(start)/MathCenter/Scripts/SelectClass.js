@@ -1,4 +1,4 @@
-﻿$('#Departments').click(function () {
+﻿$('#Departments').change(function () {
     var id = $('#Departments').val().toString(); //get the department prefix.    
     var source = "/Ajax/GetNumbers/" + id;   //the source for the json object.                   
     $.ajax({ //ajax call
@@ -9,7 +9,7 @@
         error: errorAjax
     });
 });
-$('#Numbers').click(function () {
+$('#Numbers').change(function () {
     var id = $('#Departments').val().toString(); //get the department prefix.
     var num = $('#Numbers').val().toString(); //get the class number. 
     var source = "/Ajax/GetInstructors/" + id + "/" + num;   //the source for the json object.                   
@@ -21,7 +21,7 @@ $('#Numbers').click(function () {
         error: errorAjax
     });
 });
-$('#Instructors').click(function () {
+$('#Instructors').change(function () {
     var id = $('#Departments').val().toString(); //get the department prefix.
     var num = $('#Numbers').val().toString(); //get the class number. 
     var instructor = $('#Instructors').val().toString(); //get the Instructor. 
@@ -59,6 +59,17 @@ function successDepartmentsAjax(numbers) {
             $('#Numbers').append('<option>' + json[i]["ClassNum"] + '</option>');
             i++; //increment the counter
         }
+
+        var id = $('#Departments').val().toString(); //get the department prefix.
+        var num = $('#Numbers').val().toString(); //get the class number. 
+        var source = "/Ajax/GetInstructors/" + id + "/" + num;   //the source for the json object.                   
+        $.ajax({ //ajax call
+            type: "GET",
+            dataType: "json",
+            url: source,
+            success: successInstructorsAjax,
+            error: errorAjax
+        });
     }
 }
 function successInstructorsAjax(instructors) {
@@ -71,7 +82,33 @@ function successInstructorsAjax(instructors) {
             $('#Instructors').append('<option>' + json[i]["Instructor"] + '</option>');
             i++; //increment the counter
         }
-        $('#Instructors').append('<option>'+ 'Community College' + '</option>');
+        $('#Instructors').append('<option>' + 'Community College' + '</option>');
+
+        var id = $('#Departments').val().toString(); //get the department prefix.
+        var num = $('#Numbers').val().toString(); //get the class number. 
+        var instructor = $('#Instructors').val().toString(); //get the Instructor. 
+        console.log("instructor = " + instructor);
+        console.log(instructor == "Community College");
+        if (instructor == "Community College") {
+            var source = "/Ajax/GetTimes/" + id + "/" + num + "/" + instructor; //the source for the json object.                   
+            $.ajax({ //ajax call
+                type: "GET",
+                dataType: "json",
+                url: source,
+                success: successCCAjax,
+                error: errorAjax
+            });
+        }
+        else {
+            var source = "/Ajax/GetTimes/" + id + "/" + num + "/" + instructor; //the source for the json object.                   
+            $.ajax({ //ajax call
+                type: "GET",
+                dataType: "json",
+                url: source,
+                success: successTimesAjax,
+                error: errorAjax
+            });
+        }
     }
 }
 function successTimesAjax(times) {

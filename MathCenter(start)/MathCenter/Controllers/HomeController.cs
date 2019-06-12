@@ -189,6 +189,14 @@ namespace MathCenter.Controllers
             ViewBag.Id = VNum;
             ViewBag.Week = Week;
 
+            //Get the associated Class Info for the given department.
+            string dept = GetClassDepts().Select(c => c.DeptPrefix).First();
+            ViewBag.Numbers = GetClassNums(dept);
+            int? num = GetClassNums(dept).Select(c => c.ClassNum).First();
+            ViewBag.Instructors = GetClassInstructors(dept, num);
+            string instruct = GetClassInstructors(dept, num).Select(c => c.Instructor).First();
+            ViewBag.Times = GetClassTimes(dept, num, instruct);
+                       
             //Return the View so students can select their DeptPrefix.
             return View(GetClassDepts());
         }
@@ -261,6 +269,91 @@ namespace MathCenter.Controllers
             }
 
             return ClassDepts;
+        }
+
+        private List<Class> GetClassNums(string dept)
+        {
+            //Find all of the distict Class Numbers in relation to the Prefix Given and use that for the drop down.
+            var ClassNums = db.Classes
+                .Where(c => c.DeptPrefix == dept)
+                .GroupBy(c => c.ClassNum)
+                .Select(c => c.FirstOrDefault())
+                .ToList();
+
+            //Remove the classes with "Other" not being null
+            var remClasses = ClassNums
+                .Where(c => c.Other != null)
+                .Select(c => c).ToList();
+            foreach (var remClass in remClasses)
+            {
+                ClassNums.Remove(remClass);
+            }
+
+            return ClassNums;
+        }
+
+        private List<Class> GetClassInstructors(string dept, int? num)
+        {
+            var Instructors = db.Classes
+                .Where(c => c.DeptPrefix == dept)
+                .Where(c => c.ClassNum == num)
+                .GroupBy(c => c.Instructor)
+                .Select(c => c.FirstOrDefault())
+                .ToList();
+
+            //Remove the classes with "Other" not being null
+            var remClasses = Instructors
+                .Where(c => c.Other != null)
+                .Select(c => c).ToList();
+            foreach (var remClass in remClasses)
+            {
+                Instructors.Remove(remClass);
+            }
+
+            //Remove the classes with Community Colleges as an Instructor
+            List<Class> ccClasses = Instructors
+                .Where(c => c.Instructor == "Portland")
+                .Select(c => c).ToList();
+            ccClasses.Add(
+                Instructors.Where(c => c.Instructor == "Chemeketa")
+                .Select(c => c).FirstOrDefault());
+            ccClasses.Add(
+                Instructors.Where(c => c.Instructor == "Clackamas")
+                .Select(c => c).FirstOrDefault());
+            ccClasses.Add(
+                Instructors.Where(c => c.Instructor == "Mt. Hood")
+                .Select(c => c).FirstOrDefault());
+            ccClasses.Add(
+                Instructors.Where(c => c.Instructor == "Linn-Benton")
+                .Select(c => c).FirstOrDefault());
+            foreach (var ccClass in ccClasses)
+            {
+                Instructors.Remove(ccClass);
+            }
+
+            return Instructors;
+        }
+
+        private List<Class> GetClassTimes(string dept, int? num, string instruct)
+        {
+            //Find all possible start times
+            var startTimes = db.Classes
+                .Where(c => c.DeptPrefix == dept)
+                .Where(d => d.ClassNum == num)
+                .Where(n => n.Instructor == instruct)
+                .Select(p => p)
+                .ToList();
+
+            //Remove the classes with "Other" not being null
+            var remClasses = startTimes
+                .Where(c => c.Other != null)
+                .Select(c => c).ToList();
+            foreach (var remClass in remClasses)
+            {
+                startTimes.Remove(remClass);
+            }
+
+            return startTimes;
         }
 
         /*
