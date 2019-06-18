@@ -14,6 +14,12 @@ namespace ScienceCenter
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+               name: "Ajax",
+               url: "Ajax/{action}/{id}/{num}/{instructor}",
+               defaults: new { controller = "Ajax", action = "GetNumbers", id = UrlParameter.Optional, num = UrlParameter.Optional, instructor = UrlParameter.Optional }
+           );
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }

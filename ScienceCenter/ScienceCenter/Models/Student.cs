@@ -12,26 +12,23 @@ namespace ScienceCenter.Models
         public Student()
         {
             SignIns = new HashSet<SignIn>();
+            StudentClasses = new HashSet<StudentClass>();
         }
 
         [Key]
         [StringLength(8)]
-        [Display(Name = "V-Number")]
         public string VNum { get; set; }
 
         [Required]
-        [Display(Name = "First Name")]
         public string FirstName { get; set; }
 
         [Required]
-        [Display(Name = "Last Name")]
         public string LastName { get; set; }
-
-        public int Class { get; set; }
-
-        public virtual Class Class1 { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SignIn> SignIns { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<StudentClass> StudentClasses { get; set; }
     }
 }

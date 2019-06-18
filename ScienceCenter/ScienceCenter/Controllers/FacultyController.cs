@@ -114,9 +114,9 @@ namespace ScienceCenter.Controllers
             //Go through the list of sign ins and add all the data to the list.
             foreach (var SignIn in db.SignIns.ToList())
             {
-                Data data = new Data { Week = SignIn.Week, Date = SignIn.Date, Hour = SignIn.Hour, Min = SignIn.Min, Sec = SignIn.Sec, VNum = SignIn.Student.VNum, FirstName = SignIn.Student.FirstName, LastName = SignIn.Student.LastName, CRN = SignIn.Student.Class1.CRN, DeptPrefix = SignIn.Student.Class1.DeptPrefix, ClassNum = SignIn.Student.Class1.ClassNum, Days = SignIn.Student.Class1.Days, Instructor = SignIn.Student.Class1.Instructor, StartTime = SignIn.Student.Class1.Time };
+                //Data data = new Data { Week = SignIn.Week, Date = SignIn.Date, Hour = SignIn.Hour, Min = SignIn.Min, Sec = SignIn.Sec, VNum = SignIn.Student.VNum, FirstName = SignIn.Student.FirstName, LastName = SignIn.Student.LastName, CRN = SignIn.Student.Class1.CRN, DeptPrefix = SignIn.Student.Class1.DeptPrefix, ClassNum = SignIn.Student.Class1.ClassNum, Days = SignIn.Student.Class1.Days, Instructor = SignIn.Student.Class1.Instructor, StartTime = SignIn.Student.Class1.Time };
 
-                datas.Add(data);
+                //datas.Add(data);
             }
 
             //Remove the Placeholder class.
@@ -146,11 +146,11 @@ namespace ScienceCenter.Controllers
                 //Check if there was an error ot not.
                 if (numTimes != 0)
                 {
-                    //Create the data to be added.
-                    ProfData data = new ProfData { FirstName = student.FirstName, LastName = student.LastName, CRN = student.Class1.CRN, DeptPrefix = student.Class1.DeptPrefix, Instructor = student.Class1.Instructor, Days = student.Class1.Days, ClassNum = student.Class1.ClassNum, StartTime = student.Class1.Time, TimesIn = numTimes };
+                    ////Create the data to be added.
+                    //ProfData data = new ProfData { FirstName = student.FirstName, LastName = student.LastName, CRN = student.Class1.CRN, DeptPrefix = student.Class1.DeptPrefix, Instructor = student.Class1.Instructor, Days = student.Class1.Days, ClassNum = student.Class1.ClassNum, StartTime = student.Class1.Time, TimesIn = numTimes };
 
-                    //Add the data to the list.
-                    pData.Add(data);
+                    ////Add the data to the list.
+                    //pData.Add(data);
                 }               
             }
 

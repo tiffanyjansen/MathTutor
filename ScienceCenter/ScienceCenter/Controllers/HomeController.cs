@@ -205,10 +205,74 @@ namespace ScienceCenter.Controllers
             return View(GetClassDepts());
         }
         [HttpPost]
-        public ActionResult SelectClass(string dept, int NumWeek, string VNum)
+        public ActionResult SelectClass(int? ClassID, int Week, string VNum)
         {
-            //Redirect to the Page to select the Class Number
-            return RedirectToAction("Finish", new { WeekNum = NumWeek, VNum, Dept = dept });
+            if (ClassID == null)
+            {
+                ViewBag.Id = VNum;
+                ViewBag.Week = Week;
+
+                //Get the associated Class Info for the given department.
+                string dept = GetClassDepts().Select(c => c.DeptPrefix).First();
+                ViewBag.Numbers = GetClassNums(dept);
+                string num = GetClassNums(dept).Select(c => c.ClassNum).First();
+                ViewBag.Instructors = GetClassInstructors(dept, num);
+                string instruct = GetClassInstructors(dept, num).Select(c => c.Instructor).First();
+                ViewBag.Times = GetClassTimes(dept, num, instruct);
+
+                return View(GetClassDepts());
+            }
+            else
+            {
+                Student currentStudent = db.Students.Find(VNum);
+                db.StudentClasses.Add(new StudentClass { VNum = currentStudent.VNum, ClassId = (int)ClassID });
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    //There was an error.                        
+                    ViewBag.Id = VNum;
+                    ViewBag.Week = Week;
+                    ViewBag.Error = "There was an error with the database. Please try again.";
+
+                    //Get the associated Class Info for the given department.
+                    string dept = GetClassDepts().Select(c => c.DeptPrefix).First();
+                    ViewBag.Numbers = GetClassNums(dept);
+                    string num = GetClassNums(dept).Select(c => c.ClassNum).First();
+                    ViewBag.Instructors = GetClassInstructors(dept, num);
+                    string instruct = GetClassInstructors(dept, num).Select(c => c.Instructor).First();
+                    ViewBag.Times = GetClassTimes(dept, num, instruct);
+
+                    return View(GetClassDepts());
+                }
+
+                //Add the SignIn to the Database
+                try
+                {
+                    db.SignIns.Add(new SignIn { Week = Week, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, StudentID = VNum, ClassId = (int)ClassID });
+                    db.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    //There was an error
+                    ViewBag.Error = "There was an error with the database. Please try again.";
+                    ViewBag.Id = VNum;
+                    ViewBag.Week = Week;
+
+                    //Get the associated Class Info for the given department.
+                    string dept = GetClassDepts().Select(c => c.DeptPrefix).First();
+                    ViewBag.Numbers = GetClassNums(dept);
+                    string num = GetClassNums(dept).Select(c => c.ClassNum).First();
+                    ViewBag.Instructors = GetClassInstructors(dept, num);
+                    string instruct = GetClassInstructors(dept, num).Select(c => c.Instructor).First();
+                    ViewBag.Times = GetClassTimes(dept, num, instruct);
+
+                    return View(GetClassDepts());
+                }
+                return RedirectToAction("Finish", new { VNum, Week });
+            }
         }
 
         private List<Class> GetClassDepts()
@@ -301,7 +365,7 @@ namespace ScienceCenter.Controllers
             if (approved == 1)
             {
                 //Create the Sign In and add it to the database.
-                SignIn signIn = new SignIn { Week = Week, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, Sec = DateTime.Now.TimeOfDay.Seconds, StudentID = VNum };
+                SignIn signIn = new SignIn { Week = Week, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, StudentID = VNum };
                 db.SignIns.Add(signIn);
                 db.SaveChanges();
 
@@ -311,12 +375,12 @@ namespace ScienceCenter.Controllers
             else if(approved == -1)
             {
                 //If it's not you redirect to Sign In page.
-                return RedirectToAction("SignIn", new { Week });
+                return RedirectToAction("Welcome", new { Week });
             }
             else
             {
                 //If the name is wrong, redirect to name input.
-                return RedirectToAction("NameInput", new { VNum, Week });
+                return RedirectToAction("Name", new { VNum, Week });
             }
         }
 

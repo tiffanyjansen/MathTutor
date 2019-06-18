@@ -11,21 +11,20 @@ namespace ScienceCenter.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Class()
         {
-            Students = new HashSet<Student>();
+            SignIns = new HashSet<SignIn>();
+            StudentClasses = new HashSet<StudentClass>();
         }
 
         public int ClassID { get; set; }
 
-        public int CRN { get; set; }
+        public int? CRN { get; set; }
 
         [Required]
         [StringLength(10)]
-        [Display(Name ="Class Prefix")]
         public string DeptPrefix { get; set; }
 
         [Required]
         [StringLength(4)]
-        [Display(Name = "Class Number")]
         public string ClassNum { get; set; }
 
         [Required]
@@ -35,10 +34,12 @@ namespace ScienceCenter.Models
         public string Days { get; set; }
 
         [StringLength(25)]
-        [Display(Name = "Time")]
         public string Time { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Student> Students { get; set; }
+        public virtual ICollection<SignIn> SignIns { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<StudentClass> StudentClasses { get; set; }
     }
 }
