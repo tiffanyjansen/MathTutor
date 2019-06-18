@@ -1,7 +1,5 @@
 /* 
 	This script creates all of the tables for the database.
-	For testing purposes I have added some seed data at the end. 
-	I will comment it out later when I have it working right.
 */
 
 /* Classes Table */

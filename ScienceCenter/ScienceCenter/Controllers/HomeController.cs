@@ -36,7 +36,7 @@ namespace ScienceCenter.Controllers
                 //Check the password and make sure there is a week input.
                 if (tutorPwd == tutorPass && Week != -1)
                 {
-                    return RedirectToAction("SignIn", new { Week });
+                    return RedirectToAction("Welcome", new { Week });
                 }
                 //Return specific errors if the input is not valid.
                 else if (tutorPwd != tutorPass)
@@ -72,13 +72,18 @@ namespace ScienceCenter.Controllers
         * add them to the database.
         */
         [HttpGet]
-        public ActionResult SignIn(int Week)
+        public ActionResult Welcome(int? Week)
         {
+            //Check for no input. This just adds extra error-handling.
+            if (Week == null)
+            {
+                return RedirectToAction("Index");
+            }
             ViewBag.Num = Week;
             return View();
         }
         [HttpPost]
-        public ActionResult SignIn(string VNum, int Week)
+        public ActionResult Welcome(string VNum, int Week)
         {
             //If no input, refresh page.
             if (VNum == null || VNum.Length != 8)
@@ -94,7 +99,7 @@ namespace ScienceCenter.Controllers
                 return RedirectToAction("Done", new { VNum, Week });
             }
             //Otherwise, redirect to create student page.            
-            return RedirectToAction("NameInput", new { VNum, Week });
+            return RedirectToAction("Name", new { VNum, Week });
         }
 
         /*
@@ -105,8 +110,21 @@ namespace ScienceCenter.Controllers
         * class so we don't have to carry around all the information.
         */
         [HttpGet]
-        public ActionResult NameInput(string VNum, int Week)
+        public ActionResult Name(string VNum, int? Week)
         {
+            //Check for no input. This just adds extra error-handling.
+            if (Week == null || VNum == null)
+            {
+                if (Week == null)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return RedirectToAction("Welcome", new { Week });
+                }
+            }
+
             //Use the VNum and Week in the View.
             ViewBag.VNum = VNum;
             ViewBag.Week = Week;
@@ -115,7 +133,7 @@ namespace ScienceCenter.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult NameInput(PersonWeek pWeek)
+        public ActionResult Name(PersonWeek pWeek)
         {
             //Create empty student to be used later.
             Student student = null;
@@ -131,26 +149,23 @@ namespace ScienceCenter.Controllers
             else
             {
                 //Add the student to the database.
-                student = new Student { VNum = pWeek.VNum, FirstName = pWeek.FirstName, LastName = pWeek.LastName, Class = 
-                    db.Classes.Where(c => c.CRN == 0).Select(c => c.ClassID).FirstOrDefault()};
+                student = new Student { VNum = pWeek.VNum, FirstName = pWeek.FirstName, LastName = pWeek.LastName };
                 db.Students.Add(student);                
             }
 
             try
             {
                 //Save the changes to the database.            
-                db.SaveChanges();
-                Debug.WriteLine("Student was added to db");
+                db.SaveChanges();               
             }
             catch (Exception)
             {
-                Debug.WriteLine("There was an error");
-                ViewBag.Error = "There was an error with the database. Please try again.";
+                ViewBag.Error = "There was an error adding you to the database. Please ask a tutor for help.";
                 return View(pWeek);
             }
 
             //Redirect to the select department method and slowly select the class.
-            return RedirectToAction("ClassDept", new { NumWeek = pWeek.Week, VNum = pWeek.VNum });
+            return RedirectToAction("SelectClass", new { pWeek.Week, pWeek.VNum });
         }
 
         /*
@@ -159,75 +174,71 @@ namespace ScienceCenter.Controllers
          * category for people not in any of the available classes.
          */
         [HttpGet]
-        public ActionResult ClassDept(int NumWeek, string VNum)
+        public ActionResult SelectClass(int? Week, string VNum)
         {
-            //Find all of the distict Class Prefixes and use that for the drop down.
+            //Check for no input. This just adds extra error-handling.
+            if (Week == null || VNum == null)
+            {
+                if (Week == null)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return RedirectToAction("Welcome", new { Week });
+                }
+            }           
+            
+            //Keep these floating around so we can easily have the stuff working. 
+            ViewBag.Id = VNum;
+            ViewBag.Week = Week;
+
+            //Get the associated Class Info for the given department.
+            string dept = GetClassDepts().Select(c => c.DeptPrefix).First();
+            ViewBag.Numbers = GetClassNums(dept);
+            string num = GetClassNums(dept).Select(c => c.ClassNum).First();
+            ViewBag.Instructors = GetClassInstructors(dept, num);
+            string instruct = GetClassInstructors(dept, num).Select(c => c.Instructor).First();
+            ViewBag.Times = GetClassTimes(dept, num, instruct);
+
+            //Return the View so students can select their DeptPrefix.
+            return View(GetClassDepts());
+        }
+        [HttpPost]
+        public ActionResult SelectClass(string dept, int NumWeek, string VNum)
+        {
+            //Redirect to the Page to select the Class Number
+            return RedirectToAction("Finish", new { WeekNum = NumWeek, VNum, Dept = dept });
+        }
+
+        private List<Class> GetClassDepts()
+        {
+            //Find all of the distinct Class Prefixes and use that for the drop down.
             var ClassDepts = db.Classes
                 .GroupBy(c => c.DeptPrefix)
                 .Select(c => c.FirstOrDefault())
                 .ToList();
 
-            //Remove the classes with "Other" not being null
-            ClassDepts.Remove(ClassDepts
-                .Where(c => c.CRN == 0)
-                .Select(c => c).First());
-            
-            //Keep these floating around so we can easily have the stuff working. 
-            ViewBag.Id = VNum;
-            ViewBag.NumWeek = NumWeek;
-
-            //Return the View so students can select their DeptPrefix.
-            return View(ClassDepts);
-        }
-        [HttpPost]
-        public ActionResult ClassDept(string dept, int NumWeek, string VNum)
-        {
-            //Redirect to the Page to select the Class Number
-            return RedirectToAction("ClassNum", new { WeekNum = NumWeek, VNum, Dept = dept });
+            return ClassDepts;
         }
 
-        /*
-         * This is the method for selecting the class number for the class the
-         * user is taking. (ex: 111, 102, 344, etc.) It will also have an "other"
-         * category for people not in any of the available classes.
-         */
-        [HttpGet]
-        public ActionResult ClassNum(int WeekNum, string VNum, string Dept)
+        private List<Class> GetClassNums(string dept)
         {
             //Find all of the distict Class Numbers in relation to the Prefix Given and use that for the drop down.
             var ClassNums = db.Classes
-                .Where(c => c.DeptPrefix == Dept)
+                .Where(c => c.DeptPrefix == dept)
                 .GroupBy(c => c.ClassNum)
                 .Select(c => c.FirstOrDefault())
                 .ToList();
-                      
-            //Keep these floating around so we can easily have the stuff working. 
-            ViewBag.Id = VNum;
-            ViewBag.WeekNum = WeekNum;
-            ViewBag.Dept = Dept;
 
-            // Return the View so students can select their Class Number.
-            return View(ClassNums);
-        }
-        [HttpPost]
-        public ActionResult ClassNum(int WeekNum, string VNum, string cNum, string dept)
-        {
-           //Redirect to the Page to select the Professor
-           return RedirectToAction("ChooseProf", new { NumWeek = WeekNum, VNum, Num = cNum, dept });            
+            return ClassNums;
         }
 
-        /*
-         * This is the method for selecting the professor for the class the
-         * user is taking. It will also have an "other" category for people not 
-         * in any of the available classes.
-         */
-        [HttpGet]
-        public ActionResult ChooseProf(int NumWeek, string VNum, string Num, string dept)
+        private List<Class> GetClassInstructors(string dept, string num)
         {
-            //Find all of the distict Class Professors in relation to the previous Info and use that for the drop down.
             var Instructors = db.Classes
                 .Where(c => c.DeptPrefix == dept)
-                .Where(c => c.ClassNum == Num)
+                .Where(c => c.ClassNum == num)
                 .GroupBy(c => c.Instructor)
                 .Select(c => c.FirstOrDefault())
                 .ToList();
@@ -253,136 +264,21 @@ namespace ScienceCenter.Controllers
                 Instructors.Remove(ccClass);
             }
 
-            //Keep these floating around so we can easily have the stuff working. 
-            ViewBag.Id = VNum;
-            ViewBag.WeekNum = NumWeek;
-            ViewBag.cNum = Num;
-            ViewBag.dept = dept;
-
-            // Return the View so students can select their Class Number.
-            return View(Instructors);
-        }
-        [HttpPost]
-        public ActionResult ChooseProf(int WeekNum, string VNum, string Prof, string classN, string dept)
-        {
-            //Check if the Professor selected was PCC.
-            if (Prof == "PCC" || Prof == "ChCC" || Prof == "ClCC" || Prof == "MHCC" || Prof == "LBCC")
-            {
-                int classID = CommunityCollegeSignIn(WeekNum, VNum, Prof, classN, dept);
-
-                Student student = db.Students.Find(VNum);
-                student.Class = classID;
-
-                //Create the Sign In to be added to the db.
-                db.SignIns.Add(new SignIn { Week = WeekNum, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, Sec = DateTime.Now.TimeOfDay.Seconds, StudentID = VNum });
-
-                //Save the Changes to the db.
-                db.SaveChanges();
-
-                //Redirect to the "finish" page.
-                return RedirectToAction("Finish", new { Week = WeekNum });
-            }
-            else
-            {
-                //Redirect to the Page to select the Professor
-                return RedirectToAction("ChooseStartTime", new { WeekNum, VNum, cNum = classN, Prof, dept });
-            }
+            return Instructors;
         }
 
-        private int CommunityCollegeSignIn(int weekNum, string vNum, string prof, string classN, string dept)
-        {
-            //Find the "Professor" for the given Community College Selected.
-            string Instructor = "";
-            if (prof == "PCC")
-            {
-                Instructor = "Portland";
-            }
-            else if (prof == "ChCC")
-            {
-                Instructor = "Chemeketa";
-            }
-            else if (prof == "ClCC")
-            {
-                Instructor = "Clackamas";
-            }
-            else if (prof == "MHCC")
-            {
-                Instructor = "Mt. Hood";
-            }
-            else
-            {
-                Instructor = "Linn-Benton";
-            }
-
-            //Check if the class is already in the database.
-            int id = db.Classes
-                .Where(m => m.Instructor == Instructor)
-                .Where(m => m.DeptPrefix == dept)
-                .Where(m => m.ClassNum == classN)
-                .Select(i => i.ClassID).FirstOrDefault();
-
-            //If it's not add it and get the ID Number
-            if (id == 0)
-            {
-                //Create the class
-                Class @class = new Class { DeptPrefix = dept, ClassNum = classN, Instructor = Instructor };
-
-                //Add it to the database
-                db.Classes.Add(@class);
-                db.SaveChanges();
-
-                //Get the class again.
-                id = db.Classes
-                    .Where(c => c.Instructor == Instructor)
-                    .Where(m => m.DeptPrefix == dept)
-                    .Where(m => m.ClassNum == classN)
-                    .Select(c => c.ClassID).FirstOrDefault();
-            }
-
-            //Return the id Number.
-            return id;
-        }
-
-        /*
-         * This is the method where the student selects the startTime 
-         * of their class. It will include 'online' for online classes and 
-         * an other category, just in case.
-         */
-        [HttpGet]
-        public ActionResult ChooseStartTime(int WeekNum, int VNum, string cNum, string Prof, string dept)
+        private List<Class> GetClassTimes(string dept, string num, string instruct)
         {
             //Find all possible start times
             var startTimes = db.Classes
                 .Where(c => c.DeptPrefix == dept)
-                .Where(d => d.ClassNum == cNum)
-                .Where(n => n.Instructor == Prof)
+                .Where(d => d.ClassNum == num)
+                .Where(n => n.Instructor == instruct)
                 .Select(p => p)
                 .ToList();
 
-            //Keep Week Number and StudentID
-            ViewBag.Id = VNum;
-            ViewBag.WeekNum = WeekNum;
-
-            // Return the View so students can select their Class Number.
-            return View(startTimes);
-        }
-        [HttpPost]
-        public ActionResult ChooseStartTime(int WeekNum, string VNum, int classID)
-        {           
-            //Set the student's class to their actual class.
-            Student currentStudent = db.Students.Find(VNum);
-            currentStudent.Class = classID;
-
-            //Create the SignIn to add it to the Database.
-            SignIn signIn = new SignIn { Week = WeekNum, Date = DateTime.Today, Hour = DateTime.Today.Hour, Min = DateTime.Now.TimeOfDay.Minutes, Sec = DateTime.Now.TimeOfDay.Seconds, StudentID = VNum };
-            db.SignIns.Add(signIn);
-
-            //Save the database changes.
-            db.SaveChanges();
-
-            //Redirect to the "finish" page.
-            return RedirectToAction("Finish", new { Week = WeekNum });
-        }
+            return startTimes;
+        }        
 
         /*
          * The method for when you are already in the DB and just need to approve the sign in.

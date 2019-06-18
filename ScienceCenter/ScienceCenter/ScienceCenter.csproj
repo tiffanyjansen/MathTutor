@@ -158,6 +158,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\down.sql" />
+    <Content Include="App_Data\downOld.sql" />
     <Content Include="App_Data\ScienceDB.mdf" />
     <Content Include="App_Data\ScienceDB_log.ldf">
       <DependentUpon>ScienceDB.mdf</DependentUpon>
@@ -202,12 +203,8 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Home\SignIn.cshtml" />
-    <Content Include="Views\Home\NameInput.cshtml" />
-    <Content Include="Views\Home\ClassDept.cshtml" />
-    <Content Include="Views\Home\ClassNum.cshtml" />
-    <Content Include="Views\Home\ChooseProf.cshtml" />
-    <Content Include="Views\Home\ChooseStartTime.cshtml" />
+    <Content Include="Views\Home\Welcome.cshtml" />
+    <Content Include="Views\Home\Name.cshtml" />
     <Content Include="Views\Home\Done.cshtml" />
     <Content Include="Views\Home\Finish.cshtml" />
     <Content Include="Views\Faculty\Index.cshtml" />
@@ -219,6 +216,7 @@
     <Content Include="Views\Faculty\ProfData.cshtml" />
     <Content Include="Views\Faculty\ClassData.cshtml" />
     <Content Include="Views\Faculty\Extra.cshtml" />
+    <Content Include="Views\Home\SelectClass.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

@@ -143,7 +143,7 @@ namespace MathCenter.Controllers
                 student.FirstName = pWeek.FirstName;
                 student.LastName = pWeek.LastName;
             }
-            //Create a student and set the class to the "placeholder class" created in the up script.
+            //Create a student.
             else
             {
                 //Add the student to the database.
