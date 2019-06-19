@@ -2,9 +2,7 @@
 using ScienceCenter.Models.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace ScienceCenter.Controllers
@@ -342,45 +340,84 @@ namespace ScienceCenter.Controllers
                 .ToList();
 
             return startTimes;
-        }        
+        }
 
         /*
          * The method for when you are already in the DB and just need to approve the sign in.
          */
         [HttpGet]
-        public ActionResult Done(string VNum, int Week)
+        public ActionResult Done(string VNum, int? Week)
         {
+            //Check for no input. This just adds extra error-handling.
+            if (Week == null || VNum == null)
+            {
+                if (Week == null)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return RedirectToAction("Welcome", new { Week });
+                }
+            }
+
             //Get the info from the Database about the current student.
             Student currentStudent = db.Students.Find(VNum);
 
             //Keep the data floating
+            ViewBag.VNum = VNum;
             ViewBag.Week = Week;
 
             //Return the View with the current student.
             return View(currentStudent);
         }
         [HttpPost]
-        public ActionResult Done(string VNum, int Week, int approved)
+        public ActionResult Done(string VNum, int? Week, int approved, int? classID)
         {
-            if (approved == 1)
+            if (approved == 1 && classID != null)
             {
-                //Create the Sign In and add it to the database.
-                SignIn signIn = new SignIn { Week = Week, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, StudentID = VNum };
-                db.SignIns.Add(signIn);
-                db.SaveChanges();
+                try
+                {
+                    //Create the Sign In and add it to the database.
+                    db.SignIns.Add(new SignIn { Week = (int)Week, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, StudentID = VNum, ClassId = (int)classID });
+                    db.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    //There was an error.
+                    ViewBag.Error = "There was an error with the database. Please try again.";
+                    //Keep the data floating
+                    ViewBag.VNum = VNum;
+                    ViewBag.Week = Week;
+
+                    //Return the View with the current student.
+                    return View(db.Students.Find(VNum));
+                }
 
                 //Redirect to the "finish" page.
                 return RedirectToAction("Finish", new { Week });
             }
-            else if(approved == -1)
+            else if (approved == 0)
             {
                 //If it's not you redirect to Sign In page.
+                return RedirectToAction("Name", new { Week, VNum });
+            }
+            else if (approved == 3)
+            {
+                //Redirect back to the page to add more classes
+                return RedirectToAction("SelectClass", new { VNum, Week });
+            }
+            else if (approved == 2)
+            {
+                //Redirect back to the page to input your V-Number
                 return RedirectToAction("Welcome", new { Week });
             }
             else
             {
-                //If the name is wrong, redirect to name input.
-                return RedirectToAction("Name", new { VNum, Week });
+                ViewBag.VNum = VNum;
+                ViewBag.Week = Week;
+                ViewBag.ClassError = "Please select the class you would like to Sign In for.";
+                return View(db.Students.Find(VNum));
             }
         }
 

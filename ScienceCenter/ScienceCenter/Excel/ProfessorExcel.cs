@@ -32,7 +32,7 @@ namespace ScienceCenter.Excel
                 //Student Info
                 sheet.Column(7).Width = 15; //FirstName
                 sheet.Column(8).Width = 15; //LastName    
-                sheet.Column(9).Width = 10; //TimesIn
+                sheet.Column(9).Width = 20; //TimesIn
 
                 //heading of the table
                 #region Table Header

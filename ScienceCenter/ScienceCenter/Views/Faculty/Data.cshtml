@@ -26,31 +26,28 @@
             @Html.DisplayNameFor(model => model.Min)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Sec)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.Student.FirstName)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Student.LastName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Student.Class1.CRN)
+            @Html.DisplayNameFor(model => model.Class.CRN)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Student.Class1.DeptPrefix)
+            @Html.DisplayNameFor(model => model.Class.DeptPrefix)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Student.Class1.ClassNum)
+            @Html.DisplayNameFor(model => model.Class.ClassNum)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Student.Class1.Instructor)
+            @Html.DisplayNameFor(model => model.Class.Instructor)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Student.Class1.Days)
+            @Html.DisplayNameFor(model => model.Class.Days)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Student.Class1.Time)
+            @Html.DisplayNameFor(model => model.Class.Time)
         </th>
     </tr>
     @foreach (var item in Model)
@@ -69,31 +66,28 @@
                 @Html.DisplayFor(modelItem => item.Min)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Sec)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Student.FirstName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Student.LastName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Student.Class1.CRN)
+                @Html.DisplayFor(modelItem => item.Class.CRN)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Student.Class1.DeptPrefix)
+                @Html.DisplayFor(modelItem => item.Class.DeptPrefix)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Student.Class1.ClassNum)
+                @Html.DisplayFor(modelItem => item.Class.ClassNum)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Student.Class1.Instructor)
+                @Html.DisplayFor(modelItem => item.Class.Instructor)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Student.Class1.Days)
+                @Html.DisplayFor(modelItem => item.Class.Days)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Student.Class1.Time)
+                @Html.DisplayFor(modelItem => item.Class.Time)
             </td>
         </tr>
     }

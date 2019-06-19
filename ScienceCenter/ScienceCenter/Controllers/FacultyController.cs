@@ -114,9 +114,9 @@ namespace ScienceCenter.Controllers
             //Go through the list of sign ins and add all the data to the list.
             foreach (var SignIn in db.SignIns.ToList())
             {
-                //Data data = new Data { Week = SignIn.Week, Date = SignIn.Date, Hour = SignIn.Hour, Min = SignIn.Min, Sec = SignIn.Sec, VNum = SignIn.Student.VNum, FirstName = SignIn.Student.FirstName, LastName = SignIn.Student.LastName, CRN = SignIn.Student.Class1.CRN, DeptPrefix = SignIn.Student.Class1.DeptPrefix, ClassNum = SignIn.Student.Class1.ClassNum, Days = SignIn.Student.Class1.Days, Instructor = SignIn.Student.Class1.Instructor, StartTime = SignIn.Student.Class1.Time };
+                Data data = new Data { Week = SignIn.Week, Date = SignIn.Date, Hour = SignIn.Hour, Min = SignIn.Min, VNum = SignIn.Student.VNum, FirstName = SignIn.Student.FirstName, LastName = SignIn.Student.LastName, CRN = SignIn.Class.CRN, DeptPrefix = SignIn.Class.DeptPrefix, ClassNum = SignIn.Class.ClassNum, Days = SignIn.Class.Days, Instructor = SignIn.Class.Instructor, StartTime = SignIn.Class.Time };
 
-                //datas.Add(data);
+                datas.Add(data);
             }
 
             //Remove the Placeholder class.
@@ -146,11 +146,18 @@ namespace ScienceCenter.Controllers
                 //Check if there was an error ot not.
                 if (numTimes != 0)
                 {
-                    ////Create the data to be added.
-                    //ProfData data = new ProfData { FirstName = student.FirstName, LastName = student.LastName, CRN = student.Class1.CRN, DeptPrefix = student.Class1.DeptPrefix, Instructor = student.Class1.Instructor, Days = student.Class1.Days, ClassNum = student.Class1.ClassNum, StartTime = student.Class1.Time, TimesIn = numTimes };
+                    var studentSignIns = db.SignIns.Where(s => s.StudentID == student.VNum).Select(s => s);
+                    
+                    foreach(var signIn in studentSignIns)
+                    {
+                        //Create the data to be added.
+                        ProfData data = new ProfData { FirstName = student.FirstName, LastName = student.LastName, CRN = signIn.Class.CRN, DeptPrefix = signIn.Class.DeptPrefix, Instructor = signIn.Class.Instructor, Days = signIn.Class.Days, ClassNum = signIn.Class.ClassNum, StartTime = signIn.Class.Time, TimesIn = numTimes };
 
-                    ////Add the data to the list.
-                    //pData.Add(data);
+                        if (!pData.Contains(data))
+                        {
+                            pData.Add(data);
+                        }
+                    }
                 }               
             }
 
@@ -323,7 +330,7 @@ namespace ScienceCenter.Controllers
             }
             else if(num == 3)
             {
-                return View(HourlyCount());
+                return View(AverageByWeek());
             }
             else if(num == 4)
             {
@@ -331,7 +338,7 @@ namespace ScienceCenter.Controllers
             }
             else
             {
-                return View(AverageByWeek());
+                return View(HourlyCount());                
             }
         }
 
