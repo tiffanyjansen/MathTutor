@@ -56,7 +56,7 @@
                     <select style="width:inherit;" name="ClassID" id="Times">
                         @foreach (var time in ViewBag.Times)
                         {
-                            <option value=@time.ClassID>@time.Time</option>
+                            <option value=@time.ClassID>@time.Time @time.Days</option>
                         }
                     </select>
                 </div>

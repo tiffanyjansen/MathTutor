@@ -1,7 +1,5 @@
 /* 
 	This script creates all of the tables for the database.
-	For testing purposes I have added some seed data at the end. 
-	I will comment it out later when I have it working right.
 */
 
 /* Classes Table */
@@ -25,10 +23,21 @@ CREATE TABLE [dbo].[Students]
 	[VNum] NVARCHAR(8) NOT NULL,
 	[FirstName] NVARCHAR(MAX) NOT NULL,
 	[LastName] NVARCHAR(MAX) NOT NULL,
-	[Class] INT NOT NULL,
 
 	CONSTRAINT [PK_dbo.Students] PRIMARY KEY (VNum),
-	CONSTRAINT [FK_dbo.Students] FOREIGN KEY (Class) REFERENCES [dbo].[Classes] (ClassID)
+);
+
+/* StudentClass Table */
+/* Note: this is the table that will allow students to sign in for more than one class. */
+CREATE TABLE [dbo].[StudentClasses]
+(
+	[ID] INT IDENTITY(1,1) NOT NULL,
+	[VNum] NVARCHAR(8) NOT NULL,
+	[ClassID] INT NOT NULL,
+
+	CONSTRAINT [PK_dbo.StudentClasses] PRIMARY KEY (ID),
+	CONSTRAINT [FK_dbo.StudentClasses] FOREIGN KEY (VNum) REFERENCES [dbo].[Students] (VNum),
+	CONSTRAINT [FK_dbo.StudentClasses1] FOREIGN KEY (ClassID) REFERENCES [dbo].[Classes] (ClassID)
 );
 
 /* SignIn Table (For Logging Information) */
@@ -39,8 +48,10 @@ CREATE TABLE [dbo].[SignIns]
 	[Date] DATE NOT NULL,
 	[Hour] INT NOT NULL,
 	[Min] INT NOT NUll,
-	[StudentID] NVARCHAR(8) NOT Null,
+	[StudentID] NVARCHAR(8) NOT NULL,
+	[ClassID] INT NOT NULL,
 
 	CONSTRAINT [PK_dbo.SignIns] PRIMARY KEY CLUSTERED (ID ASC),
-	CONSTRAINT [FK_dbo.SignIns] FOREIGN KEY (StudentID) REFERENCES [dbo].[Students] (VNum)
+	CONSTRAINT [FK_dbo.SignIns1] FOREIGN KEY (StudentID) REFERENCES [dbo].[Students] (VNum),
+	CONSTRAINT [FK_dbo.SignIns2] FOREIGN KEY (ClassID) REFERENCES [dbo].[Classes] (ClassID)
 );

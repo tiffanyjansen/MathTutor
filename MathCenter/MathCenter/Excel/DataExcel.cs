@@ -1,4 +1,5 @@
-﻿using MathCenter.Models.ViewModels;
+﻿using MathCenter.Models;
+using MathCenter.Models.ViewModels;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System;
@@ -35,13 +36,13 @@ namespace MathCenter.Excel
                 sheet.Column(9).Width = 12; //DeptPrefix
                 sheet.Column(10).Width = 15; //ClassNum
                 sheet.Column(11).Width = 25; //Instructor
-                sheet.Column(12).Width = 5; //Days
+                sheet.Column(12).Width = 12; //Days
                 sheet.Column(13).Width = 10; //StartTime
                 sheet.Column(14).Width = 10; //Other
 
                 //heading of the table
                 #region Table Header
-                
+
                 //Heading for Week Number
                 cell = sheet.Cells[rowIndex, 1];
                 cell.Value = "Week";
@@ -100,6 +101,7 @@ namespace MathCenter.Excel
                 cell = sheet.Cells[rowIndex, 10];
                 cell.Value = "Class Number";
                 cell.Style.Font.Bold = true;
+                cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                 //Heading for Instructor
                 cell = sheet.Cells[rowIndex, 11];
@@ -115,7 +117,7 @@ namespace MathCenter.Excel
 
                 //Heading for Start Time
                 cell = sheet.Cells[rowIndex, 13];
-                cell.Value = "Start Time";
+                cell.Value = "Time";
                 cell.Style.Font.Bold = true;
                 cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
@@ -172,41 +174,41 @@ namespace MathCenter.Excel
 
                         //Info for CRN
                         cell = sheet.Cells[rowIndex, 8];
-                        cell.Value = dat.CRN;
+                        cell.Value = dat.SignedClass.CRN;
                         cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                         //Info for Class Prefix
                         cell = sheet.Cells[rowIndex, 9];
-                        cell.Value = dat.DeptPrefix;
+                        cell.Value = dat.SignedClass.DeptPrefix;
                         cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                         //Info for Class Number
                         cell = sheet.Cells[rowIndex, 10];
-                        cell.Value = dat.ClassNum;
+                        cell.Value = dat.SignedClass.ClassNum;
                         cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                         //Info for Instructor
                         cell = sheet.Cells[rowIndex, 11];
-                        cell.Value = dat.Instructor;
+                        cell.Value = dat.SignedClass.Instructor;
                         cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                         //Info for Days
                         cell = sheet.Cells[rowIndex, 12];
-                        cell.Value = dat.Days;
+                        cell.Value = dat.SignedClass.Days;
                         cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                         //Info for Start Time
                         cell = sheet.Cells[rowIndex, 13];
-                        cell.Value = dat.StartTime;
+                        cell.Value = dat.SignedClass.Time;
                         cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                         //Info for Other
                         cell = sheet.Cells[rowIndex, 14];
-                        cell.Value = dat.Other;
+                        cell.Value = dat.SignedClass.Other;
                         cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                         //Go to the next row
-                        rowIndex = rowIndex + 1;
+                        rowIndex += 1;
                     }
                 }
                 #endregion

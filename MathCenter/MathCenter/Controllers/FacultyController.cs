@@ -4,16 +4,19 @@ using MathCenter.Excel;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.Mvc;
+using OfficeOpenXml;
 
 namespace MathCenter.Controllers
 {
     public class FacultyController : Controller
     {
         //Database Connection
-        MathContext db = new MathContext();
+        private readonly MathContext db = new MathContext();
         
         /*
          * This method returns a welcome page for Faculty users.
@@ -30,7 +33,7 @@ namespace MathCenter.Controllers
             //if you press the download button, the excel sheet will be created.
             if (download == 1)
             {
-                Excel();
+                return RedirectToAction("SelectDates");
             }
             //If you press the reset button, it will redirect you to another page.
             if(download == 2)
@@ -43,38 +46,63 @@ namespace MathCenter.Controllers
                 return RedirectToAction("Index", "Home");
             }
             return View();
-        }        
+        }
 
+        [HttpGet]
+        public ActionResult SelectDates()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult SelectDates(DateTime start, DateTime end)
+        {
+            if(start.Month > end.Month || (start.Month == end.Month && start.Day > end.Day) || start.Year > end.Year)
+            {
+                ViewBag.Error = "Please make sure your start date is before your end date.";
+                return View();
+            }
+
+            Excel(start, end);
+            return RedirectToAction("Index");
+        }
+        
         /*
          * This method will do the work of downloading the excel file with 'hopefully'
          * all the data.
          */ 
-         public void Excel()
+         public void Excel(DateTime? start, DateTime? end)
         {
             DataExcel excel = new DataExcel();
             Response.ClearContent();
-            Response.BinaryWrite(excel.GenerateExcel(GetData()));
+            Response.BinaryWrite(excel.GenerateExcel(GetData(start, end)));
             Response.AddHeader("content-disposition", "attachment; filename=MathCenterData.xlsx");
             Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             Response.Flush();
             Response.End();
         }
-        public List<Data> GetData()
+        public List<Data> GetData(DateTime? start, DateTime? end)
         {
             //Create an empty list.
             List<Data> datas = new List<Data>();
 
+            DateTime startDate = (DateTime)start;
+            DateTime endDate = (DateTime)end;
+
             //Go through the list of sign ins and add all the data to the list.
             foreach (var SignIn in db.SignIns.ToList())
             {
-                Data data = new Data { Week = SignIn.Week, Date = SignIn.Date, Hour = SignIn.Hour, Min = SignIn.Min, Sec = SignIn.Sec, VNum = SignIn.Student.VNum, FirstName = SignIn.Student.FirstName, LastName = SignIn.Student.LastName, CRN = SignIn.Student.Class1.CRN, DeptPrefix = SignIn.Student.Class1.DeptPrefix, ClassNum = SignIn.Student.Class1.ClassNum, Days = SignIn.Student.Class1.Days, Instructor = SignIn.Student.Class1.Instructor, Other = SignIn.Student.Class1.Other, StartTime = SignIn.Student.Class1.Time };
+                Data data = new Data { Week = SignIn.Week, Date = SignIn.Date, Hour = SignIn.Hour, Min = SignIn.Min, VNum = SignIn.Student.VNum, FirstName = SignIn.Student.FirstName, LastName = SignIn.Student.LastName, SignedClass = db.Classes.Find(SignIn.ClassID) };                        
 
-                datas.Add(data);
+                //Only add if they are in the selected dates.
+                if (data.Date.Month >= startDate.Month && data.Date.Day >= startDate.Day && data.Date.Year >= startDate.Year && data.Date.Month <= endDate.Month && data.Date.Day <= endDate.Day && data.Date.Year <= endDate.Year)
+                {
+                    datas.Add(data);
+                }
+                else if(startDate == null && endDate == null)
+                {
+                    datas.Add(data);
+                }
             }
-
-            //Remove the Placeholder class.
-            var remClass = datas.Where(d => d.Other == "Placeholder").Select(d => d).FirstOrDefault();
-            datas.Remove(remClass);
 
             //Return the list of the data.
             return datas;
@@ -91,8 +119,7 @@ namespace MathCenter.Controllers
 
         /*
          * This method returns a page with a box where users can add classes to the database.
-         * It will allow users to add classes whenever they want to and will always have the 
-         * placeholder class automatically get added to the db.
+         * It will allow users to add classes whenever they want.
          */
         [HttpGet]
          public ActionResult Add()
@@ -100,49 +127,42 @@ namespace MathCenter.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult Add(string data)
+        public ActionResult Add(HttpPostedFileBase file)
         {
-            //Split the data by new line.
-            var dataList = data.Split(Environment.NewLine.ToCharArray());            
-            
-            //Try all this stuff.
             try
             {
-                //Get every row in the list created above.
-                foreach (var row in dataList)
+                if (file.ContentLength > 0)
                 {
-                    //Split each row by space or tab.
-                    var rowList = row.Split();
-                    if (rowList.Length >= 8)
+                    Stream fs = file.InputStream;
+                    ExcelPackage package = new ExcelPackage(fs);
+                    foreach (ExcelWorksheet worksheet in package.Workbook.Worksheets)
                     {
-                        //Go through the list created by above and make variables with the names.
-                        int CRN = Convert.ToInt32(rowList[0]);
-                        string DeptPrefix = rowList[1];
-                        int ClassNum = Convert.ToInt32(rowList[3]);
-                        string StartTime = rowList[4];
-                        string Days = "";
-                        if(StartTime != "online")
+                        Class @class = new Models.Class();
+                        for (int i = worksheet.Dimension.Start.Row + 1; i <= worksheet.Dimension.End.Row; i++)
                         {
-                            Days = rowList[6];
-                        }                        
-                        string Instructor = rowList[rowList.Length - 2] + " " + rowList[rowList.Length - 1];
-
-                        //Add the class to the database with the info above.
-                        db.Classes.Add(new Class { CRN = CRN, DeptPrefix = DeptPrefix, ClassNum = ClassNum, Time = StartTime, Days = Days, Instructor = Instructor });
+                            @class.CRN = Int32.Parse(worksheet.Cells[i, 1].Value.ToString());
+                            @class.DeptPrefix = worksheet.Cells[i, 2].Value.ToString();
+                            @class.ClassNum = Int32.Parse(worksheet.Cells[i, 3].Value.ToString());
+                            @class.Time = worksheet.Cells[i, 4].Value.ToString();
+                            @class.Days = worksheet.Cells[i, 5].Value.ToString();
+                            @class.Instructor = worksheet.Cells[i, 6].Value.ToString();
+                            db.Classes.Add(@class);
+                            db.SaveChanges();
+                        }
                     }
+                    return RedirectToAction("Class");
                 }
-                //After going through all the rows, save changes.
-                db.SaveChanges();
+                else
+                {
+                    ViewBag.Error = "The file you uploaded has no data in it, please upload another one."; //return error message
+                    return View();
+                }
             }
-            //Catch any exception that comes through.
             catch (Exception)
             {
-                //Return an error message if an exception was thrown.
-                ViewBag.Error = "The data you inputted was not added to the database, please try again.";
+                ViewBag.Error = "The data you inputted was not added to the database, please try again."; //return error message
                 return View();
             }
-            //If everything worked, redirect to the classes page where all the classes that are in the database is shown on a page.
-            return RedirectToAction("Class");
         }
 
         /*
@@ -153,10 +173,6 @@ namespace MathCenter.Controllers
         {
             //Get the entire list of classes.
             var Classes = db.Classes.ToList();
-
-            //Remove the Placeholder Class
-            var remClass = Classes.Where(c => c.Other == "Placeholder").Select(c => c).FirstOrDefault();
-            Classes.Remove(remClass);
 
             //Return the View with only the classes you actually want.
             return View(Classes);
@@ -176,7 +192,7 @@ namespace MathCenter.Controllers
         {
             if(reset == 1)
             {
-                Excel();
+                Excel(null, null);
                 ClearDB();
                 return RedirectToAction("Complete");
             }
@@ -193,7 +209,7 @@ namespace MathCenter.Controllers
         }
 
         private void ClearDB()
-        {
+        {            
             //Delete all the SignIns from the DB.
             foreach (var SignIn in db.SignIns.ToList())
             {
@@ -209,11 +225,13 @@ namespace MathCenter.Controllers
             {
                 db.Classes.Remove(Class);
             }
-            //Save changes to Database.
-            db.SaveChanges();
+            //Delete all the StudentClasses from the DB.
+            foreach(var StudentClass in db.StudentClasses.ToList())
+            {
+                db.StudentClasses.Remove(StudentClass);
+            }
 
-            //Add the placeholder to the database.
-            db.Classes.Add(new Class { Other = "Placeholder" });
+            //Save changes to Database.
             db.SaveChanges();
         }
 

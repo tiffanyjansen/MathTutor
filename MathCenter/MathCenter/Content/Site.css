@@ -36,7 +36,7 @@ button,
     button:hover,
     .btn:hover {
         color: #DB0A29;
-        background-color: #E7E7E7;
+        background-color: #FFFFFF;
         border-radius: 5px;
     }
 
@@ -48,13 +48,22 @@ input {
     border-width: 2px;
     color: #272324;
 }
+    input[type=file]{
+        border-radius:0;
+    }
 
-select {
-    height: 35px;
-    border-radius: 10px;
-    border-color: #DB0A29;
-    border-width: 2px;
-    color: #272324;
+    select {
+        height: 40px;
+        font-family: "Trebuchet MS", Helvetica, sans-serif;
+        border-radius: 10px;
+        border-color: #DB0A29;
+        border-width: 2px;
+        color: #272324;
+        font-size: 25px;
+    }
+
+select option{
+    text-align: center;
 }
 
 .container {

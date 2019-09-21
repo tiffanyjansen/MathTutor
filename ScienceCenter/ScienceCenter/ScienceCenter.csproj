@@ -160,7 +160,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\down.sql" />
-    <Content Include="App_Data\downOld.sql" />
     <Content Include="App_Data\ScienceDB.mdf" />
     <Content Include="App_Data\ScienceDB_log.ldf">
       <DependentUpon>ScienceDB.mdf</DependentUpon>

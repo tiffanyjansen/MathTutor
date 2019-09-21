@@ -5,9 +5,22 @@
     <title>Error</title>
 </head>
 <body>
-    <hgroup>
-        <h1>Error.</h1>
-        <h2>An error occurred while processing your request.</h2>
-    </hgroup>
+    <div class="center" style="margin-top:25px; margin-bottom:25px;">
+        <img src="~/Images/logo_horizontal.gif" style="height: 75%;" />
+    </div>
+    <div class="body-content">
+        <div class="container">
+            <hgroup>
+                <h2>There was an error. Please push the button below to refresh the page, and try again.</h2>
+                <h3>
+                    <button type="submit" onclick="location.href='@Url.Action("Welcome", "Home", new { Week = ViewBag.Week })'">Done</button>
+                </h3>
+            </hgroup>
+        </div>
+        <br />
+        <footer>
+            <img src="~/Images/WOULogo.PNG" style="height:100px;" />
+        </footer>
+    </div>
 </body>
 </html>

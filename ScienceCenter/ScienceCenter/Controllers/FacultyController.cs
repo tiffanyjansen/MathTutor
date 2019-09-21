@@ -254,14 +254,17 @@ namespace ScienceCenter.Controllers
                         Class @class = new Models.Class();
                         for (int i = worksheet.Dimension.Start.Row + 1; i <= worksheet.Dimension.End.Row; i++)
                         {
-                            @class.CRN = Int32.Parse(worksheet.Cells[i, 1].Value.ToString());
-                            @class.DeptPrefix = worksheet.Cells[i, 2].Value.ToString();
-                            @class.ClassNum = worksheet.Cells[i, 3].Value.ToString();
-                            @class.Time = worksheet.Cells[i, 4].Value.ToString();
-                            @class.Days = worksheet.Cells[i, 5].Value.ToString();
-                            @class.Instructor = worksheet.Cells[i, 6].Value.ToString();
-                            db.Classes.Add(@class);
-                            db.SaveChanges();
+                            if (Int32.Parse(worksheet.Cells[i, 1].Value.ToString()) != 0)
+                            {
+                                @class.CRN = Int32.Parse(worksheet.Cells[i, 1].Value.ToString());
+                                @class.DeptPrefix = worksheet.Cells[i, 2].Value.ToString();
+                                @class.ClassNum = worksheet.Cells[i, 3].Value.ToString();
+                                @class.Time = worksheet.Cells[i, 4].Value.ToString();
+                                @class.Days = worksheet.Cells[i, 5].Value.ToString();
+                                @class.Instructor = worksheet.Cells[i, 6].Value.ToString();
+                                db.Classes.Add(@class);
+                                db.SaveChanges();
+                            }                            
                         }
                     }
                     return RedirectToAction("Class");
@@ -536,16 +539,20 @@ namespace ScienceCenter.Controllers
             {
                 db.Classes.Remove(Class);
             }
-            //Add the placeholder to the database.
-            db.Classes.Add(new Class { CRN = 0, DeptPrefix = "NaN", ClassNum = "NaN", Instructor = "NaN", Days = "None", Time = "NaN" });
+            //Delete all the StudentClasses from the DB.
+            foreach (var StudentClass in db.StudentClasses.ToList())
+            {
+                db.StudentClasses.Remove(StudentClass);
+            }
+
             //Save changes to Database.
             db.SaveChanges();
         }
 
-        /*
-         * This page let's you know that the database was wiped.
-         */
-        [HttpGet]
+    /*
+     * This page let's you know that the database was wiped.
+     */
+    [HttpGet]
         public ActionResult Complete()
         {
             return View();
