@@ -1,10 +1,12 @@
-﻿using ScienceCenter.Excel;
+﻿using OfficeOpenXml;
+using ScienceCenter.Excel;
 using ScienceCenter.Models;
 using ScienceCenter.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -239,60 +241,42 @@ namespace ScienceCenter.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult Add(string data)
+        public ActionResult Add(HttpPostedFileBase file)
         {
-            //Split the data by new line.
-            var dataList = data.Split(Environment.NewLine.ToCharArray());            
-
-            //Try all this stuff.
             try
             {
-                //Get every row in the list created above.
-                foreach (var row in dataList)
+                if (file.ContentLength > 0)
                 {
-                    //Split each row by space or tab.
-                    var rowList = row.Split();
-                    if (rowList.Length >= 8)
+                    Stream fs = file.InputStream;
+                    ExcelPackage package = new ExcelPackage(fs);
+                    foreach (ExcelWorksheet worksheet in package.Workbook.Worksheets)
                     {
-                        //Go through the list created by above and make variables with the names.
-                        int counter = 0;
-                        int CRN = Convert.ToInt32(rowList[counter]);
-                        counter++;
-                        if (rowList[counter] == "") { counter++; }
-                        string DeptPrefix = rowList[counter];
-                        counter++;
-                        if (rowList[counter] == "") { counter++; }
-                        string ClassNum = rowList[counter];
-                        counter++;
-                        if (rowList[counter] == "") { counter++; }
-                        string StartTime = rowList[counter];
-                        counter++;
-                        if (rowList[counter] == "") { counter++; }
-                        string Days = "";
-                        if (StartTime != "Online")
+                        Class @class = new Models.Class();
+                        for (int i = worksheet.Dimension.Start.Row + 1; i <= worksheet.Dimension.End.Row; i++)
                         {
-                            Days = rowList[counter];
+                            @class.CRN = Int32.Parse(worksheet.Cells[i, 1].Value.ToString());
+                            @class.DeptPrefix = worksheet.Cells[i, 2].Value.ToString();
+                            @class.ClassNum = worksheet.Cells[i, 3].Value.ToString();
+                            @class.Time = worksheet.Cells[i, 4].Value.ToString();
+                            @class.Days = worksheet.Cells[i, 5].Value.ToString();
+                            @class.Instructor = worksheet.Cells[i, 6].Value.ToString();
+                            db.Classes.Add(@class);
+                            db.SaveChanges();
                         }
-                        counter++;
-                        if (rowList[counter] == "") { counter++; }
-                        string Instructor = rowList[counter] + " " + rowList[counter + 1];
-
-                        //Add the class to the database with the info above.
-                        db.Classes.Add(new Class { CRN = CRN, DeptPrefix = DeptPrefix, ClassNum = ClassNum, Time = StartTime, Days = Days, Instructor = Instructor });
                     }
+                    return RedirectToAction("Class");
                 }
-                //After going through all the rows, save changes.
-                db.SaveChanges();
+                else
+                {
+                    ViewBag.Error = "The file you uploaded has no data in it, please upload another one."; //return error message
+                    return View();
+                }
             }
-            //Catch any exception that comes through.
             catch (Exception)
             {
-                //Return an error message if an exception was thrown.
-                ViewBag.Error = "The data you inputted was not added to the database, please try again.";
+                ViewBag.Error = "The data you inputted was not added to the database, please try again."; //return error message
                 return View();
             }
-            //If everything worked, redirect to the classes page where all the classes that are in the database is shown on a page.
-            return RedirectToAction("Class");
         }
 
         /*
