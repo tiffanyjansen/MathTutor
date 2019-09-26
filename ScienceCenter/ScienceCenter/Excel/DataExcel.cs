@@ -71,13 +71,13 @@ namespace ScienceCenter.Excel
                 cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                 //Heading for Last Name
-                cell = sheet.Cells[rowIndex, 7];
+                cell = sheet.Cells[rowIndex, 6];
                 cell.Value = "Last Name";
                 cell.Style.Font.Bold = true;
                 cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                 //Heading for CRN
-                cell = sheet.Cells[rowIndex, 8];
+                cell = sheet.Cells[rowIndex, 7];
                 cell.Value = "CRN";
                 cell.Style.Font.Bold = true;
                 cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;

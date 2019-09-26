@@ -16,7 +16,7 @@ namespace ScienceCenter.Controllers
     public class FacultyController : Controller
     {
         //Database Connection
-        ScienceContext db = new ScienceContext();
+        private readonly ScienceContext db = new ScienceContext();
 
         /*
          * This method returns a welcome page for Faculty users.
@@ -137,30 +137,27 @@ namespace ScienceCenter.Controllers
             //Create an empty list to be filled after the queries.
             List<ProfData> pData = new List<ProfData>();
 
-            //Going through all the students, get the number of times they came in and all the info from the classes needed.
-            foreach (var student in db.Students.ToList())
+            //Going through all the studentClasses so we don't 'double' count
+            foreach(var studentClass in db.StudentClasses.ToList())
             {
-                //Get the number of times the student came in.
                 int numTimes = db.SignIns
-                    .Where(s => s.StudentID == student.VNum)
+                    .Where(s => s.StudentID == studentClass.VNum)
+                    .Where(s => s.ClassId == studentClass.ClassId)
                     .Count();
 
-                //Check if there was an error ot not.
+                //make sure we have at least 1
                 if (numTimes != 0)
                 {
-                    var studentSignIns = db.SignIns.Where(s => s.StudentID == student.VNum).Select(s => s);
-                    
-                    foreach(var signIn in studentSignIns)
-                    {
-                        //Create the data to be added.
-                        ProfData data = new ProfData { FirstName = student.FirstName, LastName = student.LastName, CRN = signIn.Class.CRN, DeptPrefix = signIn.Class.DeptPrefix, Instructor = signIn.Class.Instructor, Days = signIn.Class.Days, ClassNum = signIn.Class.ClassNum, StartTime = signIn.Class.Time, TimesIn = numTimes };
+                    //Get the student and the class
+                    Student student = studentClass.Student;
+                    Class @class = studentClass.Class;
 
-                        if (!pData.Contains(data))
-                        {
-                            pData.Add(data);
-                        }
-                    }
-                }               
+                    //set the data
+                    ProfData data = new ProfData { FirstName = student.FirstName, LastName = student.LastName, CRN = @class.CRN, DeptPrefix = @class.DeptPrefix, Instructor = @class.Instructor, Days = @class.Days, ClassNum = @class.ClassNum, StartTime = @class.Time, TimesIn = numTimes };
+
+                    //add it to the list
+                    pData.Add(data);
+                }
             }
 
             //return the created list.
