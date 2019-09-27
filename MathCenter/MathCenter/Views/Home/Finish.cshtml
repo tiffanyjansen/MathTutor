@@ -9,8 +9,7 @@
         <h3>"There is a difference between not knowing and not knowing yet." -Shelia Tobias</h3>
         <h2>Good luck with your math endeavors!</h2>
         <h3>
-            @Html.ActionLink("Done", "Welcome", "Home", null, new { @class = "btn" })
-            @*<button type="submit" onclick='location.href="@Url.Action("Welcome", "Home", new { Week = ViewBag.Week })"'>Done</button>*@
+            @Html.ActionLink("Done", "Welcome", "Home", new { Week = ViewBag.Week }, new { @class = "btn" })
         </h3>
         <div class="center">
             <h4 style="color: darkblue;">@ViewBag.Error</h4>
@@ -22,4 +21,3 @@
 {
     <script type="text/javascript" src="~/Scripts/reloadPage.js"></script>
 }
-

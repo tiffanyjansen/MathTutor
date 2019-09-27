@@ -3,15 +3,74 @@
     ViewBag.Title = "Index";
 }
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="center">
-                <h1>Welcome!</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="center">
+                    <h1>Welcome!</h1>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <div class="center">
+                    <h2>Get Data Tables</h2>
+                </div>
+                <h3>@Html.ActionLink("Get all the data", "Data", "Faculty")</h3>
+                <h3>@Html.ActionLink("View all the classes", "Class", "Faculty")</h3>
+            </div>
+            <div class="col-md-4">
+                <div class="center">
+                    <img src="~/Images/mathheart.jpg" style="height:150px;" />
+                </div>
+            </div>
+            <form method="post">
+                <div class="col-md-4">
+                    <div class="center">
+                        <h2>Download/Add Data</h2>
+                    </div>
+
+                    <button class="btn" name="download" value="1" type="submit">Download the Data</button>
+
+                    @Html.ActionLink("Add Classes for New Term", "Add", "Faculty", null, new { @class = "btn" })
+                </div>
+            </form>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-12">
+                <h3>
+                    This button is to be used at the end of the term to clear the database for the next one. Don't worry,
+                    it's not a commitment, it will just take you to another page.
+                </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="center">
+                    <form method="post">
+                        <h3>
+                            <button class="btn" name="download" value="2" type="submit">Reset the Data</button>
+                        </h3>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-12">
+                <div class="center">
+                    <form method="post">
+                        <h3>
+                            <button class="btn" name="download" value="3" type="submit">Go Back to Sign In</button>
+                        </h3>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-    <div class="row">
+    @*<div class="row">
         <div class="col-md-6">
             <h3>Show the data on a page: @Html.ActionLink("Data", "Data", "Faculty")</h3>
             <h3>Add classes to the database: @Html.ActionLink("Add Classes", "Add", "Faculty")</h3>
@@ -26,11 +85,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="center">
-                <form method="post">
-                    <h3>
-                        <button name="download" value="1" type="submit">Download the Data</button>
-                    </h3>
-                </form>
+                
             </div>
         </div>
     </div>
@@ -62,4 +117,4 @@
             </div>
         </div>
     </div>
-</div>
+</div>*@

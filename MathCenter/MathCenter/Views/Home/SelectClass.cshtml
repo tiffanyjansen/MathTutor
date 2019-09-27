@@ -9,6 +9,9 @@
     <div class="container">
         <h1>Please select your class:</h1>
         <form method="post">
+            <div class="center">
+                <h4 style="color: darkblue;">@ViewBag.Error</h4>
+            </div>
             <div class="row">
                 <div class="col-md-3">
                     <h3>Department</h3>
@@ -38,7 +41,7 @@
                     <div class="col-md-10">
                         <!--This will be added with JavaScript-->
                         <select style="width:inherit;" name="Instructors" id="Instructors">
-                            @foreach(var instructor in ViewBag.Instructors)
+                            @foreach (var instructor in ViewBag.Instructors)
                             {
                                 <option>@instructor.Instructor</option>
                             }
@@ -51,7 +54,7 @@
                 <div class="col-md-5">
                     <div class="center">
                         <br />
-                        <h3>Class not found? Click <button name="button" value="Other" type="submit">Here</button></h3>
+                        <h3>Class not found? Click <button class="btn" name="button" value="Other" type="submit">Here</button></h3>
                     </div>
                 </div>
                 <div class="col-md-1"></div>
@@ -60,7 +63,7 @@
                     <div class="col-md-10">
                         <!--This will be added with JavaScript-->
                         <select style="width:inherit;" name="ClassID" id="Times">
-                            @foreach(var time in ViewBag.Times)
+                            @foreach (var time in ViewBag.Times)
                             {
                                 <option value=@time.ClassID>@time.Time @time.Days</option>
                             }
@@ -73,16 +76,15 @@
                 <input type="hidden" name="Week" value=@ViewBag.Week />
                 <input type="hidden" name="Id" value=@ViewBag.Id />
                 <div class="center">
-                    <h3><button name="button" value="Submit" type="submit">Submit</button></h3>
+                    <h3><button class="btn" name="button" value="Submit" type="submit">Submit</button></h3>
                 </div>
             </div>
             <div class="row">
-                <div class="center">
-                    
+                <div class="col-md-12">
+                    <h4 style="margin:0; color:#DB0A29;">
+                        Please select your class department, then number, then instructor, and then time and day/institution. Allow dropdowns to load before moving on to the next one. It may take a up to 10 sec. Please be patient.
+                    </h4>
                 </div>
-            </div>
-            <div class="center">
-                <h4 style="color: darkblue;">@ViewBag.Error</h4>
             </div>
         </form>
     </div>

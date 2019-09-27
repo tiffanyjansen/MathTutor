@@ -233,7 +233,7 @@ namespace MathCenter.Controllers
                     //Add the SignIn to the Database
                     try
                     {
-                        db.SignIns.Add(new SignIn { Week = Week, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, StudentID = VNum, ClassID = (int)ClassID });
+                        db.SignIns.Add(new SignIn { Week = Week, Date = DateTime.Today, Hour = DateTime.Now.Hour, Min = DateTime.Now.Minute, StudentID = VNum, ClassID = (int)ClassID });
                         db.SaveChanges();
                     }
                     catch (Exception)

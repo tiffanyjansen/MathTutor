@@ -38,7 +38,14 @@ button,
         color: #DB0A29;
         background-color: #FFFFFF;
         border-radius: 5px;
+        border: solid 2px #DB0A29;
     }
+
+.btn {
+    font-size: 24px;
+    margin: 5px;
+    padding: 2px;
+}
 
 input {
     width: 25%;
@@ -50,6 +57,10 @@ input {
 }
     input[type=file]{
         border-radius:0;
+    }
+
+    input[type=radio] {
+        width: unset;
     }
 
     select {
