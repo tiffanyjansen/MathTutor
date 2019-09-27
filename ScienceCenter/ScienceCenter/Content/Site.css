@@ -21,6 +21,11 @@ p {
     color: #272324;
 }
 
+li, 
+p {
+    font-size: 18px;
+}
+
 button,
 .btn {
     color: #FFFFFF;
@@ -33,7 +38,13 @@ button,
         color: #850915;
         background-color: #FFFFFF;
         border-radius: 5px;
+        border: solid 2px #850915;
     }
+
+.btn {
+    font-size: 24px;
+    margin: 5px;
+}
 
 input {
     width: 30%;
@@ -45,6 +56,9 @@ input {
 }
     input[type=file] {
         border-radius: 0;
+    }
+    input[type=radio] {
+        width: unset;
     }
 
 select {

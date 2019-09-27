@@ -377,9 +377,9 @@ namespace ScienceCenter.Controllers
             if (approved == 1 && classID != null)
             {
                 try
-                {
+                {                   
                     //Create the Sign In and add it to the database.
-                    db.SignIns.Add(new SignIn { Week = (int)Week, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, StudentID = VNum, ClassId = (int)classID });
+                    db.SignIns.Add(new SignIn { Week = (int)Week, Date = DateTime.Today, Hour = DateTime.Now.Hour, Min = DateTime.Now.Minute, StudentID = VNum, ClassId = (int)classID });
                     db.SaveChanges();
                 }
                 catch (Exception)

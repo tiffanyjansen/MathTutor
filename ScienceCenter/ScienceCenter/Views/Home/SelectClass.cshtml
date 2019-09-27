@@ -10,6 +10,9 @@
     <h1>Please select your class:</h1>
     <form method="post">
         <div class="row">
+            <div class="center">
+                <h4 style="color: darkblue;">@ViewBag.Error</h4>
+            </div>            
             <div class="col-md-3">
                 <h3>Department</h3>
                 <div class="col-md-10">
@@ -67,16 +70,15 @@
             <input type="hidden" name="Week" value=@ViewBag.Week />
             <input type="hidden" name="Id" value=@ViewBag.Id />
             <div class="center">
-                <h3><button name="button" value="Submit" type="submit">Submit</button></h3>
+                <h3><button class="btn" name="button" value="Submit" type="submit">Submit</button></h3>
             </div>
         </div>
         <div class="row">
-            <div class="center">
-
+            <div class="col-12">
+                <h4 style="margin:0; color:#850915;">
+                    Please select your class department, then number, then instructor, and then time and day/institution. Allow dropdowns to load before moving on to the next one. It may take a up to 10 sec. Please be patient.
+                </h4>
             </div>
-        </div>
-        <div class="center">
-            <h4 style="color: darkblue;">@ViewBag.Error</h4>
         </div>
     </form>
 </div>

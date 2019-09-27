@@ -6,11 +6,10 @@
 <div class="container">
     <form method="post">
         <div class="center">
-
             <div class="row">
                 <h2>Is this you?</h2>
-                <h3 style="color: #DB0A29;">@Html.DisplayFor(m => m.FirstName)&nbsp;@Html.DisplayFor(m => m.LastName)</h3>
-                <h3><button type="submit" name="approved" value="0">No</button></h3>
+                <h3 style="color:#850915;">@Html.DisplayFor(m => m.FirstName)&nbsp;@Html.DisplayFor(m => m.LastName)</h3>
+                <h3><button class="btn" type="submit" name="approved" value="0">No</button></h3>
             </div>
             <div class="row">
                 <h2>Which class are you here for?</h2>
@@ -19,20 +18,29 @@
                 </div>
             </div>
         </div>
-        @foreach (var sClass in Model.StudentClasses)
-        {
-            <div class="row">
-                <div class="col-md-3"></div>
-                <div class="col-md-6">
-                    <h3 style="color: #DB0A29;"><input type="radio" name="classID" style="height:15px;" value="@Html.DisplayFor(m => sClass.Class.ClassID)">@Html.DisplayFor(m => sClass.Class.DeptPrefix)&nbsp;@Html.DisplayFor(m => sClass.Class.ClassNum)&nbsp;@Html.DisplayFor(m => sClass.Class.Instructor)</h3>
+        <div class="row">
+            <br />
+            @foreach (var sClass in Model.StudentClasses)
+            {
+                <div class="row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6">
+                        <h3 style="color:#850915;margin:0 0 10px 65px;"><input type="radio" name="classID" style="height:15px;" value="@Html.DisplayFor(m => sClass.Class.ClassID)">&nbsp;@Html.DisplayFor(m => sClass.Class.DeptPrefix)&nbsp;@Html.DisplayFor(m => sClass.Class.ClassNum)&nbsp;@Html.DisplayFor(m => sClass.Class.Instructor)</h3>
+                    </div>
                 </div>
-                <br />
-            </div>
-        }
+            }
+        </div>
         <div class="row">
             <div class="center">
                 <h2>Can't find your class? Add another.</h2>
-                <h3><button type="submit" name="approved" value="3">Add Another</button></h3>
+                <h3><button class="btn" type="submit" name="approved" value="3">Add Another</button></h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="center">
+                <h4 style="margin-top:10px 0 0 0; color:#850915;">
+                    Not sure what to do? Ask a tutor for help.
+                </h4>
             </div>
         </div>
         <div class="row">
@@ -40,8 +48,8 @@
                 <h3>
                     <input type="hidden" name="Week" value=@ViewBag.Week />
                     <input type="hidden" name="VNum" value=@ViewBag.VNum />
-                    <button type="submit" name="approved" value="1">Continue</button>
-                    <button type="submit" name="approved" value="2">Go Back</button>
+                    <button class="btn" type="submit" name="approved" value="1">Continue</button>
+                    <button class="btn" type="submit" name="approved" value="2">Go Back</button>
                 </h3>
             </div>
             <div class="center">
