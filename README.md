@@ -40,4 +40,4 @@ Current Version: Implemented Fall 2019.
 7. Do a quick check to make sure it's up and working.
 8. You should be done.
 
-*Side Note:* If you find any steps are missing please write them down or email them to me so I can update this so in the future when we have to deploy (cause I know there will be more updates...) we have easy to follow steps that will be easy to follow. Also, if you can give exact paths to the files/folders mentioned here that would be great. :)
+*Side Note:* If you find any steps are missing please write them down or email them to me so I can update this so in the future when we have to deploy (cause I know there will be more updates...) we have easy to follow steps. Also, if you can give exact paths to the files/folders mentioned here that would be great. :)
