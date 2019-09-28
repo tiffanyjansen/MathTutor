@@ -60,21 +60,21 @@ namespace MathCenter.Controllers
             }
 
             //Remove the classes with Community Colleges as an Instructor
-            List<Class> ccClasses = Instructors
-                .Where(c => c.Instructor == "Portland")
+
+            List<Class> ccClasses = Instructors.Where(c => c.Instructor == "Chemeketa")
                 .Select(c => c).ToList();
-            ccClasses.Add(
-                Instructors.Where(c => c.Instructor == "Chemeketa")
-                .Select(c => c).FirstOrDefault());
             ccClasses.Add(
                 Instructors.Where(c => c.Instructor == "Clackamas")
                 .Select(c => c).FirstOrDefault());
             ccClasses.Add(
+               Instructors.Where(c => c.Instructor == "Linn-Benton")
+               .Select(c => c).FirstOrDefault());
+            ccClasses.Add(
                 Instructors.Where(c => c.Instructor == "Mt. Hood")
                 .Select(c => c).FirstOrDefault());
             ccClasses.Add(
-                Instructors.Where(c => c.Instructor == "Linn-Benton")
-                .Select(c => c).FirstOrDefault());
+                Instructors.Where(c => c.Instructor == "Portland")
+                .Select(c => c).FirstOrDefault());           
             foreach (var ccClass in ccClasses)
             {
                 Instructors.Remove(ccClass);
@@ -155,12 +155,12 @@ namespace MathCenter.Controllers
                     }
                 }
                 List<Class> CCList = new List<Class>
-                {
-                    PCC,
+                {                    
                     ChCC,
                     ClCC,
+                    LBCC,
                     MHCC,
-                    LBCC
+                    PCC                    
                 };
 
                 //Convert the list into a Json Object
