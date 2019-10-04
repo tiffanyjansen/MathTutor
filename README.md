@@ -11,9 +11,7 @@ Current Version: Implemented Fall 2019.
 5. Ability for faculty to upload current classes by uploading an excel file instead of copying into a text field.
 
 ## Steps to Deploy
-1. Pull the repo into the folder the repo exists on the server.
-    * The repo should exist in the folder with the .git folder in it.
-        * It will also contain the MathTutor folder that won't be found anywhere else.
+1. Pull the repo into C:\Math-Tutor\MathTutor
     * Open Git Bash in that folder.
         * You can right click in the folder and select "Open Git Bash Here"
     * Run _git pull origin master_ in the console.

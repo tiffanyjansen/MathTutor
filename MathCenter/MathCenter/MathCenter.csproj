@@ -154,10 +154,6 @@
   <ItemGroup>
     <Content Include="App_Data\down.sql" />
     <Content Include="App_Data\downOne.sql" />
-    <Content Include="App_Data\MathDB.mdf" />
-    <Content Include="App_Data\MathDB_log.ldf">
-      <DependentUpon>MathDB.mdf</DependentUpon>
-    </Content>
     <Content Include="App_Data\up.sql" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />

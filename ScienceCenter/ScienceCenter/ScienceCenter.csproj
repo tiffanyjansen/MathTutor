@@ -159,11 +159,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\down.sql" />
-    <Content Include="App_Data\ScienceDB.mdf" />
-    <Content Include="App_Data\ScienceDB_log.ldf">
-      <DependentUpon>ScienceDB.mdf</DependentUpon>
-    </Content>
     <Content Include="App_Data\up.sql" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
