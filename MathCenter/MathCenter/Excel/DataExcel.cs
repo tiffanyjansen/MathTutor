@@ -159,7 +159,7 @@ namespace MathCenter.Excel
 
                         //Info for V-Number
                         cell = sheet.Cells[rowIndex, 5];
-                        cell.Value = Convert.ToInt32(dat.VNum);
+                        cell.Value = dat.VNum;
                         cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                         //Info for First Name
