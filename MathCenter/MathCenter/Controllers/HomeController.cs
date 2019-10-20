@@ -84,21 +84,24 @@ namespace MathCenter.Controllers
         [HttpPost]
         public ActionResult Welcome(string VNum, int Week)
         {
-            //If no input, refresh page.
-            if (VNum == null || VNum.Length != 8)
+            //Check if V Number is all numbers and the correct length
+            Regex rx = new Regex(@"^\d{8}$", RegexOptions.IgnoreCase);
+            if (rx.IsMatch(VNum))
+            {
+                //If student is in the database, redirect to 'done' page.
+                if (db.Students.Find(VNum) != null)
+                {
+                    return RedirectToAction("Done", new { VNum, Week });
+                }
+                //Otherwise, redirect to create student page.            
+                return RedirectToAction("Name", new { VNum, Week });
+            }
+            else
             {
                 ViewBag.Error = "Your V Number is invalid. It must be 8 characters. Please do not include the V.";
                 ViewBag.Num = Week;
                 return View();
-            }
-
-            //If student is in the database, redirect to done page.
-            if (db.Students.Find(VNum) != null)
-            {
-                return RedirectToAction("Done", new { VNum, Week });
-            }
-            //Otherwise, redirect to create student page.            
-            return RedirectToAction("Name", new { VNum, Week });
+            }           
         }
 
         /*
@@ -133,32 +136,41 @@ namespace MathCenter.Controllers
         [HttpPost]
         public ActionResult Name(PersonWeek pWeek)
         {
-            //Create empty student to be used later.
-            Student student = null;
-
-            //Check if Student is already in DB.
-            if (db.Students.Find(pWeek.VNum) != null)
+            Regex rx = new Regex(@"^[a-zA-Z-\.\s]+$");
+            if (rx.IsMatch(pWeek.FirstName) && rx.IsMatch(pWeek.LastName))
             {
-                student = db.Students.Find(pWeek.VNum);
-                student.FirstName = pWeek.FirstName;
-                student.LastName = pWeek.LastName;
+                //try
+                //{
+                    string firstName = CapitalizeName(pWeek.FirstName);                    
+                    string lastName = CapitalizeName(pWeek.LastName);
+
+                    //Check if Student is already in DB.
+                    if (db.Students.Find(pWeek.VNum) != null)
+                    {
+                        Student student = db.Students.Find(pWeek.VNum);
+                        student.FirstName = firstName;
+                        student.LastName = lastName;
+                    }
+                    //Create a student.
+                    else
+                    {
+                        //Add the student to the database.
+                        Student student = new Student { VNum = pWeek.VNum, FirstName = firstName, LastName = lastName };
+                        db.Students.Add(student);
+                    }
+                
+                    //Save the changes to the database.            
+                    db.SaveChanges();
+                //}
+                //catch (Exception)
+                //{
+                //    ViewBag.Error = "There was an error adding you to the database. Please ask a tutor for help.";
+                //    return View(pWeek);
+                //}
             }
-            //Create a student.
             else
             {
-                //Add the student to the database.
-                student = new Student { VNum = pWeek.VNum, FirstName = pWeek.FirstName, LastName = pWeek.LastName };
-                db.Students.Add(student);
-            }
-
-            try
-            {
-                //Save the changes to the database.            
-                db.SaveChanges();
-            }
-            catch (Exception)
-            {
-                ViewBag.Error = "There was an error adding you to the database. Please ask a tutor for help.";
+                ViewBag.Error = "Please input your name.";
                 return View(pWeek);
             }
 
@@ -536,5 +548,27 @@ namespace MathCenter.Controllers
             //Return the View.
             return View();
         }
-    }
+
+        /// <summary>
+        /// Capitalize the string given. Basically just formats it so it looks nice everywhere. :)
+        /// </summary>
+        /// <param name="name">The name we want capitalized</param>
+        /// <returns>The name capitalized</returns>        
+        protected string CapitalizeName(string name)
+        {
+            name = char.ToUpper(name[0]) + name.Substring(1);
+            int index = 0;
+            while (name.IndexOf(' ', index) != -1)
+            {
+                index = name.IndexOf(' ', index) + 1;
+                name = name.Substring(0, index) + char.ToUpper(name[index]) + name.Substring(index + 1);
+            }
+            if (name.IndexOf('-') != -1)
+            {
+                index = name.IndexOf('-', index) + 1;
+                name = name.Substring(0, index) + char.ToUpper(name[index]) + name.Substring(index + 1);
+            }
+            return name;
+        }
+    }    
 }

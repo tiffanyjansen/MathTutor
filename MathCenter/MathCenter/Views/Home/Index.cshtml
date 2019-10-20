@@ -3,14 +3,19 @@
 }
 
 <div class="container">
+    
     <div class="row">
-        <div class="center">
-            <h4 style="color: darkblue;">@ViewBag.Error</h4>
+        <div class="col-12">
+            <div class="center">
+                <h4 style="color: darkblue;">@ViewBag.Error</h4>
+            </div>
         </div>
-        <form method="post">
-            <div class="col-md-6">
-                <h1>Tutors:</h1>
-                <div class="center">
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-12">
+            <h1>Tutors:</h1>
+            <div class="center">
+                <form method="post">
                     <h2>
                         Week Number:
                         <select name="Week">
@@ -29,9 +34,11 @@
                         Password: <input type="password" name="tutorPwd" /><br /><br />
                     </h2>
                     <h3><button class="btn" type="submit" name="button" value="tutor">Submit</button></h3>
-                </div>
+                </form>
             </div>
-            <div class="col-md-6">
+        </div>
+        <div class="col-sm-6 col-12">
+            <form method="post">
                 <div class="center">
                     <h3>"The only way to learn mathematics is to do mathematics" ~Paul Halmos</h3>
                 </div>
@@ -42,7 +49,7 @@
                     </h2>
                     <h3><button class="btn" type="submit" name="button" value="faculty">Submit</button></h3>
                 </div>
-            </div>
-        </form>
-    </div>
+            </form>
+        </div>
+    </div>    
 </div>
