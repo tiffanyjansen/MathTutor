@@ -1,106 +1,53 @@
-﻿.center {
-    text-align: center;
-}
+﻿@font-face {
+  font-family: 'Crete_Round';
+  src: url("Fonts/Crete_Round/CreteRound-Regular.ttf") format("truetype"); }
 
 body {
-    margin-top: 25px;
-    background-color: #FFFFFF;
-}
+  font-family: Crete_Round;
+  overflow-x: hidden;
+  background-color: #FFFFFF; }
 
-h1 {
-    font-family: "Trebuchet MS", Helvetica, sans-serif;
-    color: #272324;
-}
-
-h2,
-h3,
-h4,
-p {
-    font-family: "Trebuchet MS", Helvetica, sans-serif;
-    color: #272324;
-}
-
-li {
-    font-family: "Trebuchet MS", Helvetica, sans-serif;
-    color: #272324;
-    font-size: 21px;
-}
-
-button,
-.btn {
-    color: #FFFFFF;
-    background-color: #DB0A29;
-    border-radius: 5px;
-}
-
-    button:hover,
-    .btn:hover {
-        color: #DB0A29;
-        background-color: #FFFFFF;
-        border-radius: 5px;
-        border: solid 2px #DB0A29;
-    }
-
-.btn {
-    font-size: 24px;
-    margin: 5px;
-    padding: 2px;
-}
-
-input {
-    width: 25%;
-    height: 35px;
-    border-radius: 10px;
-    border-color: #DB0A29;
-    border-width: 2px;
-    color: #272324;
-}
-    input[type=file]{
-        border-radius:0;
-    }
-
-    input[type=radio] {
-        width: unset;
-    }
-
-    select {
-        height: 40px;
-        font-family: "Trebuchet MS", Helvetica, sans-serif;
-        border-radius: 10px;
-        border-color: #DB0A29;
-        border-width: 2px;
-        color: #272324;
-        font-size: 25px;
-    }
-
-select option{
-    text-align: center;
-}
+.logo {
+  max-width: 100%;
+  height: auto; }
 
 .container {
-    border-radius: 10px;
-    border-style: solid;
-    border-color: #DB0A29;
-    border-width: 2px;
-    background-color: #E7E7E7;
-}
+  background: #E7E7E7;
+  border-radius: 5px;
+  border: solid 2px #000000; }
+  .container .content {
+    padding: 1rem; }
+    .container .content .quote {
+      height: 50px;
+      overflow-y: hidden; }
+    .container .content .space {
+      height: 50px; }
+    .container .content .btn .oi {
+      top: 2px; }
+    .container .content input,
+    .container .content button,
+    .container .content select,
+    .container .content option {
+      font-size: 20px; }
 
-table {
-    width: 75%;
-    background-color: #C0C8D1;
-    border: 1px solid #DB0A29;
-}
+.footer {
+  font-size: 24px; }
+  .footer img {
+    max-width: 25%; }
 
-th {
-    padding: 5px;
-    border: 1px solid #DB0A29;
-    text-align: center;
-    color: #272324;
-}
+.error {
+  background-color: #DB0A29;
+  color: #E7E7E7;
+  border-radius: 5px;
+  margin: 0.5rem; }
+  .error .oi {
+    top: 2px; }
+  .error p {
+    font-size: 20px;
+    padding: 0.5rem; }
 
-td {
-    padding: 5px;
-    border: 1px solid #DB0A29;
-    text-align: center;
-    color: #272324;
-}
+.red-text {
+  color: #DB0A29; }
+
+.btn-danger {
+  background-color: #DB0A29; }

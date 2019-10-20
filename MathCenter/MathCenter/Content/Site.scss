@@ -1,0 +1,71 @@
+﻿@font-face {
+    font-family: 'Crete_Round';
+    src: URL('Fonts/Crete_Round/CreteRound-Regular.ttf') format('truetype');
+}
+
+body {
+    font-family: Crete_Round;
+    overflow-x: hidden; // Remove bottom scroll bar.
+    background-color: #FFFFFF;
+}
+
+.logo {
+    max-width: 100%; // Make sure image always fits on the page.
+    height: auto; // Keep width-height ratio.
+}
+
+.container {
+    background: #E7E7E7;
+    border-radius: 5px;
+    border: solid 2px #000000;
+    .content {
+        padding:1rem;
+        .quote {
+            height: 50px;
+            overflow-y: hidden;
+        }
+        .space {
+            height: 50px;
+        }
+        .btn {
+            .oi {
+                top: 2px;
+            }
+        }
+        input, 
+        button, 
+        select, 
+        option {
+            font-size: 20px;
+        }       
+    }
+}
+
+.footer {
+    font-size:24px;
+    img {
+        max-width:25%; // Make sure footer image isn't HUGE when pages are resized.
+    }
+}
+
+.error {
+    background-color: #DB0A29;
+    color: #E7E7E7;
+    border-radius: 5px;
+    margin: 0.5rem;
+    .oi {
+        top: 2px;
+    }
+    p {
+        font-size: 20px;
+        padding:0.5rem;
+    }
+}
+
+.red-text {
+    color: #DB0A29;
+}
+
+.btn-danger {
+    background-color: #DB0A29;
+}

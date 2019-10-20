@@ -40,7 +40,7 @@ namespace MathCenter.Controllers
                 //Return specific errors if the input is not valid.
                 else if (tutorPwd != tutorPass)
                 {
-                    ViewBag.Error = "You typed in the wrong password. Please Try Again.";
+                    ViewBag.Error = "Incorrect password. Please try again.";
                     return View();
                 }
                 else
@@ -59,7 +59,7 @@ namespace MathCenter.Controllers
                 //Return specific errors if the input is not valid.
                 else
                 {
-                    ViewBag.Error = "Please Try Again. You typed in the wrong password.";
+                    ViewBag.Error = "Incorrect password. Please try again.";
                     return View();
                 }
             }
@@ -547,7 +547,7 @@ namespace MathCenter.Controllers
 
             //Return the View.
             return View();
-        }
+        }       
 
         /// <summary>
         /// Capitalize the string given. Basically just formats it so it looks nice everywhere. :)

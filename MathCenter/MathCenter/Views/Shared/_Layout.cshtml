@@ -6,22 +6,27 @@
     <title>Math Center</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Content/Icons/open-iconic-master/font/css/open-iconic-bootstrap.css" rel="stylesheet">
 </head>
-<body style="position:relative;">    
-    <div class="center" style="margin-top:25px; margin-bottom:25px;">
-        <img src="~/Images/logo_horizontal.gif" style="height: 75%;" />
+<body>
+    <div class="text-center">
+        <img class="logo" src="~/Content/Images/logo_horizontal.gif" />
     </div>
-    <div class="body-content">
-        <br />
+    <div class="container">
         @RenderBody()
-        <br />
-        <footer>
-            <img src="~/Images/WOULogo.PNG" style="height: 75px; position:absolute;" />
-        </footer>
     </div>
+    <footer>
+        <div class="row">
+            <div class="col-12 text-center footer">
+                <p>&copy;&nbsp;<img src="~/Content/Images/WOU-logo-2018.jpg" /></p>
+            </div>
+        </div>
+    </footer>
+
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    <script type="text/javascript" src="~/Scripts/errors.js"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>
