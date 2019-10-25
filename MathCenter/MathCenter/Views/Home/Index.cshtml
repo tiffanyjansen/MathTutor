@@ -1,78 +1,52 @@
-﻿@{
-    ViewBag.Title = "Home Page";
-}
-
-    <div class="content">
-        @if (ViewBag.Error != null)
-        {
-            @Html.Partial("_Errors", "Partials", new ViewDataDictionary { { "error", ViewBag.Error } })
-        }
-        @using (Html.BeginForm())
-        {
-
-            <div class="row">
-                <div class="col-md-6 col-12">
-                    <h2>Tutors:</h2>
-                    @*<div class="row form-group">
-                        <div class="col-5 text-right">
-                            <label class="h4">Week Number:</label>
-                        </div>
-                        <div class="col-3">
-                            <select class="form-control" name="Week">
-                                <option value="-1" selected>-</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
-                                <option value="11">11</option>
-                            </select>
-                        </div>
-                    </div>*@
-                    <div class="row form-group">
-                        <div class="col-md-4 text-md-right col-12">
-                            <label class="h4">Password:</label>
-                        </div>
-                        <div class="col-md-8 col-12">
-                            <input class="form-control" type="password" name="tutorPwd" />
-                        </div>
+﻿<div class="content">
+    @if (ViewBag.Error != null)
+    {
+        @Html.Partial("_Errors", "Partials", new ViewDataDictionary { { "error", ViewBag.Error } })
+    }
+    @using (Html.BeginForm())
+    {
+        <div class="row">
+            <div class="col-md-6 col-12">
+                <h2>Tutors:</h2>                
+                <div class="row form-group">
+                    <div class="col-md-4 text-md-right col-12">
+                        <label class="h4">Password:</label>
                     </div>
-                    <div class="row justify-content-center form-group">
-                        <div class="col-md-6 col-sm-8 col-1o">
-                            <button class="btn btn-block btn-danger" type="submit" name="button" value="tutor">
-                                <span class="oi oi-media-play" title="media-play" aria-hidden="true"></span> Submit
-                            </button>
-                        </div>
+                    <div class="col-md-8 col-12">
+                        <input class="form-control" type="password" name="tutorPwd" />
                     </div>
                 </div>
-                <div class="col-md-6 col-12">
-                    <h2>Faculty:</h2>
-                    @*<div class="space"></div>*@
-                    <div class="row form-group">
-                        <div class="col-md-4 text-md-right col-12">
-                            <label class="h4">Password:</label>
-                        </div>
-                        <div class="col-md-8 col-12">
-                            <input class="form-control" type="password" name="facultyPwd" />
-                        </div>
-                    </div>
-                    <div class="row justify-content-center form-group">
-                        <div class="col-md-6 col-sm-8 col-1o">
-                            <button class="btn btn-block btn-danger" type="submit" name="button" value="faculty">
-                                <span class="oi oi-play-circle" title="play-circle" aria-hidden="true"></span> Submit
-                            </button>
-                        </div>
+                <div class="row justify-content-center form-group">
+                    <div class="col-12 text-center">
+                        <button class="btn btn-lg btn-danger" type="submit" name="button" value="tutor">
+                            <span class="oi oi-media-play" title="media-play" aria-hidden="true"></span> Submit
+                        </button>
                     </div>
                 </div>
             </div>
-        }
-        <div class="row">
-            <div class="col-12 text-center">
-                <h4><span class="oi oi-heart red-text" title="heart" aria-hidden="true"></span>&nbsp;"The only way to learn mathematics is to do mathematics." ~Paul Halmos&nbsp;<span class="oi oi-heart red-text" title="heart" aria-hidden="true"></span></h4>
+            <div class="col-md-6 col-12">
+                <h2>Faculty:</h2>
+                <div class="row form-group">
+                    <div class="col-md-4 text-md-right col-12">
+                        <label class="h4">Password:</label>
+                    </div>
+                    <div class="col-md-8 col-12">
+                        <input class="form-control" type="password" name="facultyPwd" />
+                    </div>
+                </div>
+                <div class="row justify-content-center form-group">
+                    <div class="col-12 text-center">
+                        <button class="btn btn-lg btn-danger" type="submit" name="button" value="faculty">
+                            <span class="oi oi-play-circle" title="play-circle" aria-hidden="true"></span> Submit
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
+    }
+    <div class="row">
+        <div class="col-12 text-center">
+            <h4><span class="oi oi-heart red-text" title="heart" aria-hidden="true"></span>&nbsp;"The only way to learn mathematics is to do mathematics." ~Paul Halmos&nbsp;<span class="oi oi-heart red-text" title="heart" aria-hidden="true"></span></h4>
+        </div>
     </div>
+</div>

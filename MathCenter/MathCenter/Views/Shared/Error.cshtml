@@ -1,26 +1,8 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Error</title>
-</head>
-<body>
-    <div class="center" style="margin-top:25px; margin-bottom:25px;">
-        <img src="~/Images/logo_horizontal.gif" style="height: 75%;" />
-    </div>
-    <div class="body-content">
-        <div class="container">
-            <hgroup>
-                <h2>There was an error. Please push the button below to refresh the page, and try again.</h2>
-                <h3>
-                    @Html.ActionLink("Home", "Index", "Home", null, new { @class = "btn" })                    
-                </h3>
-            </hgroup>
-        </div>
-        <br />
-        <footer>
-            <img src="~/Images/WOULogo.PNG" style="height:100px;" />
-        </footer>
-    </div>
-</body>
-</html>
+﻿<div class="content">
+    <hgroup>
+        <h2>There was an error. Please push the button below to refresh the page, and try again.</h2>
+        <h3>
+            @Html.ActionLink("Home", "Index", "Home", null, new { @class = "btn" })
+        </h3>
+    </hgroup>
+</div>

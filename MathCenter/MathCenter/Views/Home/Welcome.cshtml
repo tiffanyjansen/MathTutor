@@ -1,20 +1,29 @@
-﻿@{
-    ViewBag.Title = "Sign In";
-}
-
-<div class="container">
-    <div class="center">
-        <h1 style="font-size:75px;">Welcome!</h1>
-        <h2>Please sign in here:</h2>
-        <form method="post">
-            <h3>
-                V <input type="text" placeholder="Your V# ..." name="VNum" />
-                <input type="hidden" name="week" value=@ViewBag.Num />
-                <button class="btn" type="submit">Submit</button>
-            </h3>
-            <div class="center">
-                <h4 style="color: darkblue;">@ViewBag.Error</h4>
-            </div>
-        </form>
+﻿    <div class="content">
+    @if (ViewBag.Error != null)
+    {
+        @Html.Partial("_Errors", "Partials", new ViewDataDictionary { { "error", ViewBag.Error } })
+    }
+    <div class="row">
+        <div class="col-12 text-center">
+            <h1>Welcome!</h1>
+            <h2>Please enter your V Number</h2>
+        </div>
     </div>
+    @using (Html.BeginForm())
+    {
+        <div class="row form-group justify-content-center no-gutters">
+            <div class="col-md-5 col-12">
+                <label class="h3">V&nbsp;</label>
+                <input type="text" class="form-control col-11" style="display:inline-block !important;" placeholder="XXXXXXXX" name="VNum" />
+                <input type="hidden" name="week" value=@ViewBag.Num />
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-12 text-center">
+                <button class="btn btn-lg btn-danger" type="submit">
+                    <span class="oi oi-media-play" title="media-play" aria-hidden="true"></span> Submit
+                </button>
+            </div>
+        </div>
+    }
 </div>

@@ -1,0 +1,41 @@
+﻿@{
+    ViewBag.Title = "Select Week";
+}
+
+    <div class="content">
+        @if (ViewBag.Error != null)
+        {
+            @Html.Partial("_Errors", "Partials", new ViewDataDictionary { { "error", ViewBag.Error } })
+        }
+        <h2>Please Select a Week Number:</h2>
+        @using (Html.BeginForm())
+        {
+            <div class="row form-group">
+                <div class="col-5 text-right">
+                    <label class="h4">Week Number:</label>
+                </div>
+                <div class="col-3">
+                    <select class="form-control" name="Week">
+                        <option value="-1" selected>-</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row justify-content-center form-group">
+                <div class="col-12 text-center">
+                    <button class="btn btn-lg btn-danger" type="submit">
+                        <span class="oi oi-media-play" title="media-play" aria-hidden="true"></span> Submit
+                    </button>
+                </div>
+            </div>
+        }
+    </div>

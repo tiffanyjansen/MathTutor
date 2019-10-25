@@ -23,7 +23,7 @@ namespace MathCenter.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult Index(string button, string tutorPwd, string facultyPwd, int? Week)
+        public ActionResult Index(string button, string tutorPwd, string facultyPwd)
         {
             //Hard code passwords since the outside file was being dumb.
             string tutorPass = "Math42";
@@ -33,19 +33,14 @@ namespace MathCenter.Controllers
             if (button == "tutor")
             {
                 //Check the password and make sure there is a week input.
-                if (tutorPwd == tutorPass && Week != -1)
+                if (tutorPwd == tutorPass)
                 {
-                    return RedirectToAction("Welcome", new { Week });
+                    return RedirectToAction("SelectWeek");
                 }
                 //Return specific errors if the input is not valid.
-                else if (tutorPwd != tutorPass)
-                {
-                    ViewBag.Error = "Incorrect password. Please try again.";
-                    return View();
-                }
                 else
                 {
-                    ViewBag.Error = "You did not select a week, please select a week number.";
+                    ViewBag.Error = "Incorrect password. Please try again.";
                     return View();
                 }
             }
@@ -62,6 +57,26 @@ namespace MathCenter.Controllers
                     ViewBag.Error = "Incorrect password. Please try again.";
                     return View();
                 }
+            }
+        }
+
+        [HttpGet]
+        public ActionResult SelectWeek()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult SelectWeek(int Week)
+        {
+            if(Week != -1)
+            {
+                return RedirectToAction("Welcome", new { Week });
+            }
+            else
+            {
+                ViewBag.Error = "Please select a week.";
+                return View();
             }
         }
 
