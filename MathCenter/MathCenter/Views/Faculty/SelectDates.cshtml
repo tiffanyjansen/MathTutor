@@ -1,31 +1,39 @@
-﻿
-@{
-    ViewBag.Title = "Select Dates";
-}
-
-<div class="content">
-    <h2>Please select the date range for the data download</h2>
-    <div class="center">
-        <h4 style="color: darkblue;">@ViewBag.Error</h4>
-    </div>
-    <form method="post">
-        <div class="row">
-            <div class="col-md-3"></div>
+﻿<div class="content">
+    <h2>Please select date range for the download:</h2>
+    <hr />
+    @if (ViewBag.Error != null)
+    {
+        @Html.Partial("_Errors", "Partials", new ViewDataDictionary { { "error", ViewBag.Error } })
+    }
+    @using (Html.BeginForm())
+    {
+        <div class="row form-group">
             <div class="col-md-6">
-                <h3>Start Date:&nbsp;<input style="width:inherit;" name="start" type="text" placeholder="mm/dd/yyyy" id="start" /></h3>
+                <label class="h4">Start Date:</label>
+                <input data-provide="datepicker" class="datepicker form-control" autocomplete="off" name="start" type="text" placeholder="mm/dd/yyy" id="start" />
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-3"></div>
             <div class="col-md-6">
-                <h3>&nbsp;&nbsp;End Date:&nbsp;<input style="width:inherit;" name="end" type="text" placeholder="mm/dd/yyyy" id="end" /></h3>
+                <label class="h4">End Date:</label>
+                <input data-provide="datepicker" name="end" class="datepicker form-control" autocomplete="off" placeholder="mm/dd/yyy" id="end" />
             </div>
         </div>
-        <div class="row">
-            <div class="center">
-                <button class="btn" type="submit">Submit</button>
-                <h3>@Html.ActionLink("Go Back", "Index", "Faculty")</h3>
+        <div class="row form-group">
+            <div class="col-12 text-center">
+                <button class="btn btn-lg btn-danger" type="submit" name="button" value="faculty">Submit</button>
+                @Html.ActionLink("Go Back", "Index", "Faculty", null, new { @class = "btn btn-default btn-lg" })
             </div>
         </div>
-    </form>
+    }
 </div>
+
+@section scripts 
+{
+    <script type="text/javascript">
+        $('#start').datepicker({
+            maxViewMode: 0
+        });
+        $('#end').datepicker({
+            maxViewMode: 0
+        });
+    </script>
+}

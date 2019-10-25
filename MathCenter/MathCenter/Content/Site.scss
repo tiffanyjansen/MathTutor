@@ -18,26 +18,31 @@ body {
     background: #E7E7E7;
     border-radius: 5px;
     border: solid 2px #000000;
+
     .content {
-        padding:1rem;
+        padding: 1rem;
+
         .quote {
             height: 50px;
             overflow-y: hidden;
         }
+
         .space {
             height: 50px;
         }
+
         .btn {
             .oi {
                 top: 2px;
             }
         }
-        input, 
-        button, 
-        select, 
+
+        input,
+        button,
+        select,
         option {
             font-size: 20px;
-        }       
+        }
     }
 }
 
@@ -68,4 +73,41 @@ body {
 
 .btn-danger {
     background-color: #DB0A29;
+    color: #FFFFFF;
+    border: solid 2px #000000;
+
+    &:hover {
+        background-color: #FFFFFF;
+        color: #000000;
+        border: solid 2px #DB0A29;
+    }
+}
+
+.btn-default {
+    background-color: #FFFFFF;
+    color: #000000;
+    border: solid 2px #DB0A29;
+
+    &:hover {
+        background-color: #DB0A29;
+        color: #FFFFFF;
+        border: solid 2px #000000;
+    }
+}
+
+.table-condensed {
+    width: 350px;
+    height: 350px;
+    font-size: 20px;
+
+    .datepicker-switch {
+        cursor: initial;
+    }
+    .datepicker-switch:hover {
+        background-color: #FFFFFF;
+    }
+
+    tbody tr td.active.day {
+        background-image: linear-gradient(to bottom, #DB0A29, #DB0A29);
+    }
 }
