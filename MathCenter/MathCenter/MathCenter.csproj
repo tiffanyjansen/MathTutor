@@ -1768,7 +1768,9 @@
     <Content Include="Content\Images\logo_horizontal.gif" />
     <Content Include="Content\Images\logo_horizontal.jpg" />
     <Content Include="Content\Images\mathheart.jpg" />
+    <Content Include="Content\Images\new-wou-logo.jpg" />
     <Content Include="Content\Images\WOU-logo-2018.jpg" />
+    <Content Include="Content\Images\wou-logo.gif" />
     <Content Include="Content\Images\WOULogo.PNG" />
     <Content Include="Content\Site.css">
       <DependentUpon>Site.scss</DependentUpon>
