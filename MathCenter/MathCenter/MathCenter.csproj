@@ -3324,7 +3324,6 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Shared\_Errors.cshtml" />
-    <Content Include="Views\Home\SelectWeek.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Ajax\" />

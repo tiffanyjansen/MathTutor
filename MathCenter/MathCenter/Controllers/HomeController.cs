@@ -13,78 +13,64 @@ namespace MathCenter.Controllers
         //Access to Database.
         private readonly MathContext db = new MathContext();
 
-        /*
-         * The "Home Page." The page for Tutors/Faculty to either access the 
-         * sign in sheet or the data. (Depending on which you are.) It will 
-         * check passwords and return the view necessary for who signed in.
-         */
+        /// <summary>
+        /// The "Home Page." The page for Tutors/Faculty to either access the 
+        /// sign in sheet or the data. (Depending on which you are.) It will 
+        ///  check passwords and return the view necessary for who signed in.
+        /// </summary>
+        /// <returns>View</returns>
         public ActionResult Index()
         {
             return View();
         }
         [HttpPost]
-        public ActionResult Index(string button, string tutorPwd, string facultyPwd)
+        public ActionResult Index(string tutorPwd, int Week) //When tutor form has been submitted.
         {
-            //Hard code passwords since the outside file was being dumb.
-            string tutorPass = "Math42";
-            string facultyPass = "Math42";
+            //password
+            string tutorPass = "Math42"; 
 
-            //Check which button was pressed.
-            if (button == "tutor")
-            {
-                //Check the password and make sure there is a week input.
-                if (tutorPwd == tutorPass)
-                {
-                    return RedirectToAction("SelectWeek");
-                }
-                //Return specific errors if the input is not valid.
-                else
-                {
-                    ViewBag.Error = "Incorrect password. Please try again.";
-                    return View();
-                }
-            }
-            else
-            {
-                //Check the password.
-                if (facultyPwd == facultyPass)
-                {
-                    return RedirectToAction("Index", "Faculty");
-                }
-                //Return specific errors if the input is not valid.
-                else
-                {
-                    ViewBag.Error = "Incorrect password. Please try again.";
-                    return View();
-                }
-            }
-        }
-
-        [HttpGet]
-        public ActionResult SelectWeek()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult SelectWeek(int Week)
-        {
-            if(Week != -1)
+            //Check the password and make sure there is a week input.
+            if (tutorPwd == tutorPass && Week != -1)
             {
                 return RedirectToAction("Welcome", new { Week });
             }
+            //Return specific errors if the input is not valid.
+            else if (Week == -1)
+            {
+                ViewBag.Error = "Please select a week number.";
+            }            
             else
             {
-                ViewBag.Error = "Please select a week.";
-                return View();
+                ViewBag.Error = "Incorrect password. Please try again.";                
+            }
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Faculty(string facultyPwd) //When faculty form has been submitted.
+        {
+            //password
+            string facultyPass = "Math42";
+
+            //Check the password.
+            if (facultyPwd == facultyPass)
+            {
+                return RedirectToAction("Index", "Faculty");
+            }
+            //Return specific errors if the input is not valid.
+            else
+            {
+                ViewBag.Error = "Incorrect password. Please try again.";
+                return RedirectToAction("Index");
             }
         }
 
-        /*
-        * The method for signing a student in. This page will just have the student
-        * enter their V Number, then it will direct them to select their class and 
-        * add them to the database
-        */
+        /// <summary>
+        ///  The method for signing a student in. This page will just have the student
+        ///  enter their V Number, then it will direct them to select their class and 
+        ///  add them to the database
+        /// </summary>
+        /// <param name="Week">Week Number</param>
+        /// <returns>View</returns>
         [HttpGet]
         public ActionResult Welcome(int? Week)
         {
@@ -93,7 +79,7 @@ namespace MathCenter.Controllers
             { 
                 return RedirectToAction("Index");
             }
-            ViewBag.Num = Week;
+            ViewBag.Week = Week;
             return View();
         }
         [HttpPost]
@@ -154,34 +140,30 @@ namespace MathCenter.Controllers
             Regex rx = new Regex(@"^[a-zA-Z-\.\s]+$");
             if (rx.IsMatch(pWeek.FirstName) && rx.IsMatch(pWeek.LastName))
             {
-                //try
-                //{
+                try
+                {
                     string firstName = CapitalizeName(pWeek.FirstName);                    
                     string lastName = CapitalizeName(pWeek.LastName);
-
-                    //Check if Student is already in DB.
-                    if (db.Students.Find(pWeek.VNum) != null)
+                    
+                    if (db.Students.Find(pWeek.VNum) != null) //Check if Student is already in DB.
                     {
-                        Student student = db.Students.Find(pWeek.VNum);
-                        student.FirstName = firstName;
+                        Student student = db.Students.Find(pWeek.VNum); //If so, update them.
+                        student.FirstName = firstName; 
                         student.LastName = lastName;
                     }
-                    //Create a student.
                     else
-                    {
-                        //Add the student to the database.
-                        Student student = new Student { VNum = pWeek.VNum, FirstName = firstName, LastName = lastName };
-                        db.Students.Add(student);
-                    }
-                
-                    //Save the changes to the database.            
-                    db.SaveChanges();
-                //}
-                //catch (Exception)
-                //{
-                //    ViewBag.Error = "There was an error adding you to the database. Please ask a tutor for help.";
-                //    return View(pWeek);
-                //}
+                    {                       
+                        Student student = new Student { VNum = pWeek.VNum, FirstName = firstName, LastName = lastName }; //Create a student.
+                        db.Students.Add(student);  //Add the student to the database.
+                    }                
+                               
+                    db.SaveChanges(); //Save the changes to the database. 
+                }
+                catch (Exception)
+                {
+                    ViewBag.Error = "There was an error adding you to the database. Please ask a tutor for help.";
+                    return View(pWeek);
+                }
             }
             else
             {

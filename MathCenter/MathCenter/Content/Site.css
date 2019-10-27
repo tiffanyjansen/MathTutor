@@ -4,24 +4,36 @@
 
 body {
   font-family: Crete_Round;
-  overflow-x: hidden;
-  background-color: #E7E7E7; }
+  /*overflow-x: hidden; // Remove bottom scroll bar.*/
+  background-image: linear-gradient(to bottom, #C4C6C8, #FFFFFF);
+  margin: 15px; }
 
 .logo {
   max-width: 100%;
+  max-width: 100vw;
   height: auto; }
 
+.border-bottom,
+.border-top {
+  border-color: #FFFFFF !important; }
+
+.border-top {
+  margin-top: 15px; }
+
+.border-bottom {
+  margin-bottom: 15px; }
+
 .container {
-  background: #E7E7E7;
+  border: solid 1px #231F20;
   border-radius: 5px;
-  border: solid 2px #000000; }
+  padding: 15px;
+  margin: 15px auto; }
   .container .content {
     padding: 1rem; }
     .container .content .quote {
-      height: 50px;
-      overflow-y: hidden; }
-    .container .content .space {
-      height: 50px; }
+      height: 45px;
+      overflow-y: hidden;
+      color: #A7A9AC; }
     .container .content .btn .oi {
       top: 2px; }
     .container .content input,
@@ -29,6 +41,19 @@ body {
     .container .content select,
     .container .content option {
       font-size: 20px; }
+    .container .content label {
+      font-size: 24px; }
+      .container .content label.vertical-center {
+        padding-top: calc(.15rem + 1px);
+        padding-bottom: calc(.15rem + 1px);
+        line-height: 1.5; }
+    .container .content .welcome-title h1 {
+      color: #DB0A29;
+      margin-bottom: 0; }
+    .container .content #border {
+      height: 1px;
+      background-image: radial-gradient(#A7A9AC, #FFFFFF);
+      margin-bottom: 15px; }
 
 .footer {
   font-size: 24px; }
@@ -37,7 +62,7 @@ body {
 
 .error {
   background-color: #DB0A29;
-  color: #E7E7E7;
+  color: #FFFFFF;
   border-radius: 5px;
   margin: 0.5rem; }
   .error .oi {
@@ -49,23 +74,26 @@ body {
 .red-text {
   color: #DB0A29; }
 
+.bg-danger {
+  background-color: #DB0A29 !important; }
+
 .btn-danger {
   background-color: #DB0A29;
   color: #FFFFFF;
-  border: solid 2px #000000; }
+  border: solid 2px #231F20; }
   .btn-danger:hover {
     background-color: #FFFFFF;
-    color: #000000;
+    color: #231F20;
     border: solid 2px #DB0A29; }
 
 .btn-default {
   background-color: #FFFFFF;
-  color: #000000;
+  color: #231F20;
   border: solid 2px #DB0A29; }
   .btn-default:hover {
     background-color: #DB0A29;
     color: #FFFFFF;
-    border: solid 2px #000000; }
+    border: solid 2px #231F20; }
 
 .table-condensed {
   width: 350px;
@@ -77,3 +105,8 @@ body {
     background-color: #FFFFFF; }
   .table-condensed tbody tr td.active.day {
     background-image: linear-gradient(to bottom, #DB0A29, #DB0A29); }
+
+.progress {
+  height: 30px;
+  background-color: #FFFFFF;
+  margin-bottom: 15px; }

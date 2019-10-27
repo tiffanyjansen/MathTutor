@@ -3,27 +3,33 @@
     {
         @Html.Partial("_Errors", "Partials", new ViewDataDictionary { { "error", ViewBag.Error } })
     }
-    <div class="row">
-        <div class="col-12 text-center">
+
+    <div class="row justify-content-center">
+        <div class="col-12 text-center welcome-title">
             <h1>Welcome!</h1>
-            <h2>Please enter your V Number</h2>
+        </div>
+        <div class="col-12" id="border"></div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-12">
+            <h2 class="border-bottom">Please enter your V Number</h2>
         </div>
     </div>
-    @using (Html.BeginForm())
-    {
-        <div class="row form-group justify-content-center no-gutters">
-            <div class="col-md-5 col-12">
-                <label class="h3">V&nbsp;</label>
-                <input type="text" class="form-control col-11" style="display:inline-block !important;" placeholder="XXXXXXXX" name="VNum" />
-                <input type="hidden" name="week" value=@ViewBag.Num />
-            </div>
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-10 col-12">
+            @using (Html.BeginForm())
+            {
+                <div class="row form-group justify-content-center no-gutters">
+                    <label class="col-1 vertical-center text-right">V&nbsp;</label>
+                    <input type="text" class="form-control col-11" style="display:inline-block !important;" placeholder="XXXXXXXX" name="VNum" />
+                    <input type="hidden" name="Week" value=@ViewBag.Week />
+                </div>
+                <div class="row form-group">
+                    <div class="col-12 text-right">
+                        <button class="btn btn-lg btn-danger" type="submit">Submit</button>
+                    </div>
+                </div>
+            }
         </div>
-        <div class="row form-group">
-            <div class="col-12 text-center">
-                <button class="btn btn-lg btn-danger" type="submit">
-                    <span class="oi oi-media-play" title="media-play" aria-hidden="true"></span> Submit
-                </button>
-            </div>
-        </div>
-    }
+    </div>
 </div>

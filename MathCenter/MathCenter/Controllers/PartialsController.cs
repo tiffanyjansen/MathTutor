@@ -15,5 +15,11 @@ namespace MathCenter.Controllers
             ViewBag.Error = error;
             return PartialView();
         }
+
+        public PartialViewResult _Progress(int progress)
+        {
+            ViewBag.Progress = progress;
+            return PartialView();
+        }
     }
 }
