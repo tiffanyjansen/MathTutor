@@ -18,7 +18,7 @@ namespace MathCenter.Controllers
         /// sign in sheet or the data. (Depending on which you are.) It will 
         ///  check passwords and return the view necessary for who signed in.
         /// </summary>
-        /// <returns>View</returns>
+        /// <returns>The View</returns>
         public ActionResult Index()
         {
             return View();
@@ -69,8 +69,8 @@ namespace MathCenter.Controllers
         ///  enter their V Number, then it will direct them to select their class and 
         ///  add them to the database
         /// </summary>
-        /// <param name="Week">Week Number</param>
-        /// <returns>View</returns>
+        /// <param name="Week">The Week Number</param>
+        /// <returns>The View</returns>
         [HttpGet]
         public ActionResult Welcome(int? Week)
         {
@@ -105,12 +105,15 @@ namespace MathCenter.Controllers
             }           
         }
 
-        /*
-        * This is the method for inputting their name. It will allow the user
-        * to input their name and get to adding their class.
-        * 
-        * It will also add the student to the database.
-        */
+        /// <summary>
+        /// This is the method for inputting their name. It will allow the user
+        /// to input their name and get to adding their class.
+        /// 
+        /// It will also add the student to the database.
+        /// </summary>
+        /// <param name="VNum">The Student's V-Number</param>
+        /// <param name="Week">The Week Number</param>
+        /// <returns>The View</returns>
         [HttpGet]
         public ActionResult Name(string VNum, int? Week)
         {
@@ -175,13 +178,78 @@ namespace MathCenter.Controllers
             return RedirectToAction("SelectClass", new { pWeek.Week, pWeek.VNum });
         }
         
-        /*
-         * This is the method for selecting the class. It will use JavaScript to do most of the functionality.
-         */
+         /// <summary>
+         /// The method for selecting a class. It's a table that is filterable. 
+         /// There is some Javascript, for functionality, but no Ajax calls.
+         /// </summary>
+         /// <param name="Week">The Week Number</param>
+         /// <param name="VNum">The Student's V-Number</param>
+         /// <returns>The View</returns>
         [HttpGet]
         public ActionResult SelectClass(int? Week, string VNum)
         {
+            //TO DO - Update Comments and line spacing.
+
+            //get all the query strings
+            var queryStrings = new Dictionary<string, string>();
+            foreach (var key in Request.QueryString.AllKeys)
+            {
+                queryStrings.Add(key, Request.QueryString[key]);
+            }
+
             //Check for no input. This just adds extra error-handling.
+            if (Week == null || VNum == null)
+            {
+                VNum = queryStrings.ContainsKey("VNum") ? queryStrings["VNum"] : VNum;
+                Week = queryStrings.ContainsKey("Week") ? Int32.Parse(queryStrings["Week"]) : Week;
+                
+                if (Week == null)
+                {
+                    return RedirectToAction("Index");
+                }
+                else if(VNum == null)
+                {
+                    return RedirectToAction("Welcome", new { Week });
+                }
+            }          
+
+            //Keep these floating around so we can easily have the stuff working. 
+            ViewBag.Id = VNum;
+            ViewBag.Week = Week;
+
+            //remove them so we just have the filters.
+            queryStrings.Remove("VNum");
+            queryStrings.Remove("Week");
+
+            int[] IdArray = GetClassIdArray(queryStrings);
+            if(IdArray.Length > 0)
+            {
+                ViewBag.SelectedIds = queryStrings["ClassIds"]; //send the thing we got to the server back.
+                ViewBag.ClassIds = IdArray;
+            }            
+            ViewBag.SelectedCount = IdArray.Length;
+
+            //Get all the classes
+            var filteredQuery = GetFilteredClassQuery(queryStrings, IdArray);
+            var Classes = filteredQuery.ToList(); 
+            
+            //The select filters.
+            ViewBag.Departments = GetClassDepts(filteredQuery); //gets the possible class departments
+            ViewBag.ClassNumbers = GetClassNumbers(filteredQuery); //gets the possible class numbers
+            ViewBag.Instructors = GetInstructors(filteredQuery); //gets the possible instructors
+            ViewBag.Days = GetClassDays(filteredQuery); //gets the possible days
+            ViewBag.Times = GetClassTimes(filteredQuery); //gets the possible start times   
+            
+            if(queryStrings.ContainsKey("SelectedFilter"))
+            {
+                ViewBag.Filtered = queryStrings["SelectedFilter"];
+            }
+
+            return View(Classes);
+        }
+        [HttpPost]
+        public ActionResult SelectClass(string VNum, int? Week, int[] Classes)
+        {
             if (Week == null || VNum == null)
             {
                 if (Week == null)
@@ -194,175 +262,67 @@ namespace MathCenter.Controllers
                 }
             }
 
-            //Keep these floating around so we can easily have the stuff working. 
-            ViewBag.Id = VNum;
-            ViewBag.Week = Week;
-
-            //Get the associated Class Info
-            string dept = GetClassDepts().Select(c => c.DeptPrefix).First();
-            ViewBag.Numbers = GetClassNums(dept);
-            int? num = GetClassNums(dept).Select(c => c.ClassNum).First();
-            ViewBag.Instructors = GetClassInstructors(dept, num);
-            string instruct = GetClassInstructors(dept, num).Select(c => c.Instructor).First();
-            ViewBag.Times = GetClassTimes(dept, num, instruct);
-                       
-            return View(GetClassDepts());
-        }
-        [HttpPost]
-        public ActionResult SelectClass(int? ClassID, int Week, string VNum, string button)
-        {
-            if(button == "Other")
+            if (Classes == null)
             {
-                return RedirectToAction("Other", new { VNum, Week });
+                ViewBag.Id = VNum;
+                ViewBag.Week = Week;
+                var query = GetFilteredClassQuery(null, null);
+                //The select filters.
+                ViewBag.Departments = GetClassDepts(query); //gets the possible class departments
+                ViewBag.ClassNumbers = GetClassNumbers(query); //gets the possible class numbers
+                ViewBag.Instructors = GetInstructors(query); //gets the possible instructors
+                ViewBag.Days = GetClassDays(query); //gets the possible days
+                ViewBag.Times = GetClassTimes(query); //gets the possible start times
+                return View(query.ToList());
             }
             else
             {
-                if (ClassID == null)
+                Student currentStudent = db.Students.Find(VNum);
+                foreach (var ClassID in Classes)
                 {
+                    db.StudentClasses.Add(new StudentClass { VNum = currentStudent.VNum, ClassID = (int)ClassID });
+                }                
+                try
+                { 
+                    db.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    //There was an error.                        
                     ViewBag.Id = VNum;
                     ViewBag.Week = Week;
-                    return View(GetClassDepts());
+                    ViewBag.Error = "There was an error with the database. Please try again.";
+                    var query = GetFilteredClassQuery(null, null);
+                    //The select filters.
+                    ViewBag.Departments = GetClassDepts(query); //gets the possible class departments
+                    ViewBag.ClassNumbers = GetClassNumbers(query); //gets the possible class numbers
+                    ViewBag.Instructors = GetInstructors(query); //gets the possible instructors
+                    ViewBag.Days = GetClassDays(query); //gets the possible days
+                    ViewBag.Times = GetClassTimes(query); //gets the possible start times
+                    return View(query.ToList());
                 }
-                else
+
+                //Add the SignIn to the Database
+                try
                 {
-                    Student currentStudent = db.Students.Find(VNum);
-                    db.StudentClasses.Add(new StudentClass { VNum = currentStudent.VNum, ClassID = (int)ClassID });
-                    try { 
-                        db.SaveChanges();
-                    }
-                    catch (Exception)
+                    foreach(var ClassID in Classes)
                     {
-                        //There was an error.                        
-                        ViewBag.Id = VNum;
-                        ViewBag.Week = Week;
-                        ViewBag.Error = "There was an error with the database. Please try again.";
-                        return View(GetClassDepts());
+                        db.SignIns.Add(new SignIn { Week = (int)Week, Date = DateTime.Today, Hour = DateTime.Now.Hour, Min = DateTime.Now.Minute, StudentID = VNum, ClassID = (int)ClassID }); //add a sign in for every class.
                     }
-
-                    //Add the SignIn to the Database
-                    try
-                    {
-                        db.SignIns.Add(new SignIn { Week = Week, Date = DateTime.Today, Hour = DateTime.Now.Hour, Min = DateTime.Now.Minute, StudentID = VNum, ClassID = (int)ClassID });
-                        db.SaveChanges();
-                    }
-                    catch (Exception)
-                    {
-                        //There was an error
-                        ViewBag.Error = "There was an error with the database. Please try again.";
-                        ViewBag.Id = VNum;
-                        ViewBag.Week = Week;
-                        return View(GetClassDepts());
-                    }
-                    return RedirectToAction("Finish", new { VNum, Week });
+                    
+                    db.SaveChanges();
                 }
-            }           
-        }
-
-        public List<Class> GetClassDepts()
-        {
-            //Find all of the distict Class Prefixes and use that for the drop down.
-            var ClassDepts = db.Classes
-                .GroupBy(c => c.DeptPrefix)
-                .Select(c => c.FirstOrDefault())
-                .OrderBy(c => c.ClassNum)
-                .ToList();
-
-            //Remove the classes with Other having something in it.
-            var remClasses = ClassDepts
-                .Where(c => c.Other != null)
-                .Select(c => c).ToList();
-            foreach (var remClass in remClasses)
-            {
-                ClassDepts.Remove(remClass);
-            }
-
-            return ClassDepts;
-        }
-
-        private List<Class> GetClassNums(string dept)
-        {
-            //Find all of the distict Class Numbers in relation to the Prefix Given and use that for the drop down.
-            var ClassNums = db.Classes
-                .Where(c => c.DeptPrefix == dept)
-                .GroupBy(c => c.ClassNum)
-                .Select(c => c.FirstOrDefault())
-                .ToList();
-
-            //Remove the classes with "Other" not being null
-            var remClasses = ClassNums
-                .Where(c => c.Other != null)
-                .Select(c => c).ToList();
-            foreach (var remClass in remClasses)
-            {
-                ClassNums.Remove(remClass);
-            }
-
-            return ClassNums;
-        }
-
-        private List<Class> GetClassInstructors(string dept, int? num)
-        {
-            var Instructors = db.Classes
-                .Where(c => c.DeptPrefix == dept)
-                .Where(c => c.ClassNum == num)
-                .GroupBy(c => c.Instructor)
-                .Select(c => c.FirstOrDefault())
-                .ToList();
-
-            //Remove the classes with "Other" not being null
-            var remClasses = Instructors
-                .Where(c => c.Other != null)
-                .Select(c => c).ToList();
-            foreach (var remClass in remClasses)
-            {
-                Instructors.Remove(remClass);
-            }
-
-            //Remove the classes with Community Colleges as an Instructor
-            List<Class> ccClasses = Instructors
-                .Where(c => c.Instructor == "Portland")
-                .Select(c => c).ToList();
-            ccClasses.Add(
-                Instructors.Where(c => c.Instructor == "Chemeketa")
-                .Select(c => c).FirstOrDefault());
-            ccClasses.Add(
-                Instructors.Where(c => c.Instructor == "Clackamas")
-                .Select(c => c).FirstOrDefault());
-            ccClasses.Add(
-                Instructors.Where(c => c.Instructor == "Mt. Hood")
-                .Select(c => c).FirstOrDefault());
-            ccClasses.Add(
-                Instructors.Where(c => c.Instructor == "Linn-Benton")
-                .Select(c => c).FirstOrDefault());
-            foreach (var ccClass in ccClasses)
-            {
-                Instructors.Remove(ccClass);
-            }
-
-            return Instructors;
-        }
-
-        private List<Class> GetClassTimes(string dept, int? num, string instruct)
-        {
-            //Find all possible start times
-            var startTimes = db.Classes
-                .Where(c => c.DeptPrefix == dept)
-                .Where(d => d.ClassNum == num)
-                .Where(n => n.Instructor == instruct)
-                .Select(p => p)
-                .ToList();
-
-            //Remove the classes with "Other" not being null
-            var remClasses = startTimes
-                .Where(c => c.Other != null)
-                .Select(c => c).ToList();
-            foreach (var remClass in remClasses)
-            {
-                startTimes.Remove(remClass);
-            }
-
-            return startTimes;
-        }
+                catch (Exception)
+                {
+                    //There was an error
+                    ViewBag.Error = "There was an error with the database. Please try again.";
+                    ViewBag.Id = VNum;
+                    ViewBag.Week = Week;
+                    return View(GetFilteredClassQuery(null, null).ToList());
+                }
+                return RedirectToAction("Finish", new { Week });
+            }                     
+        }        
 
         /*
          * The method for when the student selects Other.
@@ -566,6 +526,228 @@ namespace MathCenter.Controllers
                 name = name.Substring(0, index) + char.ToUpper(name[index]) + name.Substring(index + 1);
             }
             return name;
+        }
+
+
+        /// <summary>
+        /// Either removes the "Other" classes from the list or gets the other
+        /// classes.
+        /// </summary>
+        /// <param name="Classes">List of classes or null</param>
+        /// <param name="remove">true or false</param>
+        /// <returns>The new and improved list of classes</returns>
+        private List<Class> RemoveOthers(List<Class> Classes = null, bool remove = true)
+        {
+            List<Class> Others = db.Classes
+                .Where(c => c.Other != null)
+                .ToList();
+
+            if (remove) //if we want to remove them, then do so.
+            {
+                foreach (var Other in Others)
+                {
+                    Classes.Remove(Other); //Remove them from the list passed in.
+                }
+
+                return Classes;
+            }
+
+            return Others; //otherwise, return the others only
+
+        }
+
+        /// <summary>
+        /// Either removes Community College classes or get the list of 
+        /// Community College classes
+        /// </summary>
+        /// <param name="Classes">The list of classes or null</param>
+        /// <param name="remove">true or false</param>
+        /// <returns>The new and improved list of classes</returns>
+        private List<Class> RemoveCCInstructors(List<Class> Classes = null, bool remove = true)
+        {
+            string[] CCInstructors = { "Portland", "Chemeketa", "Clackamas", "Mt. Hood", "Linn-Benton" }; //All the possible CCIntstructors
+
+            List<Class> CCClasses = db.Classes
+                .Where(c => CCInstructors.Contains(c.Instructor)) //Get all the ones in the DB with them. 
+                .ToList();
+
+            if (remove) //remove them if we want them removed
+            {
+                foreach (var CCClass in CCClasses)
+                {
+                    Classes.Remove(CCClass); //Remove them from the list passed in.
+                }
+
+                return Classes; //return the new list. :)
+            }
+
+            return CCClasses; //return the cc list only
+        }
+
+        /// <summary>
+        /// Get the list of distinct class departments with the 
+        /// given filters.
+        /// </summary>
+        /// <param name="filters">The dictionary of filters</param>
+        /// <returns>the list of distinct class departments</returns>
+        public List<Class> GetClassDepts(IQueryable<Class> filteredQuery)
+        {
+            List<Class> ClassDepts = filteredQuery
+                .GroupBy(c => c.DeptPrefix)
+                .Select(c => c.FirstOrDefault())
+                .ToList();
+
+            ClassDepts = RemoveOthers(ClassDepts);
+            ClassDepts = RemoveCCInstructors(ClassDepts);
+
+            return ClassDepts;
+        }
+
+        /// <summary>
+        /// Get the list of distinct class numbers with the 
+        /// given filters.
+        /// </summary>
+        /// <param name="filters">The dictionary of filters</param>
+        /// <returns>the list of distinct class numbers</returns>
+        private List<Class> GetClassNumbers(IQueryable<Class> filteredQuery)
+        {
+            //Find all of the distict Class Numbers.
+            List<Class> ClassNums = filteredQuery
+                .GroupBy(c => c.ClassNum)
+                .Select(c => c.FirstOrDefault())
+                .ToList();
+
+            ClassNums = RemoveOthers(ClassNums);
+            ClassNums = RemoveCCInstructors(ClassNums);
+
+            return ClassNums;
+        }
+
+        /// <summary>
+        /// Get the list of distinct instructors with the 
+        /// given filters.
+        /// </summary>
+        /// <param name="filters">The dictionary of filters</param>
+        /// <returns>the list of distinct instructors</returns>
+        private List<Class> GetInstructors(IQueryable<Class> filteredQuery)
+        {
+            List<Class> Instructors = filteredQuery
+                .GroupBy(c => c.Instructor)
+                .Select(c => c.FirstOrDefault())
+                .ToList();
+
+            Instructors = RemoveOthers(Instructors);
+            Instructors = RemoveCCInstructors(Instructors);
+
+            return Instructors;
+        }
+
+        /// <summary>
+        /// Get the list of distinct class days with the 
+        /// given filters.
+        /// </summary>
+        /// <param name="filters">The dictionary of filters</param>
+        /// <returns>the list of distinct class days</returns>
+        private List<Class> GetClassDays(IQueryable<Class> filteredQuery)
+        {
+            List<Class> Days = filteredQuery
+                .GroupBy(c => c.Days)
+                .Select(c => c.FirstOrDefault())
+                .ToList();
+
+            Days = RemoveOthers(Days);
+            Days = RemoveCCInstructors(Days);
+
+            return Days;
+        }
+
+        /// <summary>
+        /// Get the list of distinct class times with the 
+        /// given filters.
+        /// </summary>
+        /// <param name="filters">The dictionary of filters</param>
+        /// <returns>the list of distinct class times</returns>
+        private List<Class> GetClassTimes(IQueryable<Class> filteredQuery)
+        {
+            //Find all possible start times
+            List<Class> startTimes = filteredQuery
+                .GroupBy(c => c.Time)
+                .Select(c => c.FirstOrDefault())
+                .ToList();
+
+            startTimes = RemoveOthers(startTimes);
+            startTimes = RemoveCCInstructors(startTimes);
+
+            return startTimes;
+        }
+
+        /// <summary>
+        /// Get the query for classes with the given filters with the 
+        /// given filters.
+        /// </summary>
+        /// <param name="filters">The dictionary of filters</param>
+        /// <returns>the query</returns>
+        private IQueryable<Class> GetFilteredClassQuery(Dictionary<string, string> filters, int[] classIds)
+        {
+            var query = db.Classes.Where(c => c == c);
+
+            if (filters != null && filters.ContainsKey("DepartmentFilter"))
+            {
+                string dept = filters["DepartmentFilter"] != "all" ? filters["DepartmentFilter"] : null;
+                int? num = 0;
+                if (filters["ClassNumberFilter"] != "all")
+                {
+                    num = Int32.Parse(filters["ClassNumberFilter"]);
+                }
+                string instructor = filters["InstructorFilter"] != "all" ? filters["InstructorFilter"] : null;
+                string days = filters["DaysFilter"] != "all" ? filters["DaysFilter"] : null;
+                string time = filters["TimeFilter"] != "all" ? filters["TimeFilter"] : null;
+
+                query = dept != null ? query.Where(c => c.DeptPrefix == dept) : query;
+                query = num != 0 ? query.Where(c => c.ClassNum == num) : query;
+                query = instructor != null ? query.Where(c => c.Instructor == instructor) : query;
+                query = days != null ? query.Where(c => c.Days == days) : query;
+                query = time != null ? query.Where(c => c.Time == time) : query;
+            }
+
+            //TO DO - Fix this part of the function.
+            if (filters != null && filters.ContainsKey("SelectedFilter"))
+            {
+                switch(filters["SelectedFilter"])
+                {
+                    case "selected":
+                        query = query.Where(c => classIds.Contains(c.ClassID)); 
+                        break;
+                    case "not_selected":
+                        query = query.Where(c => !classIds.Contains(c.ClassID));
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            return query;
+        }
+
+        private int[] GetClassIdArray(Dictionary<string, string> filters)
+        {
+            int[] IdArray;
+            
+            if (filters.ContainsKey("ClassIds") && filters["ClassIds"] != null && filters["ClassIds"] != "")
+            {
+                String[] Ids = filters["ClassIds"].Split(',');
+                IdArray = new int[Ids.Length];
+                for (int i = 0; i < Ids.Length; i++)
+                {
+                    IdArray[i] = Int32.Parse(Ids[0]);
+                }                
+            }
+            else
+            {
+                IdArray = new int[0];
+            }
+
+            return IdArray;
         }
     }    
 }

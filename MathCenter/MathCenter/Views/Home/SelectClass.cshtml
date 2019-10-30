@@ -1,90 +1,195 @@
 ﻿@model IEnumerable<MathCenter.Models.Class>
-@{
-    ViewBag.Title = "Select Your Class";
-}
+
+<div class="content">
+    @Html.Partial("_Progress", "Partials", new ViewDataDictionary { { "progress", 66 } })
+
+    @if (ViewBag.Error != null)
+    {
+        @Html.Partial("_Errors", "Partials", new ViewDataDictionary { { "error", ViewBag.Error } })
+    }
+    <div class="row">
+        <div class="col-12 border-bottom">
+            <h2>Please select your classes:</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <table>
+                @using (Html.BeginForm("SelectClass", "Home", FormMethod.Get, new { name = "filterForm" }))
+                {
+                    <thead>
+                        <tr> <!--Actual Table Headers-->
+                            <th class="selected_column">
+                                <input type="hidden" name="Week" value=@ViewBag.Week />
+                                <input type="hidden" name="VNum" value=@ViewBag.Id />
+                                <input type="hidden" name="ClassIds" id="classIds" value="@ViewBag.SelectedIds" />
+                                Selected
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.DeptPrefix)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.ClassNum)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Instructor)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Days)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Time)
+                            </th>
+                        </tr>
+                        <tr> <!--Search Fields-->
+                            <td class="selected_column">
+                                @if (ViewBag.SelectedCount != 0)
+                                {
+                                    <select class="filter" name="SelectedFilter" style="width:100%;">
+                                        @if (ViewBag.Filtered == null || ViewBag.Filtered == "all")
+                                        {
+                                            <option value="all">
+                                                All
+                                            </option>
+                                            <option value="selected">
+                                                Selected
+                                            </option>
+                                            <option value="not_selected">
+                                                Not Selected
+                                            </option>
+                                        }
+                                        else if (ViewBag.Filtered != null && ViewBag.Filtered == "selected")
+                                        {
+                                            <option value="selected">
+                                                Selected
+                                            </option>
+                                            <option value="not_selected">
+                                                Not Selected
+                                            </option>
+                                            <option value="all">
+                                                All
+                                            </option>
+                                        }
+                                        else
+                                        {
+                                            <option value="not_selected">
+                                                Not Selected
+                                            </option>
+                                            <option value="all">
+                                                All
+                                            </option>
+                                            <option value="selected">
+                                                Selected
+                                            </option>
+                                        }
+                                    </select>
+                                }                                
+                            </td>
+                            <td>
+                                @Html.Partial("_FilterDropdown", "Partials", new ViewDataDictionary
+                                {
+                                    { "name", "DepartmentFilter" },
+                                    { "classes", ViewBag.Departments },
+                                    { "attribute", 1 }
+                                })                                
+                            </td>
+                            <td>
+                                @Html.Partial("_FilterDropdown", "Partials", new ViewDataDictionary
+                                {
+                                    { "name", "ClassNumberFilter" },
+                                    { "classes", ViewBag.ClassNumbers },
+                                    { "attribute", 2 }
+                                })                                
+                            </td>
+                            <td>
+                                @Html.Partial("_FilterDropdown", "Partials", new ViewDataDictionary
+                                {
+                                    { "name", "InstructorFilter" },
+                                    { "classes", ViewBag.Instructors },
+                                    { "attribute", 3 }
+                                })
+                            </td>
+                            <td>
+                                @Html.Partial("_FilterDropdown", "Partials", new ViewDataDictionary
+                                {
+                                    { "name", "DaysFilter" },
+                                    { "classes", ViewBag.Days },
+                                    { "attribute", 4 }
+                                })                                
+                            </td>
+                            <td>
+                                @Html.Partial("_FilterDropdown", "Partials", new ViewDataDictionary
+                                {
+                                    { "name", "TimeFilter" },
+                                    { "classes", ViewBag.Times },
+                                    { "attribute", 5 }
+                                })                                
+                            </td>
+                        </tr>
+                    </thead>
+                }
+                @using (Html.BeginForm("SelectClass", "Home", FormMethod.Post, new { name = "classForm" }))
+                {
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="selected_column">
+                                    @if (ViewBag.ClassIds != null && Array.Exists((int[])ViewBag.ClassIds, e=>e == item.ClassID))
+                                    {
+                                        <input type="checkbox" class="class-checkbox" name="Classes" value="@item.ClassID" checked />
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" class="class-checkbox" name="Classes" value="@item.ClassID" />
+                                    }
+
+                                    <input type="hidden" name="Week" value=@ViewBag.Week />
+                                    <input type="hidden" name="VNum" value=@ViewBag.Id />
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DeptPrefix)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ClassNum)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Instructor)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Days)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Time)
+                                </td>
+                            </tr>
+                        }
+                        <tr>
+                            <td class="selected_column">
+                                <span id="selected-count">@ViewBag.SelectedCount</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                }
+            </table>
+        </div>
+    </div>
+    <div class="row button-row">
+        <div class="col-12">
+            <h3>Class not found? Taking a class at a community college? Try one of these options:</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 text-left">
+            <button class="btn btn-danger btn-lg" onclick="submitForm('CommunityCollegeClasses')">Community College</button>
+            <button class="btn btn-default btn-lg" onclick="submitForm('OtherClasses')">Other</button>            
+        </div>
+    </div>
+    <span class="submit-fixed">
+        <button class="btn btn-danger btn-lg" onClick="submitForm()">Submit</button>
+    </span>
+</div>
+
 @section Scripts{
     <script type="text/javascript" src="~/Scripts/SelectClass.js"></script>
 }
-
-    <div class="content">
-        <h1>Please select your class:</h1>
-        <form method="post">
-            <div class="row">
-                <div class="col-md-12">
-                    <h4 style="margin:0; font-size:24px; color:#DB0A29;">Please select your class department, then number, then instructor, and then time and day/institution. </h4>
-                    <h4 style="margin:0; font-size:24px; color:#DB0A29;">Allow dropdowns to load before moving on to the next one. It may take a up to 10 sec. Please be patient.</h4>
-
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3">
-                    <h3>Department</h3>
-                    <div class="col-md-10">
-                        <select style="width:inherit;" name="Departments" id="Departments">
-                            @foreach (var dept in Model)
-                            {
-                                <option>@Html.DisplayFor(m => dept.DeptPrefix)</option>
-                            }
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <h3>Class Number</h3>
-                    <div class="col-md-10">
-                        <!--This will be added with JavaScript-->
-                        <select style="width:inherit;" name="Numbers" id="Numbers">
-                            @foreach (var num in ViewBag.Numbers)
-                            {
-                                <option>@num.ClassNum</option>
-                            }
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <h3>Instructor</h3>
-                    <div class="col-md-10">
-                        <!--This will be added with JavaScript-->
-                        <select style="width:inherit;" name="Instructors" id="Instructors">
-                            @foreach (var instructor in ViewBag.Instructors)
-                            {
-                                <option>@instructor.Instructor</option>
-                            }
-                            <option>Community College</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-5">
-                    <div class="center">
-                        <br />
-                        <h3>Class not found? Click <button class="btn" name="button" value="Other" type="submit">Here</button></h3>
-                    </div>
-                </div>
-                <div class="col-md-1"></div>
-                <div class="col-md-6">
-                    <h3 id="LabelTimes">Class Time</h3>
-                    <div class="col-md-10">
-                        <!--This will be added with JavaScript-->
-                        <select style="width:inherit;" name="ClassID" id="Times">
-                            @foreach (var time in ViewBag.Times)
-                            {
-                                <option value=@time.ClassID>@time.Time @time.Days</option>
-                            }
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <br />
-            <div class="row">
-                <input type="hidden" name="Week" value=@ViewBag.Week />
-                <input type="hidden" name="Id" value=@ViewBag.Id />
-                <div class="center">
-                    <h3><button class="btn" name="button" value="Submit" type="submit">Submit</button></h3>
-                </div>
-            </div>
-            <div class="center">
-                <h4 style="color: darkblue;">@ViewBag.Error</h4>
-            </div>
-        </form>
-    </div>

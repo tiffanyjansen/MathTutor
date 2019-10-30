@@ -76,8 +76,53 @@ body {
 
         #border {
             height: 1px;
-            background-image: radial-gradient(#A7A9AC, #FFFFFF); //Red to White
+            background-image: radial-gradient(#A7A9AC, #FFFFFF); //Silver to White
             margin-bottom: 15px;
+        }
+
+        table {
+            width: 90%;
+            border: 2px solid #DB0A29; //Red
+            text-align: center;
+            margin: 0 auto;
+            color: #231F20; //Black
+            /*table-layout: fixed;*/
+
+            tr {
+                background-color: #C4C6C8; //Gray
+                &:nth-child(odd) {
+                    background-color: #C4C6C8; //Gray
+                }
+
+                &:nth-child(even) {
+                    background-color: #A7A9AC; //Silver
+                }
+            }
+
+            th {
+                color: #DB0A29; //Red
+            }
+
+            td,
+            th {
+                border: 1px solid #DB0A29; //Red
+                &.selected_column {
+                    max-width: 45px;
+                }
+            }
+        }
+
+        .submit-fixed {
+            position: fixed;
+            top: auto;
+            left: auto;
+            right: 130px;
+            bottom: 30px;
+            z-index: 1029;
+        }
+
+        .button-row {
+            margin-top: 15px;
         }
     }
 }

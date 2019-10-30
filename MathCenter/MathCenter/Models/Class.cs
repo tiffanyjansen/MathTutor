@@ -20,16 +20,21 @@ namespace MathCenter.Models
         public int? CRN { get; set; }
 
         [StringLength(10)]
+        [Display(Name = "Department")]
         public string DeptPrefix { get; set; }
 
+        [Display(Name = "Class Number")]
         public int? ClassNum { get; set; }
 
+        [Display(Name = "Instructor")]
         public string Instructor { get; set; }
 
         [StringLength(10)]
+        [Display(Name = "Days")]
         public string Days { get; set; }
 
         [StringLength(25)]
+        [Display(Name = "Starting Time")]
         public string Time { get; set; }
 
         public string Other { get; set; }

@@ -1,145 +1,67 @@
-﻿$('#Departments').change(function () {
-    var id = $('#Departments').val().toString(); //get the department prefix.    
-    var source = "/Ajax/GetNumbers/" + id;   //the source for the json object.                   
-    $.ajax({ //ajax call
-        type: "GET",
-        dataType: "json",
-        url: source,
-        success: successDepartmentsAjax,
-        error: errorAjax
+﻿$('.filter').change(function () {
+    if ($(this).val() == "all") {
+        $('.filter').each(function(index, element) {
+            $(element).val("all");
+        });
+    }
+    var currentData = $('#classIds').val();
+    if (currentData != '') {
+        var array = currentData.split(',');
+    } else {
+        var array = new Array();
+    }
+    $('.class-checkbox').each(function (index, element) {        
+        if ($(element)[0].checked) {
+            array.push($(element)[0].value);
+        } else {
+            if ($.inArray($(element)[0].value, array) != -1) {
+                var pos = $.inArray($(element)[0].value, array);
+                var removed = array.splice(pos, 1);
+            }
+        }
     });
+    array = getUnique(array);
+    $('#classIds').val(array);
+    document.filterForm.submit(); //submit the get form
 });
-$('#Numbers').change(function () {
-    var id = $('#Departments').val().toString(); //get the department prefix.
-    var num = $('#Numbers').val().toString(); //get the class number. 
-    var source = "/Ajax/GetInstructors/" + id + "/" + num;   //the source for the json object.                   
-    $.ajax({ //ajax call
-        type: "GET",
-        dataType: "json",
-        url: source,
-        success: successInstructorsAjax,
-        error: errorAjax
-    });
-});
-$('#Instructors').change(function () {
-    var id = $('#Departments').val().toString(); //get the department prefix.
-    var num = $('#Numbers').val().toString(); //get the class number. 
-    var instructor = $('#Instructors').val().toString(); //get the Instructor. 
-    console.log("instructor = " + instructor);
-    console.log(instructor == "Community College");
-    if (instructor == "Community College") {
-        var source = "/Ajax/GetTimes/" + id + "/" + num + "/" + instructor; //the source for the json object.                   
-        $.ajax({ //ajax call
-            type: "GET",
-            dataType: "json",
-            url: source,
-            success: successCCAjax,
-            error: errorAjax
-        });
-    }
-    else {
-        var source = "/Ajax/GetTimes/" + id + "/" + num + "/" + instructor; //the source for the json object.                   
-        $.ajax({ //ajax call
-            type: "GET",
-            dataType: "json",
-            url: source,
-            success: successTimesAjax,
-            error: errorAjax
-        });
-    }
-});
-function successDepartmentsAjax(numbers) {
-    var json = JSON.parse(numbers); //parse the json object.
-    if (json.length > 0) {
-        $('#Numbers').empty(); //This clears the Drop Down.
-        $('#Instructors').empty(); //clear the Instructor Drop Down
-        $('#Times').empty(); //clear the Time Drop Down
-        i = 0; //counter for the while loop
-        while (i < json.length) {
-            $('#Numbers').append('<option>' + json[i]["ClassNum"] + '</option>');
-            i++; //increment the counter
-        }
 
-        var id = $('#Departments').val().toString(); //get the department prefix.
-        var num = $('#Numbers').val().toString(); //get the class number. 
-        var source = "/Ajax/GetInstructors/" + id + "/" + num;   //the source for the json object.                   
-        $.ajax({ //ajax call
-            type: "GET",
-            dataType: "json",
-            url: source,
-            success: successInstructorsAjax,
-            error: errorAjax
-        });
-    }
-}
-function successInstructorsAjax(instructors) {
-    var json = JSON.parse(instructors); //parse the json object.
-    if (json.length > 0) {
-        $('#Instructors').empty(); //clear the Drop Down
-        $('#Times').empty(); //clear the Time Drop Down
-        i = 0; //counter for the while loop
-        while (i < json.length) {
-            $('#Instructors').append('<option>' + json[i]["Instructor"] + '</option>');
-            i++; //increment the counter
-        }
-        $('#Instructors').append('<option>' + 'Community College' + '</option>');
+function getUnique(array) {
+    //source: https://www.tutorialrepublic.com/faq/how-to-remove-duplicate-values-from-a-javascript-array.php
+    var uniqueArray = [];
 
-        var id = $('#Departments').val().toString(); //get the department prefix.
-        var num = $('#Numbers').val().toString(); //get the class number. 
-        var instructor = $('#Instructors').val().toString(); //get the Instructor. 
-        console.log("instructor = " + instructor);
-        console.log(instructor == "Community College");
-        if (instructor == "Community College") {
-            var source = "/Ajax/GetTimes/" + id + "/" + num + "/" + instructor; //the source for the json object.                   
-            $.ajax({ //ajax call
-                type: "GET",
-                dataType: "json",
-                url: source,
-                success: successCCAjax,
-                error: errorAjax
-            });
-        }
-        else {
-            var source = "/Ajax/GetTimes/" + id + "/" + num + "/" + instructor; //the source for the json object.                   
-            $.ajax({ //ajax call
-                type: "GET",
-                dataType: "json",
-                url: source,
-                success: successTimesAjax,
-                error: errorAjax
-            });
+    // Loop through array values
+    for (i = 0; i < array.length; i++) {
+        if (uniqueArray.indexOf(array[i]) === -1) {
+            uniqueArray.push(array[i]);
         }
     }
+    return uniqueArray;
 }
-function successTimesAjax(times) {
-    console.log("In the normal success.");
-    var json = JSON.parse(times); //parse the json object.
-    if (json.length > 0) {
-        $('#LabelTimes').empty(); //clear the Label
-        $('#LabelTimes').append('Class Time')
-        $('#Times').empty(); //clear the Drop Down
-        i = 0; //counter for the while loop
-        while (i < json.length) {
-            $('#Times').append('<option value=' + json[i]["ClassID"] + '>' + json[i]["Time"] + ' ' + json[i]["Days"] + '</option>');
-            i++; //increment the counter
-        }
+
+function submitForm(route = null) {
+    if (route != null) {
+        var currentRoute = document.classForm.action;
+        var split = currentRoute.split('/');
+        split.pop();
+        split.push(route);
+        var newRoute = split.join('/');
+        document.classForm.action = newRoute; //set the route of the form to the new route. :)
+    }    
+    document.classForm.submit(); //submit the post form
+}
+
+$('.class-checkbox').click(function () {
+    //count the number of checked classes
+    var class_count = $('#selected-count').text();
+    console.log(class_count);
+    console.log($(this));
+    if ($(this)[0].checked) {
+        class_count++;
+    } else {
+        class_count--;
     }
-}
-function successCCAjax(times) {
-    console.log("In the Community College success.");
-    var json = JSON.parse(times); //parse the json object.
-    if (json.length > 0) {
-        $('#LabelTimes').empty(); //clear the Label
-        $('#LabelTimes').append('Institution')
-        $('#Times').empty(); //clear the Drop Down
-        i = 0; //counter for the while loop
-        while (i < json.length) {
-            $('#Times').append('<option value=' + json[i]["ClassID"] + '>' + json[i]["Instructor"] + ' Community College' + '</option>');
-            i++; //increment the counter
-        }
-    }
-}
-//This is the error message.
-function errorAjax() {
-    console.log("An error has occurred");
-}
+
+    //update total class count
+    $('#selected-count').empty();
+    $('#selected-count').text(class_count);
+});

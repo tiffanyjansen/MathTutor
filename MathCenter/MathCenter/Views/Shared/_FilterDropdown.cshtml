@@ -1,0 +1,48 @@
+﻿<select name="@ViewBag.Name" class="filter" style="width:100%;">
+    @if (ViewBag.Classes != null)
+    {
+        if (ViewBag.Classes.Count > 1)
+        {
+            <option value="all">
+                All
+            </option>
+        }
+        foreach (var item in ViewBag.Classes)
+        {
+            switch (ViewBag.Attribute)
+            {
+                case 1:
+                    <option value="@item.DeptPrefix">
+                        @item.DeptPrefix
+                    </option>
+                    break;
+                case 2:
+                    <option value="@item.ClassNum">
+                        @item.ClassNum
+                    </option>
+                    break;
+                case 3:
+                    <option value="@item.Instructor">
+                        @item.Instructor
+                     </option>
+                    break;
+                case 4:
+                    <option value="@item.Days">
+                        @item.Days
+                    </option>
+                    break;
+                default:
+                    <option value="@item.Time">
+                        @item.Time
+                    </option>
+                    break;
+            }
+        }
+        if (ViewBag.Classes.Count == 1)
+        {
+            <option value="all">
+                All
+            </option>
+        }
+    }
+</select>

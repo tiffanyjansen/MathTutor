@@ -21,5 +21,13 @@ namespace MathCenter.Controllers
             ViewBag.Progress = progress;
             return PartialView();
         }
+
+        public PartialViewResult _FilterDropdown(string name, List<Class> classes, int attribute)
+        {
+            ViewBag.Name = name;
+            ViewBag.Classes = classes;
+            ViewBag.Attribute = attribute;
+            return PartialView();
+        }
     }
 }
