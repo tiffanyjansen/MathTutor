@@ -1,22 +1,93 @@
 ﻿
-@{
-    ViewBag.Title = "Other";
-}
+@model IEnumerable<MathCenter.Models.Class>
 
-<div class="content">
-    <h1>Please input the class you are here for:</h1>
-    <h2>Example: If you are in MTH 344, please input MTH 344.</h2>
-    <div class="center">
-        <form method="post">
-            <h3>
-                <input type="text" name="other" placeholder="Start Typing..." />
-                <input type="hidden" name="Week" value=@ViewBag.Week />
-                <input type="hidden" name="Id" value=@ViewBag.Id />
-                <button class="btn" type="submit">Submit</button>
-            </h3>
-            <div class="center">
-                <h4 style="color: darkblue;">@ViewBag.Error</h4>
+    <div class="content">
+        @Html.Partial("_Progress", "Partials", new ViewDataDictionary { { "progress", 66 } })
+
+        @if (ViewBag.Error != null)
+        {
+            @Html.Partial("_Errors", "Partials", new ViewDataDictionary { { "error", ViewBag.Error } })
+        }
+        @if (Model.Count() > 0)
+        {
+            <div class="row">
+                <div class="col-12 border-bottom">
+                    <h2>Please select your classes:</h2>
+                </div>
             </div>
-        </form>
+            using (Html.BeginForm("Other", "Home", FormMethod.Post))
+            {
+                <div class="row">
+                    <div class="col-12">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Selected</th>
+                                    <th>Class</th>
+                                    @if (Model.Count() > 1)
+                                    {
+                                        <th>Selected</th>
+                                        <th>Class</th>
+                                    }
+                                    @if (Model.Count() > 2)
+                                    {
+                                        <th>Selected</th>
+                                        <th>Class</th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int total = Model.Count();
+                                    for (int i = 0; i < total; i++)
+                                    {
+                                        <tr>
+                                            @while (i % 3 != 2)
+                                            {
+                                                <td>
+                                                    <input type="checkbox" class="class-checkbox" name="Classes" value="@Model.Skip(i).First().ClassID" />
+                                                </td>
+                                                i++;
+                                            }
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+
+        }
+        <div class="row">
+            <div class="col-12 border-bottom">
+                @if (Model.Count() > 0)
+                {
+                    <h2>Class not here? You can add a new one here:</h2>
+                }
+                else
+                {
+                    <h2>Add your class here:</h2>
+                }
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-10">
+                <h3>Example: If you are in BA 100, type BA 100.</h3>
+                <h3>Example: If you are in MTH 300, type MTH 300.</h3>
+            </div>
+        </div>
+        @using (Html.BeginForm("Other", "Home", FormMethod.Get))
+        {
+            <div class="row form-group justify-content-center">
+                <div class="col-8">
+                    <input type="text" name="other" class="form-control" placeholder="MTH 111" />
+                </div>
+            </div>
+            <div class="row form-group justify-content-center">
+                <div class="col-8 text-right">
+                    <button class="btn btn-danger btn-lg" type="submit">Submit</button>
+                </div>
+            </div>
+        }
     </div>
-</div>

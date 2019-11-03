@@ -1,27 +1,27 @@
 ﻿$('.filter').change(function () {
-    if ($(this).val() == "all") {
+    if ($(this).val() == "all") { //if we selected all in 1 dropdown, reset the page.
         $('.filter').each(function(index, element) {
             $(element).val("all");
         });
     }
-    var currentData = $('#classIds').val();
+    var currentData = $('#classIds').val(); //get the current class ids.
     if (currentData != '') {
-        var array = currentData.split(',');
+        var array = currentData.split(','); //split it into an array.
     } else {
-        var array = new Array();
+        var array = new Array(); //create new array
     }
     $('.class-checkbox').each(function (index, element) {        
         if ($(element)[0].checked) {
-            array.push($(element)[0].value);
+            array.push($(element)[0].value); //add new elements
         } else {
             if ($.inArray($(element)[0].value, array) != -1) {
-                var pos = $.inArray($(element)[0].value, array);
+                var pos = $.inArray($(element)[0].value, array); //if we find an unchecked one in the array, remove it.
                 var removed = array.splice(pos, 1);
             }
         }
     });
-    array = getUnique(array);
-    $('#classIds').val(array);
+    array = getUnique(array); //make the array unique
+    $('#classIds').val(array); //set the classIds input (so we can access it)
     document.filterForm.submit(); //submit the get form
 });
 
@@ -39,6 +39,8 @@ function getUnique(array) {
 }
 
 function submitForm(route = null) {
+    var allClasses = $('#classIds').val();
+
     if (route != null) {
         var currentRoute = document.classForm.action;
         var split = currentRoute.split('/');
@@ -52,13 +54,11 @@ function submitForm(route = null) {
 
 $('.class-checkbox').click(function () {
     //count the number of checked classes
-    var class_count = $('#selected-count').text();
-    console.log(class_count);
-    console.log($(this));
+    var class_count = $('#selected-count').text(); //get current class count
     if ($(this)[0].checked) {
-        class_count++;
+        class_count++; //if we checked it, add 1
     } else {
-        class_count--;
+        class_count--; //otherwise subtract one
     }
 
     //update total class count

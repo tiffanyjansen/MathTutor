@@ -1,4 +1,4 @@
-﻿@model MathCenter.Models.ViewModels.PersonWeek
+﻿@model MathCenter.Models.Student
 
     <div class="content">
         @Html.Partial("_Progress", "Partials", new ViewDataDictionary { { "progress", 33 } })
@@ -18,18 +18,11 @@
             @Html.AntiForgeryToken()
 
             <div class="row form-group">
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-                @Html.HiddenFor(model => model.VNum,
-                            new { VNum = "VNum", Value = ViewBag.VNum })
-                @Html.HiddenFor(model => model.Week,
-                            new { Week = "Week", Value = ViewBag.Week })
                 <div class="col-md-4 text-md-right col-12">
                     <label class="h4">First Name:</label>
                 </div>
                 <div class="col-md-6 col-12">
-                    @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", required = "required" })
-                    @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                    @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control" })
                 </div>
             </div>
             <div class="row form-group">
@@ -37,11 +30,12 @@
                     <label class="h4">Last Name:</label>
                 </div>
                 <div class="col-md-6 col-12">
-                    @Html.TextBoxFor(model => model.LastName, new { @class = "form-control", required = "required" })
-                    @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                    @Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })                    
                 </div>
             </div>
             <div class="row form-group">
+                @Html.HiddenFor(model => model.VNum)
+
                 <div class="col-md-10 col-12 text-right">
                     <button class="btn btn-lg btn-danger" type="submit">Submit</button>
                 </div>

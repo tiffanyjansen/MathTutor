@@ -20,8 +20,6 @@
                     <thead>
                         <tr> <!--Actual Table Headers-->
                             <th class="selected_column">
-                                <input type="hidden" name="Week" value=@ViewBag.Week />
-                                <input type="hidden" name="VNum" value=@ViewBag.Id />
                                 <input type="hidden" name="ClassIds" id="classIds" value="@ViewBag.SelectedIds" />
                                 Selected
                             </th>
@@ -42,49 +40,7 @@
                             </th>
                         </tr>
                         <tr> <!--Search Fields-->
-                            <td class="selected_column">
-                                @if (ViewBag.SelectedCount != 0)
-                                {
-                                    <select class="filter" name="SelectedFilter" style="width:100%;">
-                                        @if (ViewBag.Filtered == null || ViewBag.Filtered == "all")
-                                        {
-                                            <option value="all">
-                                                All
-                                            </option>
-                                            <option value="selected">
-                                                Selected
-                                            </option>
-                                            <option value="not_selected">
-                                                Not Selected
-                                            </option>
-                                        }
-                                        else if (ViewBag.Filtered != null && ViewBag.Filtered == "selected")
-                                        {
-                                            <option value="selected">
-                                                Selected
-                                            </option>
-                                            <option value="not_selected">
-                                                Not Selected
-                                            </option>
-                                            <option value="all">
-                                                All
-                                            </option>
-                                        }
-                                        else
-                                        {
-                                            <option value="not_selected">
-                                                Not Selected
-                                            </option>
-                                            <option value="all">
-                                                All
-                                            </option>
-                                            <option value="selected">
-                                                Selected
-                                            </option>
-                                        }
-                                    </select>
-                                }                                
-                            </td>
+                            <td class="selected_column"></td>
                             <td>
                                 @Html.Partial("_FilterDropdown", "Partials", new ViewDataDictionary
                                 {
@@ -143,9 +99,6 @@
                                     {
                                         <input type="checkbox" class="class-checkbox" name="Classes" value="@item.ClassID" />
                                     }
-
-                                    <input type="hidden" name="Week" value=@ViewBag.Week />
-                                    <input type="hidden" name="VNum" value=@ViewBag.Id />
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.DeptPrefix)

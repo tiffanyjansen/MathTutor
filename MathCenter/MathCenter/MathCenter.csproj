@@ -161,12 +161,12 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Class.cs" />
-    <Compile Include="Models\MathContext.cs" />
+    <Compile Include="DAL\MathContext.cs" />
     <Compile Include="Models\SignIn.cs" />
     <Compile Include="Models\Student.cs" />
     <Compile Include="Models\StudentClass.cs" />
     <Compile Include="Models\ViewModels\Data.cs" />
-    <Compile Include="Models\ViewModels\PersonWeek.cs" />
+    <Compile Include="Models\ViewModels\WelcomeViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

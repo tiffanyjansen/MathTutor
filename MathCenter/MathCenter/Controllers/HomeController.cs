@@ -1,4 +1,5 @@
-﻿using MathCenter.Models;
+﻿using MathCenter.DAL;
+using MathCenter.Models;
 using MathCenter.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -10,8 +11,9 @@ namespace MathCenter.Controllers
 {
     public class HomeController : Controller
     {
-        //Access to Database.
-        private readonly MathContext db = new MathContext();
+        private readonly MathContext db = new MathContext(); //Access to Database
+        private static int WeekNumber;
+        private static string VNumber;
 
         /// <summary>
         /// The "Home Page." The page for Tutors/Faculty to either access the 
@@ -32,7 +34,8 @@ namespace MathCenter.Controllers
             //Check the password and make sure there is a week input.
             if (tutorPwd == tutorPass && Week != -1)
             {
-                return RedirectToAction("Welcome", new { Week });
+                WeekNumber = Week;
+                return RedirectToAction("Welcome");
             }
             //Return specific errors if the input is not valid.
             else if (Week == -1)
@@ -69,38 +72,28 @@ namespace MathCenter.Controllers
         ///  enter their V Number, then it will direct them to select their class and 
         ///  add them to the database
         /// </summary>
-        /// <param name="Week">The Week Number</param>
         /// <returns>The View</returns>
         [HttpGet]
-        public ActionResult Welcome(int? Week)
+        public ActionResult Welcome()
         {
-            //Check for no input. This just adds extra error-handling.
-            if (Week == null)
-            { 
-                return RedirectToAction("Index");
-            }
-            ViewBag.Week = Week;
             return View();
         }
         [HttpPost]
-        public ActionResult Welcome(string VNum, int Week)
+        public ActionResult Welcome(WelcomeViewModel model)
         {
-            //Check if V Number is all numbers and the correct length
-            Regex rx = new Regex(@"^\d{8}$", RegexOptions.IgnoreCase);
-            if (rx.IsMatch(VNum))
+            if (ModelState.IsValid)
             {
-                //If student is in the database, redirect to 'done' page.
-                if (db.Students.Find(VNum) != null)
+                VNumber = model.VNum;
+                if (db.Students.Find(VNumber) != null)
                 {
-                    return RedirectToAction("Done", new { VNum, Week });
+                    //Probably should make a ViewModel for this page too... Maybe with a student in it?
+                    return RedirectToAction("Done");
                 }
-                //Otherwise, redirect to create student page.            
-                return RedirectToAction("Name", new { VNum, Week });
+                return RedirectToAction("Name");
             }
             else
             {
                 ViewBag.Error = "Your V Number is invalid. It must be 8 characters. Please do not include the V.";
-                ViewBag.Num = Week;
                 return View();
             }           
         }
@@ -110,204 +103,107 @@ namespace MathCenter.Controllers
         /// to input their name and get to adding their class.
         /// 
         /// It will also add the student to the database.
-        /// </summary>
-        /// <param name="VNum">The Student's V-Number</param>
-        /// <param name="Week">The Week Number</param>
         /// <returns>The View</returns>
         [HttpGet]
-        public ActionResult Name(string VNum, int? Week)
+        public ActionResult Name()
         {
-            //Check for no input. This just adds extra error-handling.
-            if (Week == null || VNum == null)
+            Student student = db.Students.Find(VNumber);
+            if(student == null)
             {
-                if (Week == null)
-                {
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    return RedirectToAction("Welcome", new { Week });
-                }
+                student = new Student { VNum = VNumber };
             }
-
-            //Use the VNum and Week in the View.
-            ViewBag.VNum = VNum;
-            ViewBag.Week = Week;
-
-            //Return the View
-            return View();
+            return View(student);
         }
         [HttpPost]
-        public ActionResult Name(PersonWeek pWeek)
+        public ActionResult Name(Student student)
         {
-            Regex rx = new Regex(@"^[a-zA-Z-\.\s]+$");
-            if (rx.IsMatch(pWeek.FirstName) && rx.IsMatch(pWeek.LastName))
+            if(ModelState.IsValid)
             {
                 try
                 {
-                    string firstName = CapitalizeName(pWeek.FirstName);                    
-                    string lastName = CapitalizeName(pWeek.LastName);
-                    
-                    if (db.Students.Find(pWeek.VNum) != null) //Check if Student is already in DB.
-                    {
-                        Student student = db.Students.Find(pWeek.VNum); //If so, update them.
-                        student.FirstName = firstName; 
-                        student.LastName = lastName;
-                    }
-                    else
-                    {                       
-                        Student student = new Student { VNum = pWeek.VNum, FirstName = firstName, LastName = lastName }; //Create a student.
-                        db.Students.Add(student);  //Add the student to the database.
-                    }                
-                               
+                    student.FirstName = student.CapitalizeName(student.FirstName);
+                    student.LastName = student.CapitalizeName(student.LastName);
+                    db.Students.Add(student);  //Add the student to the database.          
+
                     db.SaveChanges(); //Save the changes to the database. 
                 }
                 catch (Exception)
                 {
                     ViewBag.Error = "There was an error adding you to the database. Please ask a tutor for help.";
-                    return View(pWeek);
+                    return View(student);
                 }
+
+                //Redirect to the select department method and slowly select the class.
+                return RedirectToAction("SelectClass");
             }
             else
             {
-                ViewBag.Error = "Please input your name.";
-                return View(pWeek);
+                ViewBag.Error = "Looks like you inputted something that does not look like a name. Please try again.";
+                return View(student);
             }
-
-            //Redirect to the select department method and slowly select the class.
-            return RedirectToAction("SelectClass", new { pWeek.Week, pWeek.VNum });
         }
         
          /// <summary>
          /// The method for selecting a class. It's a table that is filterable. 
          /// There is some Javascript, for functionality, but no Ajax calls.
          /// </summary>
-         /// <param name="Week">The Week Number</param>
-         /// <param name="VNum">The Student's V-Number</param>
          /// <returns>The View</returns>
         [HttpGet]
-        public ActionResult SelectClass(int? Week, string VNum)
+        public ActionResult SelectClass()
         {
-            //TO DO - Update Comments and line spacing.
-
             //get all the query strings
             var queryStrings = new Dictionary<string, string>();
             foreach (var key in Request.QueryString.AllKeys)
             {
                 queryStrings.Add(key, Request.QueryString[key]);
             }
-
-            //Check for no input. This just adds extra error-handling.
-            if (Week == null || VNum == null)
-            {
-                VNum = queryStrings.ContainsKey("VNum") ? queryStrings["VNum"] : VNum;
-                Week = queryStrings.ContainsKey("Week") ? Int32.Parse(queryStrings["Week"]) : Week;
-                
-                if (Week == null)
-                {
-                    return RedirectToAction("Index");
-                }
-                else if(VNum == null)
-                {
-                    return RedirectToAction("Welcome", new { Week });
-                }
-            }          
-
-            //Keep these floating around so we can easily have the stuff working. 
-            ViewBag.Id = VNum;
-            ViewBag.Week = Week;
-
-            //remove them so we just have the filters.
-            queryStrings.Remove("VNum");
-            queryStrings.Remove("Week");
-
-            int[] IdArray = GetClassIdArray(queryStrings);
-            if(IdArray.Length > 0)
-            {
-                ViewBag.SelectedIds = queryStrings["ClassIds"]; //send the thing we got to the server back.
-                ViewBag.ClassIds = IdArray;
-            }            
-            ViewBag.SelectedCount = IdArray.Length;
-
-            //Get all the classes
-            var filteredQuery = GetFilteredClassQuery(queryStrings, IdArray);
-            var Classes = filteredQuery.ToList(); 
             
-            //The select filters.
+            //get the classes and filters. 
+            var filteredQuery = GetFilteredClassQuery(queryStrings);//Get the filtered class query 
+            var Classes = filteredQuery.ToList(); //Get all the classes  
             ViewBag.Departments = GetClassDepts(filteredQuery); //gets the possible class departments
             ViewBag.ClassNumbers = GetClassNumbers(filteredQuery); //gets the possible class numbers
             ViewBag.Instructors = GetInstructors(filteredQuery); //gets the possible instructors
             ViewBag.Days = GetClassDays(filteredQuery); //gets the possible days
-            ViewBag.Times = GetClassTimes(filteredQuery); //gets the possible start times   
-            
-            if(queryStrings.ContainsKey("SelectedFilter"))
+            ViewBag.Times = GetClassTimes(filteredQuery); //gets the possible start times 
+
+            //get the array of selected class ids.
+            int[] IdArray = GetClassIdArray(queryStrings);
+            if (IdArray.Length > 0)
             {
-                ViewBag.Filtered = queryStrings["SelectedFilter"];
+                ViewBag.SelectedIds = queryStrings["ClassIds"]; //send the thing we got to the server back.
+                ViewBag.ClassIds = IdArray;
             }
+            ViewBag.SelectedCount = IdArray.Length; //the number of selected classes
 
             return View(Classes);
         }
         [HttpPost]
-        public ActionResult SelectClass(string VNum, int? Week, int[] Classes)
+        public ActionResult SelectClass(int[] Classes)
         {
-            if (Week == null || VNum == null)
-            {
-                if (Week == null)
-                {
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    return RedirectToAction("Welcome", new { Week });
-                }
-            }
-
             if (Classes == null)
             {
-                ViewBag.Id = VNum;
-                ViewBag.Week = Week;
-                var query = GetFilteredClassQuery(null, null);
-                //The select filters.
-                ViewBag.Departments = GetClassDepts(query); //gets the possible class departments
-                ViewBag.ClassNumbers = GetClassNumbers(query); //gets the possible class numbers
-                ViewBag.Instructors = GetInstructors(query); //gets the possible instructors
-                ViewBag.Days = GetClassDays(query); //gets the possible days
-                ViewBag.Times = GetClassTimes(query); //gets the possible start times
-                return View(query.ToList());
+                //get the classes and filters. 
+                var filteredQuery = GetFilteredClassQuery(null);//Get the filtered class query 
+                var AllClasses = filteredQuery.ToList(); //Get all the classes
+                ViewBag.Departments = GetClassDepts(filteredQuery); //gets the possible class departments
+                ViewBag.ClassNumbers = GetClassNumbers(filteredQuery); //gets the possible class numbers
+                ViewBag.Instructors = GetInstructors(filteredQuery); //gets the possible instructors
+                ViewBag.Days = GetClassDays(filteredQuery); //gets the possible days
+                ViewBag.Times = GetClassTimes(filteredQuery); //gets the possible start times
+                ViewBag.SelectedCount = 0;
+
+                return View(AllClasses);
             }
             else
             {
-                Student currentStudent = db.Students.Find(VNum);
-                foreach (var ClassID in Classes)
-                {
-                    db.StudentClasses.Add(new StudentClass { VNum = currentStudent.VNum, ClassID = (int)ClassID });
-                }                
-                try
-                { 
-                    db.SaveChanges();
-                }
-                catch (Exception)
-                {
-                    //There was an error.                        
-                    ViewBag.Id = VNum;
-                    ViewBag.Week = Week;
-                    ViewBag.Error = "There was an error with the database. Please try again.";
-                    var query = GetFilteredClassQuery(null, null);
-                    //The select filters.
-                    ViewBag.Departments = GetClassDepts(query); //gets the possible class departments
-                    ViewBag.ClassNumbers = GetClassNumbers(query); //gets the possible class numbers
-                    ViewBag.Instructors = GetInstructors(query); //gets the possible instructors
-                    ViewBag.Days = GetClassDays(query); //gets the possible days
-                    ViewBag.Times = GetClassTimes(query); //gets the possible start times
-                    return View(query.ToList());
-                }
-
-                //Add the SignIn to the Database
                 try
                 {
-                    foreach(var ClassID in Classes)
-                    {
-                        db.SignIns.Add(new SignIn { Week = (int)Week, Date = DateTime.Today, Hour = DateTime.Now.Hour, Min = DateTime.Now.Minute, StudentID = VNum, ClassID = (int)ClassID }); //add a sign in for every class.
+                    Student currentStudent = db.Students.Find(VNumber);
+                    foreach (var ClassID in Classes)
+                    {                        
+                        db.StudentClasses.Add(new StudentClass { VNum = currentStudent.VNum, ClassID = (int)ClassID });
+                        db.SignIns.Add(new SignIn { Week = WeekNumber, Date = DateTime.Today, Hour = DateTime.Now.Hour, Min = DateTime.Now.Minute, StudentID = VNumber, ClassID = (int)ClassID }); //add a sign in for every class.
                     }
                     
                     db.SaveChanges();
@@ -316,44 +212,147 @@ namespace MathCenter.Controllers
                 {
                     //There was an error
                     ViewBag.Error = "There was an error with the database. Please try again.";
-                    ViewBag.Id = VNum;
-                    ViewBag.Week = Week;
-                    return View(GetFilteredClassQuery(null, null).ToList());
-                }
-                return RedirectToAction("Finish", new { Week });
-            }                     
-        }        
 
-        /*
-         * The method for when the student selects Other.
-         */
-        [HttpGet]
-        public ActionResult Other(int? Week, string VNum)
-        {
-            //Check for no input. This just adds extra error-handling.
-            if (Week == null || VNum == null)
-            {
-                if (Week == null)
-                {
-                    return RedirectToAction("Index");
+                    //get the classes and filters. 
+                    var filteredQuery = GetFilteredClassQuery(null);//Get the filtered class query 
+                    var AllClasses = filteredQuery.ToList(); //Get all the classes          
+                    ViewBag.Departments = GetClassDepts(filteredQuery); //gets the possible class departments
+                    ViewBag.ClassNumbers = GetClassNumbers(filteredQuery); //gets the possible class numbers
+                    ViewBag.Instructors = GetInstructors(filteredQuery); //gets the possible instructors
+                    ViewBag.Days = GetClassDays(filteredQuery); //gets the possible days
+                    ViewBag.Times = GetClassTimes(filteredQuery); //gets the possible start times
+                    ViewBag.SelectedCount = 0;
+
+                    return View(AllClasses);
                 }
-                else
+
+                return RedirectToAction("Finish");
+            }                     
+        }
+        [HttpPost]
+        public ActionResult CommunityCollegeClasses(int[] Classes)
+        {
+            if(Classes != null)
+            {
+                try
                 {
-                    return RedirectToAction("Welcome", new { Week });
+                    Student currentStudent = db.Students.Find(VNumber);
+                    foreach (var ClassID in Classes)
+                    {
+                        db.StudentClasses.Add(new StudentClass { VNum = currentStudent.VNum, ClassID = ClassID });
+                        db.SignIns.Add(new SignIn { Week = WeekNumber, Date = DateTime.Today, Hour = DateTime.Now.Hour, Min = DateTime.Now.Minute, StudentID = VNumber, ClassID = ClassID }); //add a sign in for every class.
+                    }
+
+                    db.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    //There was an error
+                    ViewBag.Error = "There was an error with the database. Please try again.";                   
+                    return RedirectToAction("SelectClass");
+                }               
+            }
+            //Redirect to CommunityCollege
+            return RedirectToAction("CommunityCollege");
+        }
+        [HttpPost]
+        public ActionResult OtherClasses(int[] Classes)
+        {
+            if(Classes != null)
+            {
+                try
+                {
+                    Student currentStudent = db.Students.Find(VNumber);
+                    foreach (var ClassID in Classes)
+                    {
+                        db.StudentClasses.Add(new StudentClass { VNum = currentStudent.VNum, ClassID = ClassID });
+                        db.SignIns.Add(new SignIn { Week = WeekNumber, Date = DateTime.Today, Hour = DateTime.Now.Hour, Min = DateTime.Now.Minute, StudentID = VNumber, ClassID = ClassID }); //add a sign in for every class.
+                    }
+
+                    db.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    //There was an error
+                    ViewBag.Error = "There was an error with the database. Please try again.";
+                    return RedirectToAction("SelectClass");
+                }                
+            }
+            //Redirect to Other
+            return RedirectToAction("Other");
+        }
+
+        //HERE IS WHERE COMMUNITYCOLLEGE WILL GO
+        
+       /// <summary>
+       /// The method for when a student wants to select a different class ("Other")
+       /// </summary>
+       /// <param name="Week">The Week Number</param>
+       /// <param name="VNum">The Student's V-Number</param>
+       /// <returns>The View</returns>
+        [HttpGet]
+        public ActionResult Other()
+        {
+            var OtherClasses = RemoveOthers(null, false);
+
+            //get all the query strings
+            var queryStrings = new Dictionary<string, string>();
+            foreach (var key in Request.QueryString.AllKeys)
+            {
+                queryStrings.Add(key, Request.QueryString[key]);
+            }
+
+            if(queryStrings.ContainsKey("other"))
+            {
+                Regex rx = new Regex(@"^[A-Z]{1,3}\s\d{2,3}$", RegexOptions.IgnoreCase);
+                if (rx.IsMatch(queryStrings["other"]))
+                {
+                    try
+                    {
+                        //Create the class to be connected to the student.
+                        db.Classes.Add(new Class { Other = queryStrings["other"] });
+
+                        //Save the class into the database.
+                        db.SaveChanges();
+                    }
+                    catch (Exception)
+                    {
+                        //There was an error.
+                        ViewBag.Error = "There was an error with the database. Please try again.";
+                        return View(OtherClasses);
+                    }
+
+                    OtherClasses = RemoveOthers(null, false);
+                    Class studentClass = db.Classes
+                        .Where(c => c.Other == queryStrings["other"])
+                        .Select(c => c).FirstOrDefault();
+
+                    try
+                    {
+                        Student currentStudent = db.Students.Find(VNumber);            
+                        db.StudentClasses.Add(new StudentClass { VNum = currentStudent.VNum, ClassID = studentClass.ClassID });
+                        db.SignIns.Add(new SignIn { Week = WeekNumber, Date = DateTime.Today, Hour = DateTime.Now.Hour, Min = DateTime.Now.Minute, StudentID = VNumber, ClassID = studentClass.ClassID }); //add a sign in for every class.                       
+
+                        db.SaveChanges();
+                    }
+                    catch(Exception)
+                    {
+                        //There was an error.
+                        ViewBag.Error = "There was an error with the database. Please try again.";
+                        return View(OtherClasses);
+                    }
+
+                    return RedirectToAction("Finish");
                 }
             }
 
-            //Keep the data floating.
-            ViewBag.Week = Week;
-            ViewBag.Id = VNum;
-
             //Return the View.
-            return View();
+            return View(OtherClasses);
         }
         [HttpPost]
-        public ActionResult Other(int Week, string VNum, string other)
+        public ActionResult Other(string other)
         {
-            Regex rx = new Regex(@"^[A-Z]{1,3}\s\d{2,3}", RegexOptions.IgnoreCase);
+            Regex rx = new Regex(@"^[A-Z]{1,3}\s\d{2,3}$", RegexOptions.IgnoreCase);
             if (rx.IsMatch(other))
             {
                 try
@@ -368,8 +367,6 @@ namespace MathCenter.Controllers
                 {
                     //There was an error.
                     ViewBag.Error = "There was an error with the database. Please try again.";
-                    ViewBag.Week = Week;
-                    ViewBag.Id = VNum;
                     return View();
                 }
 
@@ -379,13 +376,13 @@ namespace MathCenter.Controllers
                     .Select(c => c).FirstOrDefault();
 
                 //Add the class to the current student.
-                Student currentStudent = db.Students.Find(VNum);
-                db.StudentClasses.Add(new StudentClass { VNum = VNum, ClassID = sClass.ClassID });
+                Student currentStudent = db.Students.Find(VNumber);
+                db.StudentClasses.Add(new StudentClass { VNum = VNumber, ClassID = sClass.ClassID });
 
                 try
                 {
                     //Create the Sign In to be added to the db.
-                    db.SignIns.Add(new SignIn { Week = Week, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, StudentID = VNum, ClassID = sClass.ClassID });
+                    db.SignIns.Add(new SignIn { Week = WeekNumber, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, StudentID = VNumber, ClassID = sClass.ClassID });
 
                     //Save the Changes to the db.
                     db.SaveChanges();
@@ -394,19 +391,16 @@ namespace MathCenter.Controllers
                 {
                     //There was an error.
                     ViewBag.Error = "There was an error with the database. Please try again.";
-                    ViewBag.Week = Week;
-                    ViewBag.Id = VNum;
                     return View();
                 }
 
                 //Redirect to the finish page.
-                return RedirectToAction("Finish", new { VNum, Week });
+                return RedirectToAction("Finish");
             }
             else
             {
                 ViewBag.Error = "Please input an actual class.";
-                ViewBag.Week = Week;
-                ViewBag.Id = VNum;
+
                 return View();
             }
         }
@@ -414,120 +408,68 @@ namespace MathCenter.Controllers
          * The method for when you are already in the DB and just need to approve the sign in.
          */
         [HttpGet]
-        public ActionResult Done(string VNum, int? Week)
+        public ActionResult Done()
         {
-            //Check for no input. This just adds extra error-handling.
-            if (Week == null || VNum == null)
-            {
-                if (Week == null)
-                {
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    return RedirectToAction("Welcome", new { Week });
-                }
-            }
-
             //Get the info from the Database about the current student.
-            Student currentStudent = db.Students.Find(VNum);
-
-            //Keep the data floating
-            ViewBag.VNum = VNum;
-            ViewBag.Week = Week;
+            Student currentStudent = db.Students.Find(VNumber);
 
             //Return the View with the current student.
             return View(currentStudent);
         }
         [HttpPost]
-        public ActionResult Done(string VNum, int? Week, int approved, int? classID)
+        public ActionResult Done(int approved, int? classID)
         {
             if (approved == 1 && classID != null)
             {
                 try
                 {
                     //Create the Sign In and add it to the database.
-                    db.SignIns.Add(new SignIn { Week = (int)Week, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, StudentID = VNum, ClassID = (int)classID });
+                    db.SignIns.Add(new SignIn { Week = WeekNumber, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, StudentID = VNumber, ClassID = (int)classID });
                     db.SaveChanges();
                 }
                 catch (Exception)
                 {
                     //There was an error.
                     ViewBag.Error = "There was an error with the database. Please try again.";
-                    //Keep the data floating
-                    ViewBag.VNum = VNum;
-                    ViewBag.Week = Week;
 
                     //Return the View with the current student.
-                    return View(db.Students.Find(VNum));
+                    return View(db.Students.Find(VNumber));
                 }
 
                 //Redirect to the "finish" page.
-                return RedirectToAction("Finish", new { Week });
+                return RedirectToAction("Finish");
             }
             else if (approved == 0)
             {
                 //If it's not you redirect to Sign In page.
-                return RedirectToAction("Name", new { Week, VNum });
+                return RedirectToAction("Name");
             }
             else if (approved == 3)
             {
                 //Redirect back to the page to add more classes
-                return RedirectToAction("SelectClass", new { VNum, Week });
+                return RedirectToAction("SelectClass");
             }
             else if (approved == 2)
             {
                 //Redirect back to the page to input your V-Number
-                return RedirectToAction("Welcome", new { Week });
+                return RedirectToAction("Welcome");
             }
             else
             {
-                ViewBag.VNum = VNum;
-                ViewBag.Week = Week;
                 ViewBag.ClassError = "Please select the class you would like to Sign In for.";
-                return View(db.Students.Find(VNum));
+                return View(db.Students.Find(VNumber));
             }
         }
         /*
          * The last page that gives a good message.
          */
         [HttpGet]
-        public ActionResult Finish(int? Week)
+        public ActionResult Finish()
         {
-            //Check for no input. This just adds extra error-handling.
-            if (Week == null)
-            {
-                return RedirectToAction("Index");
-            }
-            //The Week Continues to float.
-            ViewBag.Week = Week;
 
             //Return the View.
             return View();
         }       
-
-        /// <summary>
-        /// Capitalize the string given. Basically just formats it so it looks nice everywhere. :)
-        /// </summary>
-        /// <param name="name">The name we want capitalized</param>
-        /// <returns>The name capitalized</returns>        
-        protected string CapitalizeName(string name)
-        {
-            name = char.ToUpper(name[0]) + name.Substring(1);
-            int index = 0;
-            while (name.IndexOf(' ', index) != -1)
-            {
-                index = name.IndexOf(' ', index) + 1;
-                name = name.Substring(0, index) + char.ToUpper(name[index]) + name.Substring(index + 1);
-            }
-            if (name.IndexOf('-') != -1)
-            {
-                index = name.IndexOf('-', index) + 1;
-                name = name.Substring(0, index) + char.ToUpper(name[index]) + name.Substring(index + 1);
-            }
-            return name;
-        }
-
 
         /// <summary>
         /// Either removes the "Other" classes from the list or gets the other
@@ -687,7 +629,7 @@ namespace MathCenter.Controllers
         /// </summary>
         /// <param name="filters">The dictionary of filters</param>
         /// <returns>the query</returns>
-        private IQueryable<Class> GetFilteredClassQuery(Dictionary<string, string> filters, int[] classIds)
+        private IQueryable<Class> GetFilteredClassQuery(Dictionary<string, string> filters)
         {
             var query = db.Classes.Where(c => c == c);
 
@@ -710,25 +652,14 @@ namespace MathCenter.Controllers
                 query = time != null ? query.Where(c => c.Time == time) : query;
             }
 
-            //TO DO - Fix this part of the function.
-            if (filters != null && filters.ContainsKey("SelectedFilter"))
-            {
-                switch(filters["SelectedFilter"])
-                {
-                    case "selected":
-                        query = query.Where(c => classIds.Contains(c.ClassID)); 
-                        break;
-                    case "not_selected":
-                        query = query.Where(c => !classIds.Contains(c.ClassID));
-                        break;
-                    default:
-                        break;
-                }
-            }
-
             return query;
         }
 
+        /// <summary>
+        /// Get the class ids of the selected classes
+        /// </summary>
+        /// <param name="filters">The dictionary of filters</param>
+        /// <returns>the array of class ids</returns>
         private int[] GetClassIdArray(Dictionary<string, string> filters)
         {
             int[] IdArray;
@@ -739,7 +670,7 @@ namespace MathCenter.Controllers
                 IdArray = new int[Ids.Length];
                 for (int i = 0; i < Ids.Length; i++)
                 {
-                    IdArray[i] = Int32.Parse(Ids[0]);
+                    IdArray[i] = Int32.Parse(Ids[i]);
                 }                
             }
             else

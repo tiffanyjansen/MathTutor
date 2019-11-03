@@ -1,4 +1,5 @@
-﻿    <div class="content">
+﻿@model MathCenter.Models.ViewModels.WelcomeViewModel
+<div class="content">
     @if (ViewBag.Error != null)
     {
         @Html.Partial("_Errors", "Partials", new ViewDataDictionary { { "error", ViewBag.Error } })
@@ -19,11 +20,10 @@
         <div class="col-lg-6 col-md-10 col-12">
             @using (Html.BeginForm())
             {
-                <div class="row form-group justify-content-center no-gutters">
-                    <label class="col-1 vertical-center text-right">V&nbsp;</label>
-                    <input type="text" class="form-control col-11" style="display:inline-block !important;" placeholder="XXXXXXXX" name="VNum" />
-                    <input type="hidden" name="Week" value=@ViewBag.Week />
-                </div>
+            <div class="row form-group justify-content-center no-gutters">
+                <label class="col-1 vertical-center text-right">V&nbsp;</label>
+                @Html.TextBoxFor(model => model.VNum, new { @class = "form-control col-11", style = "display:inline-block !important;", placeholder = "XXXXXXXX" })
+            </div>
                 <div class="row form-group">
                     <div class="col-12 text-right">
                         <button class="btn btn-lg btn-danger" type="submit">Submit</button>
