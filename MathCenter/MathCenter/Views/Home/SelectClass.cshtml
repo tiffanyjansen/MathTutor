@@ -93,11 +93,11 @@
                                 <td class="selected_column">
                                     @if (ViewBag.ClassIds != null && Array.Exists((int[])ViewBag.ClassIds, e=>e == item.ClassID))
                                     {
-                                        <input type="checkbox" class="class-checkbox" name="Classes" value="@item.ClassID" checked />
+                                        <input type="checkbox" class="class-checkbox" value="@item.ClassID" checked />
                                     }
                                     else
                                     {
-                                        <input type="checkbox" class="class-checkbox" name="Classes" value="@item.ClassID" />
+                                        <input type="checkbox" class="class-checkbox" value="@item.ClassID" />
                                     }
                                 </td>
                                 <td>
@@ -120,6 +120,7 @@
                         <tr>
                             <td class="selected_column">
                                 <span id="selected-count">@ViewBag.SelectedCount</span>
+                                <input type="hidden" id="selected-classes" value="" name="Classes" />
                             </td>
                         </tr>
                     </tbody>
@@ -135,7 +136,7 @@
     <div class="row">
         <div class="col-12 text-left">
             <button class="btn btn-danger btn-lg" onclick="submitForm('CommunityCollegeClasses')">Community College</button>
-            <button class="btn btn-default btn-lg" onclick="submitForm('OtherClasses')">Other</button>            
+            <button class="btn btn-default btn-lg" onclick="submitForm('OtherClasses')">Other</button>
         </div>
     </div>
     <span class="submit-fixed">

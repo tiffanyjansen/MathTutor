@@ -39,8 +39,23 @@ function getUnique(array) {
 }
 
 function submitForm(route = null) {
-    var allClasses = $('#classIds').val();
-
+    var currentData = $('#classIds').val(); //get the current class ids.
+    if (currentData != '' && currentData != null &&  currentData != undefined) {
+        var allClasses = currentData.split(','); //split it into an array.
+    } else {
+        var allClasses = new Array(); //create new array
+    }    $('.class-checkbox').each(function (index, element) {
+        if ($(element)[0].checked) {
+            allClasses.push($(element)[0].value); //add new elements
+        } else {
+            if ($.inArray($(element)[0].value, allClasses) != -1) {
+                var pos = $.inArray($(element)[0].value, allClasses); //if we find an unchecked one in the array, remove it.
+                var removed = allClasses.splice(pos, 1);
+            }
+        }
+    });
+    allClasses = getUnique(allClasses); //make the array unique
+    $('#selected-classes').val(allClasses);
     if (route != null) {
         var currentRoute = document.classForm.action;
         var split = currentRoute.split('/');

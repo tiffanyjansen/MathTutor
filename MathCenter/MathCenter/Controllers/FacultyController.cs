@@ -86,20 +86,24 @@ namespace MathCenter.Controllers
             //Create an empty list.
             List<Data> datas = new List<Data>();
 
-            DateTime startDate = (DateTime)start;
-            DateTime endDate = (DateTime)end;
+            DateTime endDate = DateTime.MaxValue;
+            DateTime startDate = DateTime.MinValue;
+            if (start != null)
+            {
+                startDate = (DateTime)start;
+            }
+            if(end != null)
+            {
+                endDate = (DateTime)end;
+            }
 
             //Go through the list of sign ins and add all the data to the list.
             foreach (var SignIn in db.SignIns.ToList())
             {
-                Data data = new Data { Week = SignIn.Week, Date = SignIn.Date, Hour = SignIn.Hour, Min = SignIn.Min, VNum = SignIn.Student.VNum, FirstName = SignIn.Student.FirstName, LastName = SignIn.Student.LastName, SignedClass = db.Classes.Find(SignIn.ClassID) };                        
+                Data data = new Data { Week = SignIn.Week, Date = SignIn.Date, Hour = SignIn.Hour, Min = SignIn.Min, VNum = SignIn.Student.VNum, FirstName = SignIn.Student.FirstName, LastName = SignIn.Student.LastName, SignedClass = db.Classes.Find(SignIn.ClassID) };
 
                 //Only add if they are in the selected dates.
-                if (data.Date.Month >= startDate.Month && data.Date.Day >= startDate.Day && data.Date.Year >= startDate.Year && data.Date.Month <= endDate.Month && data.Date.Day <= endDate.Day && data.Date.Year <= endDate.Year)
-                {
-                    datas.Add(data);
-                }
-                else if(startDate == null && endDate == null)
+                if(data.Date.Month >= startDate.Month && data.Date.Day >= startDate.Day && data.Date.Year >= startDate.Year && data.Date.Month <= endDate.Month && data.Date.Day <= endDate.Day && data.Date.Year <= endDate.Year)
                 {
                     datas.Add(data);
                 }
@@ -188,25 +192,11 @@ namespace MathCenter.Controllers
         {
             return View();
         }
-        [HttpPost]
-        public ActionResult Reset(int? reset)
+        [HttpGet]
+        public ActionResult DownloadReset()
         {
-            if(reset == 1)
-            {
-                Excel(null, null);
-                ClearDB();
-                return RedirectToAction("Complete");
-            }
-            else if(reset == 2)
-            {
-                ClearDB();            
-                return RedirectToAction("Complete");
-            }
-            else if(reset == 3)
-            {
-                return RedirectToAction("Index");
-            }
-            return View();
+            Excel(null, null);
+            return RedirectToAction("Complete");
         }
 
         private void ClearDB()
@@ -242,6 +232,7 @@ namespace MathCenter.Controllers
          [HttpGet]
          public ActionResult Complete()
         {
+            ClearDB();
             return View();
         }
     }

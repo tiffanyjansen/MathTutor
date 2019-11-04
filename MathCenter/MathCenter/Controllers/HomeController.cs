@@ -160,7 +160,11 @@ namespace MathCenter.Controllers
             
             //get the classes and filters. 
             var filteredQuery = GetFilteredClassQuery(queryStrings);//Get the filtered class query 
-            var Classes = filteredQuery.ToList(); //Get all the classes  
+
+            var Classes = filteredQuery.ToList(); //Get all the classes 
+            Classes = RemoveOthers(Classes);
+            Classes = RemoveCCInstructors(Classes);
+
             ViewBag.Departments = GetClassDepts(filteredQuery); //gets the possible class departments
             ViewBag.ClassNumbers = GetClassNumbers(filteredQuery); //gets the possible class numbers
             ViewBag.Instructors = GetInstructors(filteredQuery); //gets the possible instructors
@@ -179,13 +183,17 @@ namespace MathCenter.Controllers
             return View(Classes);
         }
         [HttpPost]
-        public ActionResult SelectClass(int[] Classes)
+        public ActionResult SelectClass(string Classes)
         {
             if (Classes == null)
             {
                 //get the classes and filters. 
                 var filteredQuery = GetFilteredClassQuery(null);//Get the filtered class query 
+
                 var AllClasses = filteredQuery.ToList(); //Get all the classes
+                AllClasses = RemoveOthers(AllClasses);
+                AllClasses = RemoveCCInstructors(AllClasses);
+
                 ViewBag.Departments = GetClassDepts(filteredQuery); //gets the possible class departments
                 ViewBag.ClassNumbers = GetClassNumbers(filteredQuery); //gets the possible class numbers
                 ViewBag.Instructors = GetInstructors(filteredQuery); //gets the possible instructors
@@ -197,10 +205,12 @@ namespace MathCenter.Controllers
             }
             else
             {
+                int[] IdArray = GetClassIdArray(null, Classes);
+
                 try
                 {
                     Student currentStudent = db.Students.Find(VNumber);
-                    foreach (var ClassID in Classes)
+                    foreach (var ClassID in IdArray)
                     {                        
                         db.StudentClasses.Add(new StudentClass { VNum = currentStudent.VNum, ClassID = (int)ClassID });
                         db.SignIns.Add(new SignIn { Week = WeekNumber, Date = DateTime.Today, Hour = DateTime.Now.Hour, Min = DateTime.Now.Minute, StudentID = VNumber, ClassID = (int)ClassID }); //add a sign in for every class.
@@ -214,8 +224,12 @@ namespace MathCenter.Controllers
                     ViewBag.Error = "There was an error with the database. Please try again.";
 
                     //get the classes and filters. 
-                    var filteredQuery = GetFilteredClassQuery(null);//Get the filtered class query 
-                    var AllClasses = filteredQuery.ToList(); //Get all the classes          
+                    var filteredQuery = GetFilteredClassQuery(null);//Get the filtered class query
+                    
+                    var AllClasses = filteredQuery.ToList(); //Get all the classes        
+                    AllClasses = RemoveOthers(AllClasses);
+                    AllClasses = RemoveCCInstructors(AllClasses);
+
                     ViewBag.Departments = GetClassDepts(filteredQuery); //gets the possible class departments
                     ViewBag.ClassNumbers = GetClassNumbers(filteredQuery); //gets the possible class numbers
                     ViewBag.Instructors = GetInstructors(filteredQuery); //gets the possible instructors
@@ -230,14 +244,16 @@ namespace MathCenter.Controllers
             }                     
         }
         [HttpPost]
-        public ActionResult CommunityCollegeClasses(int[] Classes)
+        public ActionResult CommunityCollegeClasses(string Classes)
         {
             if(Classes != null)
             {
+                int[] IdArray = GetClassIdArray(null, Classes);
+
                 try
                 {
                     Student currentStudent = db.Students.Find(VNumber);
-                    foreach (var ClassID in Classes)
+                    foreach (var ClassID in IdArray)
                     {
                         db.StudentClasses.Add(new StudentClass { VNum = currentStudent.VNum, ClassID = ClassID });
                         db.SignIns.Add(new SignIn { Week = WeekNumber, Date = DateTime.Today, Hour = DateTime.Now.Hour, Min = DateTime.Now.Minute, StudentID = VNumber, ClassID = ClassID }); //add a sign in for every class.
@@ -256,14 +272,16 @@ namespace MathCenter.Controllers
             return RedirectToAction("CommunityCollege");
         }
         [HttpPost]
-        public ActionResult OtherClasses(int[] Classes)
+        public ActionResult OtherClasses(string Classes)
         {
             if(Classes != null)
             {
+                int[] IdArray = GetClassIdArray(null, Classes);
+
                 try
                 {
                     Student currentStudent = db.Students.Find(VNumber);
-                    foreach (var ClassID in Classes)
+                    foreach (var ClassID in IdArray)
                     {
                         db.StudentClasses.Add(new StudentClass { VNum = currentStudent.VNum, ClassID = ClassID });
                         db.SignIns.Add(new SignIn { Week = WeekNumber, Date = DateTime.Today, Hour = DateTime.Now.Hour, Min = DateTime.Now.Minute, StudentID = VNumber, ClassID = ClassID }); //add a sign in for every class.
@@ -282,19 +300,46 @@ namespace MathCenter.Controllers
             return RedirectToAction("Other");
         }
 
-        //HERE IS WHERE COMMUNITYCOLLEGE WILL GO
-        
-       /// <summary>
-       /// The method for when a student wants to select a different class ("Other")
-       /// </summary>
-       /// <param name="Week">The Week Number</param>
-       /// <param name="VNum">The Student's V-Number</param>
-       /// <returns>The View</returns>
+        /// <summary>
+        /// The method for when a student wants to select a different class ("Other")
+        /// </summary>
+        /// <returns>The View</returns>
+        [HttpGet]
+        public ActionResult CommunityCollege()
+        {
+            // Chemeketa
+            // Clackamas
+            // Linn-Benton
+            // Mt. Hood
+            // Portland
+                       
+            return View();
+        }
+        [HttpPost]
+        public ActionResult CommunityCollege(string Classes)
+        {
+            try
+            {
+
+            }
+            catch (Exception)
+            {
+                //There was an error
+                ViewBag.Error = "There was an error with the database. Please try again.";
+                return View();
+            }
+
+            //Redirect to the finish page.
+            return RedirectToAction("Finish");
+        }
+
+        /// <summary>
+        /// The method for when a student wants to select a different class ("Other")
+        /// </summary>
+        /// <returns>The View</returns>
         [HttpGet]
         public ActionResult Other()
         {
-            var OtherClasses = RemoveOthers(null, false);
-
             //get all the query strings
             var queryStrings = new Dictionary<string, string>();
             foreach (var key in Request.QueryString.AllKeys)
@@ -307,106 +352,64 @@ namespace MathCenter.Controllers
                 Regex rx = new Regex(@"^[A-Z]{1,3}\s\d{2,3}$", RegexOptions.IgnoreCase);
                 if (rx.IsMatch(queryStrings["other"]))
                 {
+                    string other = queryStrings["other"];
+
                     try
                     {
                         //Create the class to be connected to the student.
-                        db.Classes.Add(new Class { Other = queryStrings["other"] });
+                        db.Classes.Add(new Class { Other = other });
 
                         //Save the class into the database.
-                        db.SaveChanges();
+                        db.SaveChanges();                        
                     }
                     catch (Exception)
                     {
+                        var Classes = RemoveOthers(null, false);
                         //There was an error.
                         ViewBag.Error = "There was an error with the database. Please try again.";
-                        return View(OtherClasses);
+                        return View(Classes);
                     }
-
-                    OtherClasses = RemoveOthers(null, false);
-                    Class studentClass = db.Classes
-                        .Where(c => c.Other == queryStrings["other"])
-                        .Select(c => c).FirstOrDefault();
-
-                    try
-                    {
-                        Student currentStudent = db.Students.Find(VNumber);            
-                        db.StudentClasses.Add(new StudentClass { VNum = currentStudent.VNum, ClassID = studentClass.ClassID });
-                        db.SignIns.Add(new SignIn { Week = WeekNumber, Date = DateTime.Today, Hour = DateTime.Now.Hour, Min = DateTime.Now.Minute, StudentID = VNumber, ClassID = studentClass.ClassID }); //add a sign in for every class.                       
-
-                        db.SaveChanges();
-                    }
-                    catch(Exception)
-                    {
-                        //There was an error.
-                        ViewBag.Error = "There was an error with the database. Please try again.";
-                        return View(OtherClasses);
-                    }
-
-                    return RedirectToAction("Finish");
                 }
             }
+            var OtherClasses = RemoveOthers(null, false);
 
             //Return the View.
             return View(OtherClasses);
         }
         [HttpPost]
-        public ActionResult Other(string other)
+        public ActionResult Other(string Classes)
         {
-            Regex rx = new Regex(@"^[A-Z]{1,3}\s\d{2,3}$", RegexOptions.IgnoreCase);
-            if (rx.IsMatch(other))
+            if (Classes != null)
             {
+                int[] IdArray = GetClassIdArray(null, Classes);
+
                 try
                 {
-                    //Create the class to be connected to the student.
-                    db.Classes.Add(new Class { Other = other });
+                    Student currentStudent = db.Students.Find(VNumber);
+                    foreach (var ClassID in IdArray)
+                    {
+                        db.StudentClasses.Add(new StudentClass { VNum = currentStudent.VNum, ClassID = ClassID });
+                        db.SignIns.Add(new SignIn { Week = WeekNumber, Date = DateTime.Today, Hour = DateTime.Now.Hour, Min = DateTime.Now.Minute, StudentID = VNumber, ClassID = ClassID }); //add a sign in for every class.
+                    }
 
-                    //Save the class into the database.
                     db.SaveChanges();
                 }
                 catch (Exception)
                 {
-                    //There was an error.
+                    //There was an error
                     ViewBag.Error = "There was an error with the database. Please try again.";
                     return View();
                 }
-
-                //Get the class again.
-                Class sClass = db.Classes
-                    .Where(c => c.Other == other)
-                    .Select(c => c).FirstOrDefault();
-
-                //Add the class to the current student.
-                Student currentStudent = db.Students.Find(VNumber);
-                db.StudentClasses.Add(new StudentClass { VNum = VNumber, ClassID = sClass.ClassID });
-
-                try
-                {
-                    //Create the Sign In to be added to the db.
-                    db.SignIns.Add(new SignIn { Week = WeekNumber, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, StudentID = VNumber, ClassID = sClass.ClassID });
-
-                    //Save the Changes to the db.
-                    db.SaveChanges();
-                }
-                catch (Exception)
-                {
-                    //There was an error.
-                    ViewBag.Error = "There was an error with the database. Please try again.";
-                    return View();
-                }
-
-                //Redirect to the finish page.
-                return RedirectToAction("Finish");
             }
-            else
-            {
-                ViewBag.Error = "Please input an actual class.";
 
-                return View();
-            }
+            //Redirect to the finish page.
+            return RedirectToAction("Finish");
         }
-        /*
-         * The method for when you are already in the DB and just need to approve the sign in.
-         */
+
+        /// <summary>
+        /// The function for when you are already in the database and you sign in again.
+        /// </summary>
+        /// <returns>The View</returns>
         [HttpGet]
         public ActionResult Done()
         {
@@ -660,18 +663,27 @@ namespace MathCenter.Controllers
         /// </summary>
         /// <param name="filters">The dictionary of filters</param>
         /// <returns>the array of class ids</returns>
-        private int[] GetClassIdArray(Dictionary<string, string> filters)
+        private int[] GetClassIdArray(Dictionary<string, string> filters = null, string Classes = null)
         {
             int[] IdArray;
-            
-            if (filters.ContainsKey("ClassIds") && filters["ClassIds"] != null && filters["ClassIds"] != "")
+
+            if (filters != null && filters.ContainsKey("ClassIds") && filters["ClassIds"] != null && filters["ClassIds"] != "")
             {
                 String[] Ids = filters["ClassIds"].Split(',');
                 IdArray = new int[Ids.Length];
                 for (int i = 0; i < Ids.Length; i++)
                 {
                     IdArray[i] = Int32.Parse(Ids[i]);
-                }                
+                }
+            }
+            else if (Classes != null && Classes != "")
+            {
+                String[] Ids = Classes.Split(',');
+                IdArray = new int[Ids.Length];
+                for (int i = 0; i < Ids.Length; i++)
+                {
+                    IdArray[i] = Int32.Parse(Ids[i]);
+                }
             }
             else
             {

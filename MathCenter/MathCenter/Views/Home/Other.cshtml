@@ -39,21 +39,43 @@
                             <tbody>
                                 @{
                                     int total = Model.Count();
-                                    for (int i = 0; i < total; i++)
+                                    int i = 0;
+                                    while (i < total)
                                     {
                                         <tr>
-                                            @while (i % 3 != 2)
+                                            @{
+                                                int j = 0;
+                                            }
+                                            @while (j < 3 && i < total)
                                             {
                                                 <td>
                                                     <input type="checkbox" class="class-checkbox" name="Classes" value="@Model.Skip(i).First().ClassID" />
                                                 </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => Model.Skip(i).First().Other)
+                                                </td>
                                                 i++;
+                                                j++;
                                             }
                                         </tr>
                                     }
                                 }
                             </tbody>
                         </table>
+                    </div>
+                </div>
+                <div class="row form-group justify-content-center">
+                    <div style="width:90%; margin-top:15px;">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-6 text-left">
+                                    @Html.ActionLink("Go Back", "SelectClass", "Home", null, new { @class = "btn btn-default btn-lg" })
+                                </div>
+                                <div class="col-6 text-right">
+                                    <button class="btn btn-danger btn-lg" type="submit">Submit</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             }
@@ -86,7 +108,7 @@
             </div>
             <div class="row form-group justify-content-center">
                 <div class="col-8 text-right">
-                    <button class="btn btn-danger btn-lg" type="submit">Submit</button>
+                    <button class="btn btn-danger btn-lg" type="submit">Add New Class</button>
                 </div>
             </div>
         }
