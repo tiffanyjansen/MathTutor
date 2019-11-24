@@ -21,11 +21,13 @@ namespace MathCenter
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
+                      "~/Content/DataTables/datatables.min.js",
                       "~/Scripts/bootstrap-datepicker.min.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.min.css",
                       "~/Content/bootstrap-datepicker.min.css",
+                      "~/Content/DataTables/datatables.min.css",
                       "~/Content/site.css"));
         }
     }

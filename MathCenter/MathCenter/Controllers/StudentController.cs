@@ -43,6 +43,7 @@ namespace MathCenter.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public ActionResult Index(WelcomeViewModel model)
         {
@@ -51,7 +52,7 @@ namespace MathCenter.Controllers
                 _v_number = model.VNum;
                 if (db.Students.Find(_v_number) != null)
                 {
-                    return RedirectToAction("Done", "Student"); //This will not work
+                    return RedirectToAction("Done", "Student");
                 }
                 return RedirectToAction("Name", "Student");
             }
@@ -59,6 +60,44 @@ namespace MathCenter.Controllers
             {
                 ViewBag.Error = "Your V Number is invalid. It must be 8 characters. Please do not include the V.";
                 return View();
+            }
+        }
+
+        [HttpGet]
+        public ActionResult Name()
+        {
+            Student student = db.Students.Find(_v_number);
+            if (student == null)
+            {
+                student = new Student { VNum = _v_number };
+            }
+            return View(student);
+        }
+
+        [HttpPost]
+        public ActionResult Name(Student student)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    student.FirstName = student.CapitalizeName(student.FirstName);
+                    student.LastName = student.CapitalizeName(student.LastName);
+                    db.Students.Add(student);
+
+                    db.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    ViewBag.Error = "There was an error adding you to the database. Please ask a tutor for help.";
+                    return View(student);
+                }
+                return RedirectToAction("SelectClass", "Student");
+            }
+            else
+            {
+                ViewBag.Error = "Looks like you inputted something that does not look like a name. Please try again.";
+                return View(student);
             }
         }
     }

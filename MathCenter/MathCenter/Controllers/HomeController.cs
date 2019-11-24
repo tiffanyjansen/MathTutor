@@ -26,50 +26,7 @@ namespace MathCenter.Controllers
             return View();
         }
 
-        /// <summary>
-        /// This is the method for inputting their name. It will allow the user
-        /// to input their name and get to adding their class.
-        /// 
-        /// It will also add the student to the database.
-        /// <returns>The View</returns>
-        [HttpGet]
-        public ActionResult Name()
-        {
-            Student student = db.Students.Find(_v_number);
-            if(student == null)
-            {
-                student = new Student { VNum = _v_number };
-            }
-            return View(student);
-        }
-        [HttpPost]
-        public ActionResult Name(Student student)
-        {
-            if(ModelState.IsValid)
-            {
-                try
-                {
-                    student.FirstName = student.CapitalizeName(student.FirstName);
-                    student.LastName = student.CapitalizeName(student.LastName);
-                    db.Students.Add(student);  //Add the student to the database.          
 
-                    db.SaveChanges(); //Save the changes to the database. 
-                }
-                catch (Exception)
-                {
-                    ViewBag.Error = "There was an error adding you to the database. Please ask a tutor for help.";
-                    return View(student);
-                }
-
-                //Redirect to the select department method and slowly select the class.
-                return RedirectToAction("SelectClass");
-            }
-            else
-            {
-                ViewBag.Error = "Looks like you inputted something that does not look like a name. Please try again.";
-                return View(student);
-            }
-        }
         
          /// <summary>
          /// The method for selecting a class. It's a table that is filterable. 
