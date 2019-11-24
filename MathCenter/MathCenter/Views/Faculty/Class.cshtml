@@ -4,64 +4,69 @@
     ViewBag.Title = "Class";
 }
 
-<div class="content">
-    <div class="center">
-        <h1>Here is a table with all of the classes found on the site</h1>
-        <h3>Link to go back: @Html.ActionLink("Go back to home", "Index", "Faculty")</h3>
+    <div class="content">
+        <div class="row">
+            <div class="col-12 border-bottom">
+                <h2>Math Center Classes</h2>
+            </div>
+        </div>
+        <table class="table" style="margin-bottom:15px;" align="center">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.CRN)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DeptPrefix)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ClassNum)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Instructor)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Days)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Time)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Other)
+                </th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CRN)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DeptPrefix)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ClassNum)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Instructor)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Days)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Time)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Other)
+                    </td>
+                </tr>
+            }
+
+        </table>
+        <div class="row">
+            <div class="col-12 text-center">
+                @Html.ActionLink("Go Back", "Index", "Faculty", null, new { @class = "btn btn-lg btn-default" })
+            </div>
+        </div>
     </div>
-</div>
-<br /><br />
-<table align="center">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.CRN)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DeptPrefix)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ClassNum)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Instructor)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Days)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Time)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Other)
-        </th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.CRN)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DeptPrefix)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClassNum)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Instructor)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Days)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Time)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Other)
-            </td>
-        </tr>
-    }
-
-</table>
 

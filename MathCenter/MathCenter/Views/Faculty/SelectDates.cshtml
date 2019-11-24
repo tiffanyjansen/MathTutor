@@ -1,6 +1,5 @@
 ﻿<div class="content">
-    <h2>Please select date range for the download:</h2>
-    <hr />
+    <h2 class="border-bottom">Please select date range for the download:</h2>
     @if (ViewBag.Error != null)
     {
         @Html.Partial("_Errors", "Partials", new ViewDataDictionary { { "error", ViewBag.Error } })
@@ -19,7 +18,7 @@
         </div>
         <div class="row form-group">
             <div class="col-12 text-center">
-                <button class="btn btn-lg btn-danger" type="submit" name="button" value="faculty">Submit</button>
+                <input class="btn btn-lg btn-danger" type="submit" value="Submit"/>
                 @Html.ActionLink("Go Back", "Index", "Faculty", null, new { @class = "btn btn-default btn-lg" })
             </div>
         </div>

@@ -4,107 +4,51 @@
 }
 
     <div class="content">
-        @using (Html.BeginForm())
-        {
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <h1>Welcome!</h1>
-                </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1>Welcome!</h1>
             </div>
-            <hr />
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="text-center">
-                        <h2>Get Data Tables</h2>
-                    </div>
-                    <h3>@Html.ActionLink("Get all the data", "Data", "Faculty")</h3>
-                    <h3>@Html.ActionLink("View all the classes", "Class", "Faculty")</h3>
+        </div>
+        <div class="col-12" id="border"></div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="text-center border-bottom">
+                    <h2>Get Data Tables</h2>
                 </div>
-                <div class="col-md-4 text-center">
-                    <img src="~/Content/Images/mathheart.jpg" style="height:150px;" />
-                </div>
-                <div class="col-md-4">
-                    <div class="text-center">
-                        <h2>Download/Add Data</h2>
-                    </div>
-                    <button class="btn btn-danger btn-lg" name="download" value="1" type="submit">Download the Data</button>
-                    @Html.ActionLink("Add Classes for New Term", "Add", "Faculty", null, new { @class = "btn btn-danger btn-lg" })
-                </div>
+                <h3>@Html.ActionLink("View all the data", "Data", "Faculty")</h3>
+                <h3>@Html.ActionLink("View all the classes", "Class", "Faculty")</h3>
             </div>
-            <hr />
+            <div class="col-md-4 text-center">
+                <img src="~/Content/Images/mathheart.jpg" class="image" />
+            </div>
+            <div class="col-md-4">
+                <div class="text-center border-bottom">
+                    <h2>Download/Add Data</h2>
+                </div>
+                <h3>@Html.ActionLink("Download the Data", "SelectDates", "Faculty")</h3>
+                <h3>@Html.ActionLink("Add Classes for New Term", "Add", "Faculty")</h3>
+            </div>
+        </div>
+        <div class="col-12" id="border"></div>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-12 form-group">
                     <h3>
-                        This button is to be used at the end of the term to clear the database for the next one. Don't worry,
-                        it's not a commitment, it will just take you to another page.
+                        End of the term? The Reset button will allow you to reset the database for the next term AND download the current term's data.
                     </h3>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
-                    <div class="text-center">
-                        <button class="btn btn-danger btn-lg" name="download" value="2" type="submit">Reset the Data</button>
+                <div class="col-md-6 col-12">
+                    <div class="text-left">
+                        @Html.ActionLink("Reset the Data", "Reset", "Faculty", null, new { @class="btn btn-lg btn-danger" })
+                    </div>
+                </div>
+            @*</div>*@
+            @*<div class="row">*@
+                <div class="col-md-6 col-12">
+                    <div class="text-right">
+                        @Html.ActionLink("Go Back to Sign In", "Index", "Home", null, new { @class = "btn btn-default btn-lg" })
                     </div>
                 </div>
             </div>
-            <hr />
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="text-center">
-
-                        <button class="btn btn-danger btn-lg" name="download" value="3" type="submit">Go Back to Sign In</button>
-
-                    </div>
-                </div>
-            </div>
-
-        }
     </div>
-    @*<div class="row">
-                <div class="col-md-6">
-                    <h3>Show the data on a page: @Html.ActionLink("Data", "Data", "Faculty")</h3>
-                    <h3>Add classes to the database: @Html.ActionLink("Add Classes", "Add", "Faculty")</h3>
-                    <h3>Show all the classes in the system: @Html.ActionLink("Classes", "Class", "Faculty")</h3>
-                </div>
-                <div class="col-md-6">
-                    <div class="center">
-                        <img src="~/Images/mathheart.jpg" style="height:175px;" />
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="center">
-
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <h3>
-                    This button is to be used at the end of the term to clear the database for the next one. Don't worry,
-                    it's not a commitment, it will just take you to another page.
-                </h3>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="center">
-                        <form method="post">
-                            <h3>
-                                <button name="download" value="2" type="submit">Reset the Data</button>
-                            </h3>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="center">
-                        <form method="post">
-                            <h3>
-                                <button name="download" value="3" type="submit">Go Back to Sign In</button>
-                            </h3>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>*@

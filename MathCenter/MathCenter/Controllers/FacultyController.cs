@@ -18,10 +18,29 @@ namespace MathCenter.Controllers
     {
         //Database Connection
         private readonly MathContext db = new MathContext();
-        
+
+        [HttpPost]
+        public ActionResult SignIn(string facultyPwd) //When faculty form has been submitted.
+        {
+            //password
+            string facultyPass = "Math42";
+
+            //Check the password.
+            if (facultyPwd == facultyPass)
+            {
+                return RedirectToAction("Index", "Faculty");
+            }
+            //Return specific errors if the input is not valid.
+            else
+            {
+                ViewBag.Error = "Incorrect password. Please try again.";
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
         /*
          * This method returns a welcome page for Faculty users.
-         */ 
+         */
         [HttpGet]
         public ActionResult Index()
         {
@@ -55,15 +74,27 @@ namespace MathCenter.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult SelectDates(DateTime start, DateTime end)
+        public ActionResult SelectDates(DateTime? start, DateTime? end)
         {
-            if(start.Month > end.Month || (start.Month == end.Month && start.Day > end.Day) || start.Year > end.Year)
+            if (start == null)
+            {
+                start = new DateTime(2000, 1, 1); // 01/01/2000
+            }
+            DateTime startDate = (DateTime)start;
+
+            if(end == null)
+            {
+                end = DateTime.Today; // Today's Date
+            }
+            DateTime endDate = (DateTime)end;
+
+            if(startDate.Month > endDate.Month || (startDate.Month == endDate.Month && startDate.Day > endDate.Day) || startDate.Year > endDate.Year)
             {
                 ViewBag.Error = "Please make sure your start date is before your end date.";
                 return View();
             }
 
-            Excel(start, end);
+            Excel(startDate, endDate);
             return RedirectToAction("Index");
         }
         

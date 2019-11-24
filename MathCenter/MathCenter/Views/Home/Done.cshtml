@@ -5,44 +5,46 @@
 
 <div class="content">
     <div class="row">
-        <div class="col-6">
-            <div class="border-bottom">
-                <h2>Is this you?</h2>
-            </div>
-            <div class="text-left">
-                <h3 class="red-text">@Html.DisplayFor(m => m.FirstName)&nbsp;@Html.DisplayFor(m => m.LastName)</h3>
-            </div>
+        <div class="col-12 text-center">
+            <h2>@Model.FirstName&nbsp;@Model.LastName</h2>
         </div>
-        <div class="col-6">
-            <div class="border-bottom">
-                <h2>Are these your classes?</h2>
-            </div>
-            <div class="text-left">
-                @foreach (var sClass in Model.StudentClasses)
+        <div class="col-12" id="border-red"></div>
+    </div>
+    <div class="row">
+        <div class="col-3 text-right">
+            <h3>Your V-Number:</h3>
+        </div>
+        <div class="col-9">
+            <h3><span class="red-text">@Model.VNum</span></h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3 text-right">
+            @if (Model.StudentClasses.Count() == 1)
+            {
+                <h3>Your Class:</h3>
+            }
+            else
+            {
+                <h3>Your Classes:</h3>
+            }
+        </div>
+        <div class="col-9">
+            @if (Model.StudentClasses.Count() == 1)
+            {
+                if (Model.StudentClasses.First().Class.Other != null)
                 {
-                    <label class="h3 red-text">
-                        <input type="checkbox" name="classID" style="height:15px;" value="@Html.DisplayFor(m => sClass.Class.ClassID)" checked>
-                        &nbsp;@Html.DisplayFor(m => sClass.Class.DeptPrefix)&nbsp;@Html.DisplayFor(m => sClass.Class.ClassNum)&nbsp;@Html.DisplayFor(m => sClass.Class.Instructor)&nbsp;@Html.DisplayFor(m => sClass.Class.Other)
-                    </label>
+                    <h3><span class="red-text">@Model.StudentClasses.First().Class.Other</span></h3>
                 }
-            </div>
-        </div>
-    </div>
-    <div class="row form-group">
-        <div class="col-6 text-right">
-            @Html.ActionLink("No", "Name", "Home", null, new { @class="btn btn-default btn-lg"})
-        </div>
-        <div class="col-6 text-right">
-            <!--I want this to be an ActionLink... -->
-            <button class="btn btn-danger btn-lg">Edit Classes</button>
-        </div>
-    </div>
-    <div class="row form-group">
-        <div class="col-6 text-left">
-            @Html.ActionLink("Go Back", "Welcome", "Home", null, new { @class="btn btn-danger btn-lg" })
-        </div>
-        <div class="col-6 text-right">
-            <button type="submit" class="btn btn-default btn-lg">Continue</button>
+                else
+                {
+                    <h3><span class="red-text">@Model.StudentClasses.First().Class.ToString()</span></h3>
+                }
+            }
+            else
+            {
+                
+            }
         </div>
     </div>
 </div>

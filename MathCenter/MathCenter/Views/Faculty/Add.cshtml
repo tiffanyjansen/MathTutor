@@ -1,36 +1,43 @@
 ﻿
-@{
-    ViewBag.Title = "Add";
-}
-
-<div class="content">
-    <div class="center">
-        <h4 style="color: darkblue;">@ViewBag.Error</h4>
-    </div>
-    <div class="center">
-        <h1>Add classes for the current term here</h1>
-        <h2 style="margin-bottom:25px;">Link to go back: @Html.ActionLink("Go back to home", "Index", "Faculty")</h2>
-        <h2>The order of the data should be:</h2>
-        <h3>CRN, Class Prefix, Class Number, Start Time (Online), Days, Instructor</h3>
-    </div>
-    <h2>Instructions:</h2>
-    <ol>
-        <li>Copy and paste class data from WOU RealTime Availability website to Notepad, which is in Accessories (to strip the formatting).</li>
-        <li>Copy and paste that data into Excel (Ctrl-A, Ctrl-C). Include a header row</li>
-        <li>Remove the unnecessary fields so that it matches the order and columns above.</li>
-        <li>For classes that span multiple rows, make it so they are only on one row. (If it has M, W, and TF split up, put them all on the same line.)</li>
-        <li>If the class is online, please add "Online" to the Start Time column, you may leave the Days column empty.</li>
-        <li>Upload the excel file here.</li>
-    </ol>
-    <div class="center">
+    <div class="content">
+        <h2 class="border-bottom">Add classes for the current term here</h2>
+        @if (ViewBag.Error != null)
+        {
+            @Html.Partial("_Errors", "Partials", new ViewDataDictionary { { "error", ViewBag.Error } })
+        }
+        <div class="row">
+            <div class="col-12 text-center form-group">
+                <h2>The order of the data should be:</h2>
+                <h3 class="red-text">CRN, Class Prefix, Class Number, Start Time (Online), Days, Instructor</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 form-group">
+                <h2>Instructions:</h2>
+                <ol>
+                    <li>Copy and paste class data from WOU RealTime Availability website to Notepad, which is in Accessories (to strip the formatting).</li>
+                    <li>Copy and paste that data into Excel (Ctrl-A, Ctrl-C). Include a header row</li>
+                    <li>Remove the unnecessary fields so that it matches the order and columns above.</li>
+                    <li>For classes that span multiple rows, make it so they are only on one row. (If it has M, W, and TF split up, put them all on the same line.)</li>
+                    <li>If the class is online, please add "Online" to the Start Time column, you may leave the Days column empty.</li>
+                    <li>Upload the excel file here.</li>
+                </ol>
+            </div>
+        </div>
         @using (Html.BeginForm("Add", "Faculty", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
-            <h4>
-                @Html.TextBox("file", "", new { type = "file", accept = ".xlsx, .xls, .csv" })
-            </h4>           
-            <h3>
-                <button class="btn" type="submit">Submit</button>
-            </h3>
+            <div class="row">
+                <div class="col-12 form-group">
+                    <h4>
+                        @Html.TextBox("file", "", new { type = "file", accept = ".xlsx, .xls, .csv" })
+                    </h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 text-center">
+                    <input type="submit" value="Submit" class="btn btn-danger btn-lg"/>
+                    @Html.ActionLink("Go Back", "Index", "Faculty", null, new { @class="btn btn-lg btn-default" })
+                </div>
+            </div>
         }
     </div>
-</div>

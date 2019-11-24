@@ -152,7 +152,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\AjaxController.cs" />
+    <Compile Include="Controllers\StudentController.cs" />
     <Compile Include="Controllers\FacultyController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PartialsController.cs" />
@@ -171,7 +171,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\down.sql" />
-    <Content Include="App_Data\downOne.sql" />
     <Content Include="App_Data\up.sql" />
     <Content Include="Content\bootstrap-datepicker.css" />
     <Content Include="Content\bootstrap-datepicker.min.css" />
@@ -188,6 +187,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Fonts\Crete_Round\OFL.txt" />
+    <Content Include="Content\Fonts\Noto_Sans_JP\OFL.txt" />
     <Content Include="Content\Fonts\Vidaloka\OFL.txt" />
     <Content Include="Content\Icons\open-iconic-master\font\css\open-iconic-bootstrap.css" />
     <Content Include="Content\Icons\open-iconic-master\font\css\open-iconic-bootstrap.min.css" />
@@ -1767,6 +1767,7 @@
     <Content Include="Content\Images\logo_final.jpg" />
     <Content Include="Content\Images\logo_horizontal.gif" />
     <Content Include="Content\Images\logo_horizontal.jpg" />
+    <Content Include="Content\Images\Math-Meme.jpg" />
     <Content Include="Content\Images\mathheart.jpg" />
     <Content Include="Content\Images\new-wou-logo.jpg" />
     <Content Include="Content\Images\WOU-logo-2018.jpg" />
@@ -3161,6 +3162,12 @@
     <Content Include="Content\bootstrap-datepicker3.css.map" />
     <Content Include="Content\bootstrap-datepicker.standalone.css.map" />
     <Content Include="Content\bootstrap-datepicker.css.map" />
+    <Content Include="Content\Fonts\Noto_Sans_JP\NotoSansJP-Black.otf" />
+    <Content Include="Content\Fonts\Noto_Sans_JP\NotoSansJP-Bold.otf" />
+    <Content Include="Content\Fonts\Noto_Sans_JP\NotoSansJP-Light.otf" />
+    <Content Include="Content\Fonts\Noto_Sans_JP\NotoSansJP-Medium.otf" />
+    <Content Include="Content\Fonts\Noto_Sans_JP\NotoSansJP-Regular.otf" />
+    <Content Include="Content\Fonts\Noto_Sans_JP\NotoSansJP-Thin.otf" />
     <None Include="Properties\PublishProfiles\math-center - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\math-tutor - Web Deploy.pubxml" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
@@ -3326,9 +3333,9 @@
     <Content Include="Views\Shared\_Errors.cshtml" />
     <Content Include="Views\Shared\_Progress.cshtml" />
     <Content Include="Views\Shared\_FilterDropdown.cshtml" />
+    <Content Include="Views\Student\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Views\Ajax\" />
     <Folder Include="Views\Partials\" />
   </ItemGroup>
   <ItemGroup>

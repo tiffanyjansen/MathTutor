@@ -2,16 +2,37 @@
   font-family: 'Crete_Round';
   src: url("Fonts/Crete_Round/CreteRound-Regular.ttf") format("truetype"); }
 
+@font-face {
+  font-family: 'Noto_Sans';
+  src: url("Fonts/Noto_Sans_JP/NotoSansJP-Bold.otf") format("opentype"); }
+
 body {
-  font-family: Crete_Round;
-  /*overflow-x: hidden; // Remove bottom scroll bar.*/
+  font-family: Noto_Sans;
   background-image: linear-gradient(to bottom, #C4C6C8, #FFFFFF);
   margin: 15px; }
+
+h1,
+h2,
+h3 {
+  font-family: Crete_Round; }
+
+h4,
+h5,
+h6,
+p,
+a {
+  font-family: Noto_Sans; }
 
 .logo {
   max-width: 100%;
   max-width: 100vw;
   height: auto; }
+
+.border-gray {
+  border-color: #C4C6C8 !important; }
+
+.border-silver {
+  border-color: #A7A9AC !important; }
 
 .border-bottom,
 .border-top {
@@ -24,7 +45,7 @@ body {
   margin-bottom: 15px; }
 
 .container {
-  border: solid 1px #231F20;
+  border: solid 3px #231F20;
   border-radius: 5px;
   padding: 15px;
   margin: 15px auto; }
@@ -54,13 +75,16 @@ body {
       height: 1px;
       background-image: radial-gradient(#A7A9AC, #FFFFFF);
       margin-bottom: 15px; }
+    .container .content #border-red {
+      height: 1px;
+      background-image: radial-gradient(#DB0A29, #FFFFFF);
+      margin-bottom: 15px; }
     .container .content table {
       width: 90%;
       border: 2px solid #DB0A29;
       text-align: center;
       margin: 0 auto;
-      color: #231F20;
-      /*table-layout: fixed;*/ }
+      color: #231F20; }
       .container .content table tr {
         background-color: #C4C6C8; }
         .container .content table tr:nth-child(odd) {
@@ -84,6 +108,18 @@ body {
       z-index: 1029; }
     .container .content .button-row {
       margin-top: 15px; }
+
+.image {
+  height: 150px;
+  width: auto;
+  margin-bottom: 15px; }
+
+.image-300 {
+  height: 300px;
+  width: auto;
+  margin-bottom: 15px;
+  border: 5px solid #DB0A29;
+  border-radius: 10px; }
 
 .footer {
   font-size: 24px; }
@@ -140,3 +176,25 @@ body {
   height: 30px;
   background-color: #FFFFFF;
   margin-bottom: 15px; }
+
+ol {
+  counter-reset: ol-counter; }
+  ol li {
+    position: relative;
+    list-style: none;
+    font-size: 20px; }
+    ol li::before {
+      counter-increment: ol-counter;
+      content: counter(ol-counter);
+      background-color: #DB0A29;
+      color: #FFFFFF;
+      position: absolute;
+      left: -28px;
+      top: 5px;
+      height: 20px;
+      font-size: 12px;
+      text-align: center;
+      border-radius: 50% 50%;
+      width: 20px;
+      box-sizing: border-box;
+      display: inline-block; }

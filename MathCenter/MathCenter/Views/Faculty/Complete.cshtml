@@ -1,12 +1,19 @@
 ﻿
-@{
-    ViewBag.Title = "Complete";
-}
-
 <div class="content">
-    <div class="center">
-        <h1>Your reset is complete.</h1>
-        <h2>Go back?: @Html.ActionLink("Back to home", "Index", "Faculty")</h2>
+    <div class="row">
+        <div class="col-12 border-bottom">
+            <h2>Your reset is complete.</h2>
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-12 text-center">
+            <img src="~/Content/Images/Math-Meme.jpg" class="image-300" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 text-center">
+            @Html.ActionLink("Go Back", "Index", "Faculty", null, new { @class="btn btn-lg btn-default" })
+        </div>
     </div>
 </div>
 

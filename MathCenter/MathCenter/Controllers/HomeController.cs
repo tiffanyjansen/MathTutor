@@ -12,8 +12,8 @@ namespace MathCenter.Controllers
     public class HomeController : Controller
     {
         private readonly MathContext db = new MathContext(); //Access to Database
-        private static int WeekNumber;
-        private static string VNumber;
+        private static int _week_number;
+        private static string _v_number;
 
         /// <summary>
         /// The "Home Page." The page for Tutors/Faculty to either access the 
@@ -25,78 +25,6 @@ namespace MathCenter.Controllers
         {
             return View();
         }
-        [HttpPost]
-        public ActionResult Index(string tutorPwd, int Week) //When tutor form has been submitted.
-        {
-            //password
-            string tutorPass = "Math42"; 
-
-            //Check the password and make sure there is a week input.
-            if (tutorPwd == tutorPass && Week != -1)
-            {
-                WeekNumber = Week;
-                return RedirectToAction("Welcome");
-            }
-            //Return specific errors if the input is not valid.
-            else if (Week == -1)
-            {
-                ViewBag.Error = "Please select a week number.";
-            }            
-            else
-            {
-                ViewBag.Error = "Incorrect password. Please try again.";                
-            }
-            return View();
-        }
-        [HttpPost]
-        public ActionResult Faculty(string facultyPwd) //When faculty form has been submitted.
-        {
-            //password
-            string facultyPass = "Math42";
-
-            //Check the password.
-            if (facultyPwd == facultyPass)
-            {
-                return RedirectToAction("Index", "Faculty");
-            }
-            //Return specific errors if the input is not valid.
-            else
-            {
-                ViewBag.Error = "Incorrect password. Please try again.";
-                return RedirectToAction("Index");
-            }
-        }
-
-        /// <summary>
-        ///  The method for signing a student in. This page will just have the student
-        ///  enter their V Number, then it will direct them to select their class and 
-        ///  add them to the database
-        /// </summary>
-        /// <returns>The View</returns>
-        [HttpGet]
-        public ActionResult Welcome()
-        {
-            return View();
-        }
-        [HttpPost]
-        public ActionResult Welcome(WelcomeViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                VNumber = model.VNum;
-                if (db.Students.Find(VNumber) != null)
-                {
-                    //Probably should make a ViewModel for this page too... Maybe with a student in it?
-                    return RedirectToAction("Done");
-                }
-                return RedirectToAction("Name");
-            }
-            else
-            {
-                ViewBag.Error = "Your V Number is invalid. It must be 8 characters. Please do not include the V.";
-                return View();
-            }           
-        }
 
         /// <summary>
         /// This is the method for inputting their name. It will allow the user
@@ -107,10 +35,10 @@ namespace MathCenter.Controllers
         [HttpGet]
         public ActionResult Name()
         {
-            Student student = db.Students.Find(VNumber);
+            Student student = db.Students.Find(_v_number);
             if(student == null)
             {
-                student = new Student { VNum = VNumber };
+                student = new Student { VNum = _v_number };
             }
             return View(student);
         }
@@ -149,7 +77,7 @@ namespace MathCenter.Controllers
          /// </summary>
          /// <returns>The View</returns>
         [HttpGet]
-        public ActionResult SelectClass()
+        public ActionResult SelectClass(int[] ClassIds = null)
         {
             //get all the query strings
             var queryStrings = new Dictionary<string, string>();
@@ -171,14 +99,26 @@ namespace MathCenter.Controllers
             ViewBag.Days = GetClassDays(filteredQuery); //gets the possible days
             ViewBag.Times = GetClassTimes(filteredQuery); //gets the possible start times 
 
-            //get the array of selected class ids.
-            int[] IdArray = GetClassIdArray(queryStrings);
-            if (IdArray.Length > 0)
-            {
-                ViewBag.SelectedIds = queryStrings["ClassIds"]; //send the thing we got to the server back.
-                ViewBag.ClassIds = IdArray;
-            }
-            ViewBag.SelectedCount = IdArray.Length; //the number of selected classes
+            //int[] IdArray;
+            //string SelectedIds = "";
+            ////get the array of selected class ids.
+            ////if (queryStrings.ContainsKey("ClassIds"))
+            ////{
+            ////    IdArray = GetClassIdArray(queryStrings);
+            ////    SelectedIds = queryStrings["ClassIds"];
+            ////}
+            //else
+            //{
+            //    IdArray = ClassIds;
+            //    SelectedIds = GetSelectedIdsString(ClassIds);
+            //}
+                
+            //if (IdArray.Length > 0)
+            //{
+            //    ViewBag.SelectedIds = SelectedIds; //send the thing we got to the server back.
+            //    ViewBag.ClassIds = IdArray;
+            //}
+            //ViewBag.SelectedCount = IdArray.Length; //the number of selected classes
 
             return View(Classes);
         }
@@ -209,11 +149,11 @@ namespace MathCenter.Controllers
 
                 try
                 {
-                    Student currentStudent = db.Students.Find(VNumber);
+                    Student currentStudent = db.Students.Find(_v_number);
                     foreach (var ClassID in IdArray)
                     {                        
                         db.StudentClasses.Add(new StudentClass { VNum = currentStudent.VNum, ClassID = (int)ClassID });
-                        db.SignIns.Add(new SignIn { Week = WeekNumber, Date = DateTime.Today, Hour = DateTime.Now.Hour, Min = DateTime.Now.Minute, StudentID = VNumber, ClassID = (int)ClassID }); //add a sign in for every class.
+                        db.SignIns.Add(new SignIn { Week = _week_number, Date = DateTime.Today, Hour = DateTime.Now.Hour, Min = DateTime.Now.Minute, StudentID = _v_number, ClassID = (int)ClassID }); //add a sign in for every class.
                     }
                     
                     db.SaveChanges();
@@ -252,11 +192,11 @@ namespace MathCenter.Controllers
 
                 try
                 {
-                    Student currentStudent = db.Students.Find(VNumber);
+                    Student currentStudent = db.Students.Find(_v_number);
                     foreach (var ClassID in IdArray)
                     {
                         db.StudentClasses.Add(new StudentClass { VNum = currentStudent.VNum, ClassID = ClassID });
-                        db.SignIns.Add(new SignIn { Week = WeekNumber, Date = DateTime.Today, Hour = DateTime.Now.Hour, Min = DateTime.Now.Minute, StudentID = VNumber, ClassID = ClassID }); //add a sign in for every class.
+                        db.SignIns.Add(new SignIn { Week = _week_number, Date = DateTime.Today, Hour = DateTime.Now.Hour, Min = DateTime.Now.Minute, StudentID = _v_number, ClassID = ClassID }); //add a sign in for every class.
                     }
 
                     db.SaveChanges();
@@ -280,11 +220,11 @@ namespace MathCenter.Controllers
 
                 try
                 {
-                    Student currentStudent = db.Students.Find(VNumber);
+                    Student currentStudent = db.Students.Find(_v_number);
                     foreach (var ClassID in IdArray)
                     {
                         db.StudentClasses.Add(new StudentClass { VNum = currentStudent.VNum, ClassID = ClassID });
-                        db.SignIns.Add(new SignIn { Week = WeekNumber, Date = DateTime.Today, Hour = DateTime.Now.Hour, Min = DateTime.Now.Minute, StudentID = VNumber, ClassID = ClassID }); //add a sign in for every class.
+                        db.SignIns.Add(new SignIn { Week = _week_number, Date = DateTime.Today, Hour = DateTime.Now.Hour, Min = DateTime.Now.Minute, StudentID = _v_number, ClassID = ClassID }); //add a sign in for every class.
                     }
 
                     db.SaveChanges();
@@ -385,11 +325,11 @@ namespace MathCenter.Controllers
 
                 try
                 {
-                    Student currentStudent = db.Students.Find(VNumber);
+                    Student currentStudent = db.Students.Find(_v_number);
                     foreach (var ClassID in IdArray)
                     {
                         db.StudentClasses.Add(new StudentClass { VNum = currentStudent.VNum, ClassID = ClassID });
-                        db.SignIns.Add(new SignIn { Week = WeekNumber, Date = DateTime.Today, Hour = DateTime.Now.Hour, Min = DateTime.Now.Minute, StudentID = VNumber, ClassID = ClassID }); //add a sign in for every class.
+                        db.SignIns.Add(new SignIn { Week = _week_number, Date = DateTime.Today, Hour = DateTime.Now.Hour, Min = DateTime.Now.Minute, StudentID = _v_number, ClassID = ClassID }); //add a sign in for every class.
                     }
 
                     db.SaveChanges();
@@ -414,7 +354,7 @@ namespace MathCenter.Controllers
         public ActionResult Done()
         {
             //Get the info from the Database about the current student.
-            Student currentStudent = db.Students.Find(VNumber);
+            Student currentStudent = db.Students.Find(_v_number);
 
             //Return the View with the current student.
             return View(currentStudent);
@@ -427,7 +367,7 @@ namespace MathCenter.Controllers
                 try
                 {
                     //Create the Sign In and add it to the database.
-                    db.SignIns.Add(new SignIn { Week = WeekNumber, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, StudentID = VNumber, ClassID = (int)classID });
+                    db.SignIns.Add(new SignIn { Week = _week_number, Date = DateTime.Today, Hour = DateTime.Now.TimeOfDay.Hours, Min = DateTime.Now.TimeOfDay.Minutes, StudentID = _v_number, ClassID = (int)classID });
                     db.SaveChanges();
                 }
                 catch (Exception)
@@ -436,7 +376,7 @@ namespace MathCenter.Controllers
                     ViewBag.Error = "There was an error with the database. Please try again.";
 
                     //Return the View with the current student.
-                    return View(db.Students.Find(VNumber));
+                    return View(db.Students.Find(_v_number));
                 }
 
                 //Redirect to the "finish" page.
@@ -460,7 +400,7 @@ namespace MathCenter.Controllers
             else
             {
                 ViewBag.ClassError = "Please select the class you would like to Sign In for.";
-                return View(db.Students.Find(VNumber));
+                return View(db.Students.Find(_v_number));
             }
         }
         /*
@@ -691,6 +631,28 @@ namespace MathCenter.Controllers
             }
 
             return IdArray;
+        }
+
+        /// <summary>
+        /// Get the string version of the ids passed in.
+        /// </summary>
+        /// <param name="IdArray"></param>
+        /// <returns></returns>
+        private string GetSelectedIdsString(int[] IdArray)
+        {
+            string SelectedIds = "";
+
+            if (IdArray.Length > 0)
+            {
+                SelectedIds += IdArray[0];
+
+                for(int i = 1; i < IdArray.Length; i++)
+                {
+                    SelectedIds += ", " + IdArray[i];
+                }
+            }
+
+            return SelectedIds;
         }
     }    
 }
