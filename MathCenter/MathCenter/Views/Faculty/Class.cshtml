@@ -1,9 +1,5 @@
 ﻿@model IEnumerable<MathCenter.Models.Class>
 
-@{
-    ViewBag.Title = "Class";
-}
-
 <div class="content">
     @Html.Partial("_ClassDataTable", "Partials", new ViewDataDictionary {
         { "data", Model.ToList() },
