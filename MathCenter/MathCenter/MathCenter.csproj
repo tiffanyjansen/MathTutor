@@ -1930,6 +1930,12 @@
     <Content Include="Content\Site.min.css">
       <DependentUpon>Site.css</DependentUpon>
     </Content>
+    <Content Include="Content\Tables.css">
+      <DependentUpon>Tables.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\Tables.min.css">
+      <DependentUpon>Tables.css</DependentUpon>
+    </Content>
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Images\logo_final.gif" />
@@ -3321,6 +3327,7 @@
     <Content Include="Content\Fonts\Noto_Sans_JP\NotoSansJP-Thin.otf" />
     <Content Include="Content\DataTables\Buttons-1.6.1\css\common.scss" />
     <Content Include="Content\DataTables\Buttons-1.6.1\css\mixins.scss" />
+    <Content Include="Content\Tables.scss" />
     <None Include="Properties\PublishProfiles\math-center - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\math-tutor - Web Deploy.pubxml" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
@@ -3463,8 +3470,6 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Home\Welcome.cshtml" />
-    <Content Include="Views\Home\Name.cshtml" />
     <Content Include="Views\Home\SelectClass.cshtml" />
     <Content Include="Views\Home\Done.cshtml" />
     <Content Include="Views\Home\Finish.cshtml" />
@@ -3490,6 +3495,8 @@
     <Content Include="Views\Shared\_FilterDropdown.cshtml" />
     <Content Include="Views\Student\Index.cshtml" />
     <Content Include="Views\Student\Name.cshtml" />
+    <Content Include="Views\Shared\_ClassDataTable.cshtml" />
+    <Content Include="Views\Shared\_DataDataTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Partials\" />

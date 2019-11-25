@@ -18,14 +18,17 @@ namespace MathCenter.Models
         [Key]
         [StringLength(8)]
         [RegularExpression(@"^\d{8}$")]
+        [Display(Name = "V Number")]
         public string VNum { get; set; }
 
         [Required]
+        [Display(Name = "First Name")]
         [RegularExpression(@"^[a-zA-Z-\.\s]+$")]
         public string FirstName { get; set; }
 
         [Required]
         [RegularExpression(@"^[a-zA-Z-\.\s]+$")]
+        [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

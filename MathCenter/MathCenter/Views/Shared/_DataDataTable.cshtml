@@ -1,0 +1,51 @@
+﻿
+<table id="data_table" class="display table-hover" style="width:100%">
+    <thead>
+        <tr>
+            @{ MathCenter.Models.SignIn firstData = ViewBag.First; }
+            <th>@Html.DisplayNameFor(data => firstData.Week)</th>
+            <th>@Html.DisplayNameFor(data => firstData.Date)</th>
+            <th>@Html.DisplayNameFor(data => firstData.Hour)</th>
+            <th>@Html.DisplayNameFor(data => firstData.Min)</th>
+            <th>@Html.DisplayNameFor(data => firstData.Student.FirstName)</th>
+            <th>@Html.DisplayNameFor(data => firstData.Student.LastName)</th>
+            <th>@Html.DisplayNameFor(data => firstData.Class.DeptPrefix)</th>
+            <th>@Html.DisplayNameFor(data => firstData.Class.ClassNum)</th>
+            <th>@Html.DisplayNameFor(data => firstData.Class.Instructor)</th>
+            <th>@Html.DisplayNameFor(data => firstData.Class.Days)</th>
+            <th>@Html.DisplayNameFor(data => firstData.Class.Time)</th>
+        </tr>
+        <tr>
+            <td><input type="text" placeholder="Search Week Number" /></td>
+            <td><input type="text" placeholder="Search Date"/></td>
+            <td><input type="text" placeholder="Search Hour"/></td>
+            <td><input type="text" placeholder="Search Minute" /></td>
+            <td><input type="text" placeholder="Search First Name" /></td>
+            <td><input type="text" placeholder="Search Last Name" /></td>
+            <td><input type="text" placeholder="Search Department" /></td>
+            <td><input type="text" placeholder="Search Class Number" /></td>
+            <td><input type="text" placeholder="Search Instructor" /></td>
+            <td><input type="text" placeholder="Search Days" /></td>
+            <td><input type="text" placeholder="Search Starting Time" /></td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (MathCenter.Models.SignIn signIN in ViewBag.Data)
+        {
+            <tr>
+                <td>@Html.DisplayNameFor(data => signIN.Week)</td>
+                <td>@Html.DisplayNameFor(data => signIN.Date)</td>
+                <td>@Html.DisplayNameFor(data => signIN.Hour)</td>
+                <td>@Html.DisplayNameFor(data => signIN.Min)</td>
+                <td>@Html.DisplayNameFor(data => signIN.Student.FirstName)</td>
+                <td>@Html.DisplayNameFor(data => signIN.Student.LastName)</td>
+                <td>@Html.DisplayNameFor(data => signIN.Class.DeptPrefix)</td>
+                <td>@Html.DisplayNameFor(data => signIN.Class.ClassNum)</td>
+                <td>@Html.DisplayNameFor(data => signIN.Class.Instructor)</td>
+                <td>@Html.DisplayNameFor(data => signIN.Class.Days)</td>
+                <td>@Html.DisplayNameFor(data => signIN.Class.Time)</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

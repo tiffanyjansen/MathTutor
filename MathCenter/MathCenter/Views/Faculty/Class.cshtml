@@ -4,69 +4,61 @@
     ViewBag.Title = "Class";
 }
 
-    <div class="content">
-        <div class="row">
-            <div class="col-12 border-bottom">
-                <h2>Math Center Classes</h2>
-            </div>
-        </div>
-        <table class="table" style="margin-bottom:15px;" align="center">
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.CRN)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DeptPrefix)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ClassNum)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Instructor)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Days)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Time)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Other)
-                </th>
-            </tr>
+<div class="content">
+    @Html.Partial("_ClassDataTable", "Partials", new ViewDataDictionary {
+        { "data", Model.ToList() },
+        { "table_id", "classes_table" }
+    })
+</div>
 
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CRN)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DeptPrefix)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ClassNum)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Instructor)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Days)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Time)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Other)
-                    </td>
-                </tr>
-            }
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#classes_table').DataTable({
+                "paging": false,
+                "ordering": true,
+                "info": false,
+                "scrollY": 310,
+                "scrollX": true,
+                "dom": '<"table-header border-bottom row"<"table-header-left-class col-md-6 col-12"><"table-header-right col-md-6 col-12" B>>t',
+                "buttons": {
+                    "buttons": [
+                        {
+                            text: "Go Back",
+                            action: function ( e, dt, button, config ) {
+                                window.location = 'Index';
+                            },
+                            className: 'btn-default',
+                        },
+                        { extend: 'excel', className: 'btn-default' },
+                        { extend: 'colvis', className: 'btn-danger' }
+                    ]
+                },
+                "bSortCellsTop": true,
+                "columns": [
+                    { "visible": false },
+                    { "visible": true },
+                    { "visible": true },
+                    { "visible": true },
+                    { "visible": false },
+                    { "visible": true },
+                    { "visible": false }
+                ],
+                "order":[[2, "asc"]],
+            });
 
-        </table>
-        <div class="row">
-            <div class="col-12 text-center">
-                @Html.ActionLink("Go Back", "Index", "Faculty", null, new { @class = "btn btn-lg btn-default" })
-            </div>
-        </div>
-    </div>
-
+            //Filtering Function
+            var table = $('#classes_table').DataTable();
+            table.columns().every( function () {
+                var that = this; 
+                $('input', this.header()).on( 'keyup change clear', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search( this.value )
+                            .draw();
+                    }
+                });
+            });
+        });
+    </script>
+}

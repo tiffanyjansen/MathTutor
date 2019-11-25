@@ -28,7 +28,8 @@ namespace MathCenter
                       "~/Content/bootstrap.min.css",
                       "~/Content/bootstrap-datepicker.min.css",
                       "~/Content/DataTables/datatables.min.css",
-                      "~/Content/site.css"));
+                      "~/Content/Tables.min.css",
+                      "~/Content/Site.min.css"));
         }
     }
 }

@@ -34,6 +34,9 @@ a {
 .border-silver {
   border-color: #A7A9AC !important; }
 
+.border-black {
+  border-color: #231F20 !important; }
+
 .border-bottom,
 .border-top {
   border-color: #FFFFFF !important; }
@@ -79,26 +82,6 @@ a {
       height: 1px;
       background-image: radial-gradient(#DB0A29, #FFFFFF);
       margin-bottom: 15px; }
-    .container .content table {
-      width: 90%;
-      border: 2px solid #DB0A29;
-      text-align: center;
-      margin: 0 auto;
-      color: #231F20; }
-      .container .content table tr {
-        background-color: #C4C6C8; }
-        .container .content table tr:nth-child(odd) {
-          background-color: #C4C6C8; }
-        .container .content table tr:nth-child(even) {
-          background-color: #A7A9AC; }
-      .container .content table th {
-        color: #DB0A29; }
-      .container .content table td,
-      .container .content table th {
-        border: 1px solid #DB0A29; }
-        .container .content table td.selected_column,
-        .container .content table th.selected_column {
-          max-width: 45px; }
     .container .content .submit-fixed {
       position: fixed;
       top: auto;
@@ -146,20 +129,20 @@ a {
 .btn-danger {
   background-color: #DB0A29;
   color: #FFFFFF;
-  border: solid 2px #231F20; }
+  border: solid 2px #A7A9AC; }
   .btn-danger:hover {
     background-color: #FFFFFF;
     color: #231F20;
-    border: solid 2px #DB0A29; }
+    border: solid 2px #C4C6C8; }
 
 .btn-default {
   background-color: #FFFFFF;
   color: #231F20;
-  border: solid 2px #DB0A29; }
+  border: solid 2px #A7A9AC; }
   .btn-default:hover {
     background-color: #DB0A29;
     color: #FFFFFF;
-    border: solid 2px #231F20; }
+    border: solid 2px #C4C6C8; }
 
 .table-condensed {
   width: 350px;

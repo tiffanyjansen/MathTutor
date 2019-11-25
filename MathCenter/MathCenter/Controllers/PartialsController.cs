@@ -29,5 +29,21 @@ namespace MathCenter.Controllers
             ViewBag.Attribute = attribute;
             return PartialView();
         }
+
+        public PartialViewResult _ClassDataTable(List<Class> data, string table_id)
+        {
+            ViewBag.TableID = table_id;
+            ViewBag.Data = data;
+            ViewBag.First = data.FirstOrDefault();
+            return PartialView();
+        }
+
+        public PartialViewResult _DataDataTable(List<SignIn> data, string table_id)
+        {
+            ViewBag.TableID = table_id;
+            ViewBag.Data = data;
+            ViewBag.First = data.FirstOrDefault();
+            return PartialView();
+        }
     }
 }

@@ -10,13 +10,17 @@ namespace MathCenter.Models
     {
         public int ID { get; set; }
 
+        [Display(Name = "Week Number")]
         public int Week { get; set; }
 
         [Column(TypeName = "date")]
+        [Display(Name = "Date")]
         public DateTime Date { get; set; }
 
+        [Display(Name = "Hour")]
         public int Hour { get; set; }
 
+        [Display(Name = "Minute")]
         public int Min { get; set; }
 
         [Required]

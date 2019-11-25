@@ -1,0 +1,68 @@
+﻿@font-face {
+  font-family: 'Crete_Round';
+  src: url("Fonts/Crete_Round/CreteRound-Regular.ttf") format("truetype"); }
+
+@font-face {
+  font-family: 'Noto_Sans';
+  src: url("Fonts/Noto_Sans_JP/NotoSansJP-Bold.otf") format("opentype"); }
+
+.container .content table input {
+  font-size: 16px; }
+
+table {
+  border: 2px solid #A7A9AC; }
+  table thead tr th {
+    background-color: #DB0A29;
+    color: #FFFFFF; }
+  table thead tr th,
+  table thead tr td {
+    border: 1px solid #A7A9AC;
+    text-align: center; }
+  table.dataTable thead .sorting_asc::before,
+  table.dataTable thead .sorting::before,
+  table.dataTable thead .sorting_desc::before,
+  table.dataTable thead .sorting_desc::after,
+  table.dataTable thead .sorting::after,
+  table.dataTable thead th.sorting_asc::after {
+    bottom: 0; }
+  table.dataTable.table-hover tbody tr:hover {
+    background-color: #A7A9AC; }
+  table tbody tr td {
+    border: 1px solid #A7A9AC; }
+  table tbody tr:nth-child(odd) {
+    background-color: #C4C6C8; }
+  table tbody tr:nth-child(even) {
+    background-color: #FFFFFF; }
+
+.table-header .table-header-left-class {
+  position: relative;
+  text-align: left;
+  align-content: start;
+  justify-content: left;
+  width: 50%; }
+  .table-header .table-header-left-class::before {
+    content: 'Math Center Classes';
+    font-weight: 500;
+    line-height: 1.2;
+    font-size: 2rem; }
+
+.table-header .table-header-left-data {
+  position: relative;
+  text-align: left;
+  align-content: start;
+  justify-content: left;
+  width: 50%; }
+  .table-header .table-header-left-data::before {
+    content: 'Math Center Data';
+    font-weight: 500;
+    line-height: 1.2;
+    font-size: 2rem; }
+
+.table-header .table-header-right {
+  text-align: right;
+  align-content: end;
+  justify-content: right; }
+
+.dropdown-item.active,
+.dropdown-item:active {
+  background-color: #DB0A29; }

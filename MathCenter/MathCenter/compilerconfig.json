@@ -6,5 +6,9 @@
   {
     "outputFile": "Content/Site.css",
     "inputFile": "Content/Site.scss"
+  },
+  {
+    "outputFile": "Content/Tables.css",
+    "inputFile": "Content/Tables.scss"
   }
 ]

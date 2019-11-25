@@ -49,6 +49,10 @@ a {
     border-color: $silver !important;
 }
 
+.border-black {
+    border-color: $black !important;
+}
+
 .border-bottom,
 .border-top {
     border-color: $white !important;
@@ -119,36 +123,6 @@ a {
             margin-bottom: 15px;
         }
 
-        table {
-            width: 90%;
-            border: 2px solid $red;
-            text-align: center;
-            margin: 0 auto;
-            color: $black;
-            tr {
-                background-color: $gray;
-                &:nth-child(odd) {
-                    background-color: $gray;
-                }
-
-                &:nth-child(even) {
-                    background-color: $silver;
-                }
-            }
-
-            th {
-                color: $red;
-            }
-
-            td,
-            th {
-                border: 1px solid $red;
-                &.selected_column {
-                    max-width: 45px;
-                }
-            }
-        }
-
         .submit-fixed {
             position: fixed;
             top: auto;
@@ -212,24 +186,24 @@ a {
 .btn-danger {
     background-color: $red;
     color: $white;
-    border: solid 2px $black;
+    border: solid 2px $silver;
 
     &:hover {
         background-color: $white;
         color: $black;
-        border: solid 2px $red;
+        border: solid 2px $gray;
     }
 }
 
 .btn-default {
     background-color: $white;
     color: $black;
-    border: solid 2px $red;
+    border: solid 2px $silver;
 
     &:hover {
         background-color: $red;
         color: $white;
-        border: solid 2px $black;
+        border: solid 2px $gray;
     }
 }
 
@@ -242,6 +216,7 @@ a {
     .datepicker-switch {
         cursor: initial;
     }
+
     .datepicker-switch:hover {
         background-color: $white;
     }
@@ -251,7 +226,6 @@ a {
     }
 }
 
-//Progress bar stuff
 .progress {
     height: 30px;
     background-color: $white;
