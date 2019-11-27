@@ -18,7 +18,7 @@ $font-size: 20px;
 body {
     font-family: Noto_Sans;
     background-image: linear-gradient(to bottom, $gray, $white);
-    margin: 15px;
+    margin: 0 15px;
 }
 
 h1,
@@ -38,6 +38,7 @@ a {
 .logo {
     max-width: 100%;
     max-width: 100vw;
+    width: 750px;
     height: auto;
 }
 
@@ -152,7 +153,10 @@ a {
 }
 
 .footer {
+    margin-top: 15px;
     font-size: 24px;
+    background-color: $white;
+    border-top: solid 1px $silver;
 
     img {
         max-width: 25%;
@@ -160,8 +164,8 @@ a {
 }
 
 .error {
-    background-color: $red;
-    color: $white;
+    background-color: transparent;
+    color: red;
     border-radius: 5px;
     margin: 0.5rem;
 

@@ -92,13 +92,23 @@ namespace MathCenter.Controllers
                     ViewBag.Error = "There was an error adding you to the database. Please ask a tutor for help.";
                     return View(student);
                 }
-                return RedirectToAction("SelectClass", "Student");
+                return RedirectToAction("Class", "Student");
             }
             else
             {
                 ViewBag.Error = "Looks like you inputted something that does not look like a name. Please try again.";
                 return View(student);
             }
+        }
+
+        [HttpGet]
+        public ActionResult Class()
+        {
+            string[] CCColleges = Enum.GetNames(typeof(Models.Class.CCColleges));
+
+            ViewBag.OtherClasses = db.Classes.Where(c => c.Other != null).Select(c => c).ToList();            
+            ViewBag.CCClasses = db.Classes.Where(c => CCColleges.Contains(c.Instructor)).Select(c => c).ToList();
+            return View(db.Classes.Where(c => c.Other == null).Where(c => !CCColleges.Contains(c.Instructor)).Select(c => c).ToList());
         }
     }
 }  

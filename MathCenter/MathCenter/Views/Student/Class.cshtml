@@ -1,0 +1,93 @@
+﻿@model IEnumerable<MathCenter.Models.Class>
+
+    <div class="content">
+        @Html.Partial("_Progress", "Partials", new ViewDataDictionary { { "progress", 66 } })
+        @if (ViewBag.Error != null)
+        {
+            @Html.Partial("_Errors", "Partials", new ViewDataDictionary { { "error", ViewBag.Error } })
+        }
+        <ul class="nav nav-tabs" id="class_selector" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="normal_class" data-toggle="tab" href="#normal">Common Classes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="cc_class" data-toggle="tab" href="#cc">Community College Classes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="other_class" data-toggle="tab" href="#other">Other Classes</a>
+            </li>
+        </ul>
+        <div class="tab-content" id="class_selector_content">
+            <div class="tab-pane active" id="normal" role="tabpanel" aria-labelledby="normal_class">
+                @Html.Partial("_ClassSelectDataTable", "Partials", new ViewDataDictionary {
+                    { "data", Model.ToList() },
+                    { "table_id", "classes_select_table" }
+                })
+            </div>
+            <div class="tab-pane" id="cc" role="tabpanel" aria-labelledby="cc_class">
+                @Html.Partial("_ClassSelectDataTable", "Partials", new ViewDataDictionary {
+                    { "data", ViewBag.CCClasses },
+                    { "table_id", "classes_select_table" }
+                })
+            </div>
+            <div class="tab-pane" id="other" role="tabpanel" aria-labelledby="other_class">
+                @Html.Partial("_ClassSelectDataTable", "Partials", new ViewDataDictionary {
+                    { "data", ViewBag.OtherClasses },
+                    { "table_id", "classes_select_table" }
+                })
+            </div>
+        </div>
+
+    </div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#classes_select_table').DataTable({
+                "paging": false,
+                "ordering": true,
+                "info": false,
+                "scrollY": 310,
+                "scrollX": true,
+                "dom": '<"table-header border-bottom row"<"table-header-left-class col-md-6 col-12"><"table-header-right col-md-6 col-12" B>>t',
+                "buttons": {
+                    "buttons": [
+                        {
+                            text: "Go Back",
+                            action: function ( e, dt, button, config ) {
+                                window.location = 'Index';
+                            },
+                            className: 'btn-default',
+                        },
+                        { extend: 'excel', className: 'btn-default' },
+                        { extend: 'colvis', className: 'btn-danger' }
+                    ]
+                },
+                "bSortCellsTop": true,
+                "columns": [
+                    { "visible": true },
+                    { "visible": false },
+                    { "visible": true },
+                    { "visible": true },
+                    { "visible": true },
+                    { "visible": false },
+                    { "visible": true },
+                ],
+                "order":[[2, "asc"]],
+            });
+
+            //Filtering Function
+            var table = $('#classes_select_table').DataTable();
+            table.columns().every( function () {
+                var that = this;
+                $('input', this.header()).on( 'keyup change clear', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search( this.value )
+                            .draw();
+                    }
+                });
+            });
+        });
+    </script>
+}

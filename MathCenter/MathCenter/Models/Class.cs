@@ -49,5 +49,14 @@ namespace MathCenter.Models
         {
             return this.DeptPrefix + " " + this.ClassNum;
         }
+
+        public enum CCColleges
+        {
+            Portland, 
+            Chemeketa,
+            Clackamas,
+            Mt_Hood,
+            Linn_Benton
+        }
     }
 }

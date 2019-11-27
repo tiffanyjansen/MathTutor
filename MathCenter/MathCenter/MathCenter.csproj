@@ -3497,6 +3497,8 @@
     <Content Include="Views\Student\Name.cshtml" />
     <Content Include="Views\Shared\_ClassDataTable.cshtml" />
     <Content Include="Views\Shared\_DataDataTable.cshtml" />
+    <Content Include="Views\Student\Class.cshtml" />
+    <Content Include="Views\Shared\_ClassSelectDataTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Partials\" />

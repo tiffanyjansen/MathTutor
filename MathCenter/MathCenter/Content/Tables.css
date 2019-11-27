@@ -66,3 +66,13 @@ table {
 .dropdown-item.active,
 .dropdown-item:active {
   background-color: #DB0A29; }
+
+.nav-tabs {
+  border-bottom: 2px solid #A7A9AC;
+  margin-bottom: 15px; }
+  .nav-tabs .nav-item .nav-link {
+    color: #DB0A29; }
+    .nav-tabs .nav-item .nav-link.active {
+      color: #231F20;
+      background-color: #FFFFFF;
+      border: 2px solid #DB0A29; }

@@ -112,3 +112,18 @@ table {
 .dropdown-item:active {
     background-color: $red;
 }
+
+.nav-tabs {
+    border-bottom: 2px solid $silver;
+    margin-bottom: 15px;
+    .nav-item {
+        .nav-link {
+            color: $red;
+            &.active {
+                color: $black;
+                background-color: $white;
+                border: 2px solid $red;
+            }
+        }
+    }
+}
