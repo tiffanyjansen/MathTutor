@@ -1,0 +1,71 @@
+﻿@model MathCenter.Models.Student
+
+    <div class="content">
+        <div class="row">
+            <div class="col-12 border-bottom">
+                <h2>Please verify your information and select your classes:</h2>
+            </div>
+        </div>
+        @Html.Partial("_Progress", "Partials", new ViewDataDictionary { { "progress", 50 } })
+        @if (ViewBag.Error != null)
+        {
+            @Html.Partial("_Errors", "Partials", new ViewDataDictionary { { "error", ViewBag.Error } })
+        }
+        @using (Html.BeginForm("Done", "Student", FormMethod.Post, new { }))
+        {
+            <div class="row">
+                <div class="col-md-5 col-12">
+                    <div class="row">
+                        <div class="col-md-6 col-12 form-group text-md-right">
+                            <label class="h4">Your V-Number:</label>
+                        </div>
+                        <div class="col-md-6 col-12 form-group">
+                            <h4 class="red-text">@Model.VNum</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-12 form-group text-md-right">
+                            <label class="h4">Your Name:</label>
+                        </div>
+                        <div class="col-md-6 col-12 form-group">
+                            <h4 class="red-text">@Model.ToString()</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-7 col-12">
+                    <div class="row">
+                        <div class="col-md-4 col-12 text-md-right">
+                            <h4>Your Classes:</h4>
+                        </div>
+                        <div class="col-md-8 row">
+                            @foreach (var @class in Model.StudentClasses)
+                            {
+                                <div class="col-12">
+                                    <label class="h4 red-text">
+                                        <input type="checkbox" name="ClassID" value="@(@class.ClassID)" class="custom-checkbox" />
+                                        &nbsp;@(@class.Class.ToLongString())
+                                    </label>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row button-group mt-3">
+                <div class="col-md-3 form-group">
+                    @Html.ActionLink("Edit Name", "Name", "Student", null, new { @class = "btn btn-block btn-lg btn-danger" })
+                </div>
+                <div class="col-md-3 offset-md-6 form-group">
+                    @Html.ActionLink("Add Class", "Class", "Student", null, new { @class = "btn btn-block btn-lg btn-default" })
+                </div>
+            </div>
+            <div class="row button-group">
+                <div class="col-md-3">
+                    @Html.ActionLink("Go Back", "Index", "Student", null, new { @class = "btn btn-block btn-lg btn-default" })
+                </div>
+                <div class="col-md-3 offset-md-6">
+                    <button type="submit" class="btn btn-block btn-lg btn-danger">Continue</button>
+                </div>
+            </div>
+        }
+    </div>

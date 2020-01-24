@@ -1,0 +1,18 @@
+﻿<table id="other_select_table" class="display table-hover" style="width:100%;">
+    <thead>
+        <tr>
+            @{ MathCenter.Models.Class firstClass = ViewBag.First; }
+            <th>Selected</th>
+            <th>@Html.DisplayNameFor(data => firstClass.Other)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (MathCenter.Models.Class @class in ViewBag.Data)
+        {
+            <tr>
+                <td class="text-center"><input type="checkbox" name="ClassID" value="@(@class.ClassID)" class="custom-checkbox" /></td>
+                <td class="text-center">@Html.DisplayFor(data => @class.Other)</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,33 @@
+﻿<div class="content">
+    <div class="row">
+        <div class="col-12 text-center">
+            <h2 class="red-text">Congratulations! You've signed in!</h2>
+        </div>
+        <div class="col-12" id="border"></div>
+    </div>
+    @Html.Partial("_Progress", "Partials", new ViewDataDictionary { { "progress", 100 } })
+    @if (ViewBag.Error != null)
+    {
+        @Html.Partial("_Errors", "Partials", new ViewDataDictionary { { "error", ViewBag.Error } })
+    }
+    <div class="row">
+        <div class="col-12">
+            <h3 class="silver-text">"There is a difference between not knowing and not knowing yet." -Shelia Tobias</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 text-center">
+            <h2>Good luck with your math endeavors!</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 text-right">
+            @Html.ActionLink("Done", "Index", "Student", null, new { @Class="btn btn-lg btn-danger" })
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript" src="~/Scripts/reloadPage.js"></script>
+}

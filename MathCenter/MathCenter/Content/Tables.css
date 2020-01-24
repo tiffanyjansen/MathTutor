@@ -13,18 +13,42 @@ table {
   border: 2px solid #A7A9AC; }
   table thead tr th {
     background-color: #DB0A29;
-    color: #FFFFFF; }
+    color: #FFFFFF;
+    border: 1px solid #A7A9AC;
+    text-align: center; }
+  table thead tr td {
+    border: 1px solid #A7A9AC;
+    text-align: center; }
+  table thead tr:nth-child(even) th {
+    background-color: transparent; }
+    table thead tr:nth-child(even) th input {
+      width: 100%; }
   table thead tr th,
   table thead tr td {
     border: 1px solid #A7A9AC;
     text-align: center; }
-  table.dataTable thead .sorting_asc::before,
-  table.dataTable thead .sorting::before,
-  table.dataTable thead .sorting_desc::before,
-  table.dataTable thead .sorting_desc::after,
-  table.dataTable thead .sorting::after,
+  table.dataTable thead > tr > th.sorting_asc,
+  table.dataTable thead > tr > th.sorting_desc,
+  table.dataTable thead > tr > th.sorting,
+  table.dataTable thead > tr > td.sorting_asc,
+  table.dataTable thead > tr > td.sorting_desc,
+  table.dataTable thead > tr > td.sorting {
+    padding-right: 25px; }
+  table.dataTable thead th.sorting_asc::before,
+  table.dataTable thead th.sorting::before,
+  table.dataTable thead th.sorting_desc::before,
+  table.dataTable thead th.sorting_desc::after,
+  table.dataTable thead th.sorting::after,
   table.dataTable thead th.sorting_asc::after {
     bottom: 0; }
+  table.dataTable thead th.sorting_asc::before,
+  table.dataTable thead th.sorting::before,
+  table.dataTable thead th.sorting_desc::before {
+    right: 0em; }
+  table.dataTable thead th.sorting_desc::after,
+  table.dataTable thead th.sorting::after,
+  table.dataTable thead th.sorting_asc::after {
+    right: 0.5em; }
   table.dataTable.table-hover tbody tr:hover {
     background-color: #A7A9AC; }
   table tbody tr td {
@@ -44,7 +68,8 @@ table {
     content: 'Math Center Classes';
     font-weight: 500;
     line-height: 1.2;
-    font-size: 2rem; }
+    font-size: 2rem;
+    font-family: Crete_Round; }
 
 .table-header .table-header-left-data {
   position: relative;

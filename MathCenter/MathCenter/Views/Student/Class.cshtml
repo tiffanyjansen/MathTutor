@@ -1,93 +1,247 @@
 ﻿@model IEnumerable<MathCenter.Models.Class>
 
-    <div class="content">
-        @Html.Partial("_Progress", "Partials", new ViewDataDictionary { { "progress", 66 } })
-        @if (ViewBag.Error != null)
-        {
-            @Html.Partial("_Errors", "Partials", new ViewDataDictionary { { "error", ViewBag.Error } })
-        }
-        <ul class="nav nav-tabs" id="class_selector" role="tablist">
-            <li class="nav-item">
-                <a class="nav-link active" id="normal_class" data-toggle="tab" href="#normal">Common Classes</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="cc_class" data-toggle="tab" href="#cc">Community College Classes</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="other_class" data-toggle="tab" href="#other">Other Classes</a>
-            </li>
-        </ul>
+<div class="content">
+    @if (ViewBag.Error != null)
+    {
+        @Html.Partial("_Errors", "Partials", new ViewDataDictionary { { "error", ViewBag.Error } })
+    }
+    <ul class="nav nav-tabs" id="class_selector" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="normal_class" data-toggle="tab" href="#normal">Common Classes</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="cc_class" data-toggle="tab" href="#cc">Community College Classes</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="other_class" data-toggle="tab" href="#other">Other Classes</a>
+        </li>
+    </ul>
+    @using (Html.BeginForm("Class", "Student", FormMethod.Post, new { }))
+    {
         <div class="tab-content" id="class_selector_content">
             <div class="tab-pane active" id="normal" role="tabpanel" aria-labelledby="normal_class">
                 @Html.Partial("_ClassSelectDataTable", "Partials", new ViewDataDictionary {
                     { "data", Model.ToList() },
                     { "table_id", "classes_select_table" }
                 })
+                <div class="row mt-3 button-group">
+                    <div class="col-12 text-right">
+                        <button type="submit" class="btn btn-lg btn-danger" disabled>Submit</button>
+                    </div>
+                </div>
             </div>
             <div class="tab-pane" id="cc" role="tabpanel" aria-labelledby="cc_class">
-                @Html.Partial("_ClassSelectDataTable", "Partials", new ViewDataDictionary {
-                    { "data", ViewBag.CCClasses },
-                    { "table_id", "classes_select_table" }
-                })
+                @if (ViewBag.CCClasses.Count > 0)
+                {
+                    <div class="row">
+                        <div class="col-md-7 col-12">
+                            @Html.Partial("_CommSelectDataTable", "Partials", new ViewDataDictionary {
+                                { "data", ViewBag.CCClasses },
+                                { "table_id", "comm_select_table" }
+                            })
+                        </div>
+                        <div class="col-md-5 col-12">
+                            <div class="row">
+                                <div class="col-12 border-bottom">
+                                    <h3 style="margin-bottom:.35rem;">Add another class here:</h3>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 form-group">
+                                    @Html.DropDownList("ClassDeptNum", new SelectList(ViewBag.CCClassList, "Other"), "Select Class", new { @class = "form-control cc-college-input" })
+                                </div>
+                                <div class="col-12 form-group">
+                                    @Html.DropDownList("ClassInstitution", new SelectList(MathCenter.Models.Class.CCCollegeStrings.Keys, "Instructor"), "Select Institution", new { @class = "form-control cc-college-input" })
+                                </div>
+                            </div>
+                            <div class="row button-group">
+                                <div class="col-12 text-right">
+                                    <a onclick="submitCCForm()" class="btn btn-lg btn-default">Add Class</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row button-group">
+                        <div class="col-12 text-right">
+                            <button type="submit" class="btn btn-lg btn-danger" disabled>Submit</button>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="row">
+                        <div class="col-12 border-bottom">
+                            <h2>Add your class here:</h2>
+                        </div>
+                    </div>
+                    @Html.Partial("_Progress", "Partials", new ViewDataDictionary { { "progress", 66 } })
+                    <div class="row">
+                        <div class="col-md-6 col-12 form-group">
+                            @Html.DropDownList("ClassDeptNum", new SelectList(ViewBag.CCClassList, "Other"), "Select Class", new { @class = "form-control cc-college-input" })
+                        </div>
+                        <div class="col-md-6 col-12 form-group">
+                            @Html.DropDownList("ClassInstitution", new SelectList(MathCenter.Models.Class.CCCollegeStrings.Keys, "Instructor"), "Select Institution", new { @class = "form-control  cc-college-input" })
+                        </div>
+                    </div>
+                    <div class="row button-group">
+                        <div class="col-12 text-right">
+                            <a onclick="submitCCForm()" class="btn btn-lg btn-default">Add Class</a>
+                        </div>
+                    </div>
+                }
             </div>
             <div class="tab-pane" id="other" role="tabpanel" aria-labelledby="other_class">
-                @Html.Partial("_ClassSelectDataTable", "Partials", new ViewDataDictionary {
-                    { "data", ViewBag.OtherClasses },
-                    { "table_id", "classes_select_table" }
-                })
+                @if (ViewBag.OtherClasses.Count > 0)
+                {
+                    <div class="row">
+                        <div class="col-md-6 col-12">
+                            @Html.Partial("_OtherSelectDataTable", "Partials", new ViewDataDictionary {
+                                { "data", ViewBag.OtherClasses },
+                                { "table_id", "other_select_table" }
+                            })
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="row">
+                                <div class="col-12 border-bottom">
+                                    <h3 style="margin-bottom:.35rem;">Add another class here:</h3>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 form-group">
+                                    @Html.TextBoxFor(c => c.First().Other, null, new { @class = "form-control other-input", placeholder = "MTH ###" })
+                                </div>
+                            </div>
+                            <div class="row button-group">
+                                <div class="col-12 text-right">
+                                    <a onclick="submitOtherForm()" class="btn btn-lg btn-default">Add Class</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row button-group">
+                        <div class="col-12 text-right">
+                            <button type="submit" class="btn btn-lg btn-danger" disabled>Submit</button>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="row">
+                        <div class="col-12 border-bottom">
+                            <h2>Add your class here:</h2>
+                        </div>
+                    </div>
+                    @Html.Partial("_Progress", "Partials", new ViewDataDictionary { { "progress", 66 } })
+                    <div class="row">
+                        <div class="col-md-6 offset-md-3 offset-sm-0 col-sm-12 form-group">
+                            @Html.TextBoxFor(c => c.First().Other, null, new { @class = "form-control other-input", placeholder = "MTH ###" })
+                        </div>
+                    </div>
+                    <div class="row button-group">
+                        <div class="col-12 text-right">
+                            <a onclick="submitOtherForm()" class="btn btn-lg btn-default">Add Class</a>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
-
-    </div>
+    }
+</div>
 
 @section Scripts {
+    <script type="text/javascript" src="~/Scripts/form-submit.js"></script>
+    <script type="text/javascript" src="~/Scripts/search-helpers.js"></script>
     <script type="text/javascript">
+        window.table = null;
+        window.comTable = null;
+        window.otherTable = null;
         $(document).ready(function () {
-            $('#classes_select_table').DataTable({
+            $('.table-hover tr').click(function (event) {
+                if (event.target.type !== 'checkbox') {
+                    $(':checkbox', this).trigger('click');
+                }
+                var disabled = true;
+                $('.custom-checkbox').each(function (index, elem) {
+                    if (elem.checked) {
+                        $('button[type="submit"]').removeAttr('disabled');
+                        disabled = false;
+                    }
+                });
+                if (disabled) {
+                    $('button[type="submit"]').attr('disabled', 'disabled');
+                }
+            });
+
+            window.table = $('#classes_select_table').DataTable({
                 "paging": false,
                 "ordering": true,
                 "info": false,
                 "scrollY": 310,
                 "scrollX": true,
-                "dom": '<"table-header border-bottom row"<"table-header-left-class col-md-6 col-12"><"table-header-right col-md-6 col-12" B>>t',
+                "dom": '<"table-header border-bottom row"<"table-header-left-class col-md-9 col-12"><"table-header-right col-md-3 col-12" B>><"progress-bar-mine">t',
                 "buttons": {
                     "buttons": [
-                        {
-                            text: "Go Back",
-                            action: function ( e, dt, button, config ) {
-                                window.location = 'Index';
-                            },
-                            className: 'btn-default',
-                        },
-                        { extend: 'excel', className: 'btn-default' },
-                        { extend: 'colvis', className: 'btn-danger' }
+                        { extend: 'colvis', className: 'btn-danger' },
                     ]
                 },
                 "bSortCellsTop": true,
                 "columns": [
                     { "visible": true },
-                    { "visible": false },
                     { "visible": true },
                     { "visible": true },
                     { "visible": true },
                     { "visible": false },
                     { "visible": true },
                 ],
-                "order":[[2, "asc"]],
+                "order": [[2, "asc"]],
             });
 
-            //Filtering Function
-            var table = $('#classes_select_table').DataTable();
-            table.columns().every( function () {
-                var that = this;
-                $('input', this.header()).on( 'keyup change clear', function () {
-                    if (that.search() !== this.value) {
-                        that
-                            .search( this.value )
-                            .draw();
-                    }
-                });
+            window.comTable = $('#comm_select_table').DataTable({
+                "paging": false,
+                "ordering": true,
+                "info": false,
+                "scrollY": 310,
+                "scrollX": true,
+                "dom": '<"table-header border-bottom row"<"table-header-left-class col-md-12 col-12">><"progress-bar-mine">t',
+                "bSortCellsTop": true,
+                "columns": [
+                    { "visible": true },
+                    { "visible": true },
+                    { "visible": true },
+                ],
+                "order": [[2, "asc"]],
             });
+
+            window.otherTable = $('#other_select_table').DataTable({
+                "paging": false,
+                "ordering": true,
+                "info": false,
+                "scrollY": 310,
+                "scrollX": true,
+                "dom": '<"table-header border-bottom row"<"table-header-left-class col-md-12 col-12">><"progress-bar-mine">t',
+                "bSortCellsTop": true,
+                "columns": [
+                    { "visible": true },
+                    { "visible": true },
+                ],
+                "order": [[1, "asc"]],
+            });
+
+            createSearches();
+        });
+
+        $('.custom-checkbox').on('click', function (e) {
+            var disabled = true;
+            $('.custom_checkbox').each(function (index, elem) {
+                if (elem.checked) {
+                    $('button[type="submit"]').removeAttr('disabled');
+                    disabled = false;
+                }
+            });
+            if (disabled) {
+                $('button[type="submit"]').attr('disabled', 'disabled');
+            }
         });
     </script>
+    <script type="text/javascript" src="~/Scripts/progress-bar.js"></script>
 }

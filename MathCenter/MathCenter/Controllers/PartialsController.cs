@@ -46,6 +46,22 @@ namespace MathCenter.Controllers
             return PartialView();
         }
 
+        public PartialViewResult _CommSelectDataTable(List<Class> data, string table_id)
+        {
+            ViewBag.TableID = table_id;
+            ViewBag.Data = data;
+            ViewBag.First = data.FirstOrDefault();
+            return PartialView();
+        }
+
+        public PartialViewResult _OtherSelectDataTable(List<Class> data, string table_id)
+        {
+            ViewBag.TableID = table_id;
+            ViewBag.Data = data;
+            ViewBag.First = data.FirstOrDefault();
+            return PartialView();
+        }
+
         public PartialViewResult _DataDataTable(List<SignIn> data, string table_id)
         {
             ViewBag.TableID = table_id;

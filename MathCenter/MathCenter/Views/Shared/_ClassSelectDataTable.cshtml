@@ -3,29 +3,18 @@
         <tr>
             @{ MathCenter.Models.Class firstClass = ViewBag.First; }
             <th>Selected</th>
-            <th>@Html.DisplayNameFor(data => firstClass.CRN)</th>
             <th>@Html.DisplayNameFor(data => firstClass.DeptPrefix)</th>
             <th>@Html.DisplayNameFor(data => firstClass.ClassNum)</th>
             <th>@Html.DisplayNameFor(data => firstClass.Instructor)</th>
             <th>@Html.DisplayNameFor(data => firstClass.Days)</th>
             <th>@Html.DisplayNameFor(data => firstClass.Time)</th>
         </tr>
-        <tr>
-            <td></td>
-            <td><input type="text" placeholder="Search CRN" /></td>
-            <td><input type="text" placeholder="Search Department" /></td>
-            <td><input type="text" placeholder="Search Class Number" /></td>
-            <td><input type="text" placeholder="Search Instructor" /></td>
-            <td><input type="text" placeholder="Search Days" /></td>
-            <td><input type="text" placeholder="Search Starting Time" /></td>
-        </tr>
     </thead>
     <tbody>
         @foreach (MathCenter.Models.Class @class in ViewBag.Data)
         {
             <tr>
-                <td class="text-center"><input type="checkbox" class="custom-checkbox" /></td>
-                <td class="text-center">@Html.DisplayFor(data => @class.CRN)</td>
+                <td class="text-center"><input type="checkbox" name="ClassID" value="@(@class.ClassID)" class="custom-checkbox" /></td>
                 <td class="text-center">@Html.DisplayFor(data => @class.DeptPrefix)</td>
                 <td class="text-center">@Html.DisplayFor(data => @class.ClassNum)</td>
                 <td>@Html.DisplayFor(data => @class.Instructor)</td>
@@ -35,4 +24,3 @@
         }
     </tbody>
 </table>
-

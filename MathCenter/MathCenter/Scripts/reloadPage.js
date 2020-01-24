@@ -1,13 +1,7 @@
-﻿//The function for redirecting the page to the "Sign In" Page.
-var reload_call = function () {
-    var pageURL = window.location.href; //Get the current url.
-    var URLList = pageURL.split('/'); //Split the url Up by /s
-    var id = URLList[URLList.length - 1];//Get the last part of the url (Week #)
-    var source = "/Home/Welcome/" + id; //Create the new source to be redirected to
-    window.location.href = source;//Use it to redirect there.
+﻿var reload_call = function () {
+    var source = "/Student/Index";
+    window.location.href = source;
 }
 
-//This is the timing part, so the page is only there for 'x' seconds before redirecting.
-var interval = 5000; //This is the 'x' part. It will be (interval/1000) seconds.
-window.setInterval(reload_call, interval); //Call the function above on the given interval.
-
+var interval = 8000; //8 sec
+window.setInterval(reload_call, interval); 

@@ -183,30 +183,34 @@ a {
     color: $red;
 }
 
+.silver-text {
+    color: $silver;
+}
+
 .bg-danger {
     background-color: $red !important;
 }
 
 .btn-danger {
     background-color: $red;
-    color: $white;
+    color: $white !important;
     border: solid 2px $silver;
 
     &:hover {
         background-color: $white;
-        color: $black;
+        color: $black !important;
         border: solid 2px $gray;
     }
 }
 
 .btn-default {
     background-color: $white;
-    color: $black;
+    color: $black !important;
     border: solid 2px $silver;
 
     &:hover {
         background-color: $red;
-        color: $white;
+        color: $white !important;
         border: solid 2px $gray;
     }
 }

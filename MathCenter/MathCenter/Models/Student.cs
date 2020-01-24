@@ -37,6 +37,11 @@ namespace MathCenter.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<StudentClass> StudentClasses { get; set; }
 
+        public override string ToString()
+        {
+            return this.FirstName + " " + this.LastName;
+        }
+
         public string CapitalizeName(string name)
         {
             name = char.ToUpper(name[0]) + name.Substring(1);

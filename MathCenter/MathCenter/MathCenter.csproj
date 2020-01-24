@@ -3352,6 +3352,7 @@
     <Content Include="Scripts\esm\popper-utils.min.js.map" />
     <Content Include="Scripts\esm\popper-utils.js.map" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\form-submit.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
@@ -3450,8 +3451,8 @@
     <Content Include="Scripts\popper-utils.min.js" />
     <Content Include="Scripts\popper.js" />
     <Content Include="Scripts\popper.min.js" />
+    <Content Include="Scripts\progress-bar.js" />
     <Content Include="Scripts\reloadPage.js" />
-    <Content Include="Scripts\SelectClass.js" />
     <Content Include="Scripts\umd\popper-utils.js" />
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
@@ -3470,10 +3471,6 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Home\SelectClass.cshtml" />
-    <Content Include="Views\Home\Done.cshtml" />
-    <Content Include="Views\Home\Finish.cshtml" />
-    <Content Include="Views\Home\Other.cshtml" />
     <Content Include="Views\Faculty\Index.cshtml" />
     <Content Include="Views\Faculty\Data.cshtml" />
     <Content Include="Views\Faculty\Add.cshtml" />
@@ -3492,17 +3489,18 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Shared\_Errors.cshtml" />
     <Content Include="Views\Shared\_Progress.cshtml" />
-    <Content Include="Views\Shared\_FilterDropdown.cshtml" />
     <Content Include="Views\Student\Index.cshtml" />
     <Content Include="Views\Student\Name.cshtml" />
     <Content Include="Views\Shared\_ClassDataTable.cshtml" />
     <Content Include="Views\Shared\_DataDataTable.cshtml" />
     <Content Include="Views\Student\Class.cshtml" />
     <Content Include="Views\Shared\_ClassSelectDataTable.cshtml" />
+    <Content Include="Views\Shared\_CommSelectDataTable.cshtml" />
+    <Content Include="Views\Shared\_OtherSelectDataTable.cshtml" />
+    <Content Include="Views\Student\Finish.cshtml" />
+    <Content Include="Views\Student\Done.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Partials\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

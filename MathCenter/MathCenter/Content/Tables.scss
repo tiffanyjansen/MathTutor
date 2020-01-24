@@ -25,9 +25,25 @@ table {
     border: 2px solid $silver;
 
     thead {
-        tr th {
-            background-color: $red;
-            color: $white;
+        tr {
+            th {
+                background-color: $red;
+                color: $white;
+                border: 1px solid $silver;
+                text-align: center;
+            }
+
+            td {
+                border: 1px solid $silver;
+                text-align: center;
+            }
+
+            &:nth-child(even) th {
+                background-color: transparent;
+                input {
+                    width:100%;
+                }
+            }
         }
 
         tr th,
@@ -37,13 +53,35 @@ table {
         }
     }
 
-    &.dataTable thead .sorting_asc::before,
-    &.dataTable thead .sorting::before,
-    &.dataTable thead .sorting_desc::before,
-    &.dataTable thead .sorting_desc::after,
-    &.dataTable thead .sorting::after,
+    &.dataTable thead > tr > th.sorting_asc,
+    &.dataTable thead > tr > th.sorting_desc,
+    &.dataTable thead > tr > th.sorting,
+    &.dataTable thead > tr > td.sorting_asc,
+    &.dataTable thead > tr > td.sorting_desc,
+    &.dataTable thead > tr > td.sorting {
+        padding-right: 25px;
+    }
+
+
+    &.dataTable thead th.sorting_asc::before,
+    &.dataTable thead th.sorting::before,
+    &.dataTable thead th.sorting_desc::before,
+    &.dataTable thead th.sorting_desc::after,
+    &.dataTable thead th.sorting::after,
     &.dataTable thead th.sorting_asc::after {
         bottom: 0;
+    }
+
+    &.dataTable thead th.sorting_asc::before,
+    &.dataTable thead th.sorting::before,
+    &.dataTable thead th.sorting_desc::before {
+        right: 0em;
+    }
+
+    &.dataTable thead th.sorting_desc::after,
+    &.dataTable thead th.sorting::after,
+    &.dataTable thead th.sorting_asc::after {
+        right: 0.5em;
     }
 
     &.dataTable.table-hover tbody tr {
@@ -68,62 +106,66 @@ table {
         }
     }
 }
-.table-header {
-    .table-header-left-class {
-        position: relative;
 
-        &::before {
-            content: 'Math Center Classes';
-            font-weight: 500;
-            line-height: 1.2;
-            font-size: 2rem;
+    .table-header {
+        .table-header-left-class {
+            position: relative;
+
+            &::before {
+                content: 'Math Center Classes';
+                font-weight: 500;
+                line-height: 1.2;
+                font-size: 2rem;
+                font-family: Crete_Round;
+            }
+
+            text-align: left;
+            align-content: start;
+            justify-content: left;
+            width: 50%;
         }
 
-        text-align: left;
-        align-content: start;
-        justify-content: left;
-        width: 50%;
-    }
+        .table-header-left-data {
+            position: relative;
 
-    .table-header-left-data {
-        position: relative;
+            &::before {
+                content: 'Math Center Data';
+                font-weight: 500;
+                line-height: 1.2;
+                font-size: 2rem;
+            }
 
-        &::before {
-            content: 'Math Center Data';
-            font-weight: 500;
-            line-height: 1.2;
-            font-size: 2rem;
+            text-align: left;
+            align-content: start;
+            justify-content: left;
+            width: 50%;
         }
 
-        text-align: left;
-        align-content: start;
-        justify-content: left;
-        width: 50%;
+        .table-header-right {
+            text-align: right;
+            align-content: end;
+            justify-content: right;
+        }
     }
 
-    .table-header-right {
-        text-align: right;
-        align-content: end;
-        justify-content: right;
+    .dropdown-item.active,
+    .dropdown-item:active {
+        background-color: $red;
     }
-}
 
-.dropdown-item.active, 
-.dropdown-item:active {
-    background-color: $red;
-}
+    .nav-tabs {
+        border-bottom: 2px solid $silver;
+        margin-bottom: 15px;
 
-.nav-tabs {
-    border-bottom: 2px solid $silver;
-    margin-bottom: 15px;
-    .nav-item {
-        .nav-link {
-            color: $red;
-            &.active {
-                color: $black;
-                background-color: $white;
-                border: 2px solid $red;
+        .nav-item {
+            .nav-link {
+                color: $red;
+
+                &.active {
+                    color: $black;
+                    background-color: $white;
+                    border: 2px solid $red;
+                }
             }
         }
     }
-}

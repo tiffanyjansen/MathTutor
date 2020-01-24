@@ -5,6 +5,7 @@ namespace MathCenter.Models
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
+    using System.Linq;
 
     public partial class Class
     {
@@ -47,16 +48,43 @@ namespace MathCenter.Models
 
         public override string ToString()
         {
-            return this.DeptPrefix + " " + this.ClassNum;
+            if(this.Other == null)
+            {
+                return this.DeptPrefix + " " + this.ClassNum;
+            }
+            else
+            {
+                return this.Other;
+            }
         }
 
-        public enum CCColleges
+        public string ToLongString()
         {
-            Portland, 
-            Chemeketa,
-            Clackamas,
-            Mt_Hood,
-            Linn_Benton
+            if(this.Other == null)
+            {
+                string[] FirstLast = this.Instructor.Split(',');
+                if (FirstLast.Length == 1)
+                {
+                    return this.DeptPrefix + " " + this.ClassNum + ": " + this.Instructor + " CC";
+                }
+                else
+                {
+                    return this.DeptPrefix + " " + this.ClassNum + ": " + FirstLast[0].Trim();
+                }
+            }
+            else
+            {
+                return this.Other;
+            }
         }
+
+        public static Dictionary<string, string> CCCollegeStrings = new Dictionary<string, string>()
+        {
+            { "Portland Community College" , "Portland" },
+            { "Chemeketa Community College", "Chemeketa" },
+            { "Clackamas Community College", "Clackamas" },
+            { "Mt. Hood Community College", "Mt. Hood" },
+            { "Linn Benton Community College", "Linn Benton" }
+        };
     }
 }

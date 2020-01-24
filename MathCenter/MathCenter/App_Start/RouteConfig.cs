@@ -14,9 +14,27 @@ namespace MathCenter
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
-                name: "Ajax",
-                url: "Ajax/{action}/{id}/{num}/{instructor}",
-                defaults: new { controller = "Ajax", action = "GetNumbers", id = UrlParameter.Optional, num = UrlParameter.Optional, instructor = UrlParameter.Optional }
+                name: "api",
+                url: "api/classes",
+                defaults: new { controller = "Home", action = "GetClasses" }
+            );
+
+            routes.MapRoute(
+                name: "filter",
+                url: "api/filter/classes",
+                defaults: new { controller = "Home", action = "FilterClasses" }
+            );
+
+            routes.MapRoute(
+                name: "other",
+                url: "api/filter/other",
+                defaults: new { controller = "Home", action = "FilterOther" }
+            );
+
+            routes.MapRoute(
+                name: "community",
+                url: "api/filter/community",
+                defaults: new { controller = "Home", action = "FilterCommunity" }
             );
 
             routes.MapRoute(

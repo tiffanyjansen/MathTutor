@@ -127,25 +127,28 @@ a {
 .red-text {
   color: #DB0A29; }
 
+.silver-text {
+  color: #A7A9AC; }
+
 .bg-danger {
   background-color: #DB0A29 !important; }
 
 .btn-danger {
   background-color: #DB0A29;
-  color: #FFFFFF;
+  color: #FFFFFF !important;
   border: solid 2px #A7A9AC; }
   .btn-danger:hover {
     background-color: #FFFFFF;
-    color: #231F20;
+    color: #231F20 !important;
     border: solid 2px #C4C6C8; }
 
 .btn-default {
   background-color: #FFFFFF;
-  color: #231F20;
+  color: #231F20 !important;
   border: solid 2px #A7A9AC; }
   .btn-default:hover {
     background-color: #DB0A29;
-    color: #FFFFFF;
+    color: #FFFFFF !important;
     border: solid 2px #C4C6C8; }
 
 .table-condensed {

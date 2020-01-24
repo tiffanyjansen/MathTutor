@@ -1,0 +1,26 @@
+﻿<table id="comm_select_table" class="display table-hover" style="width:100%">
+    <thead>
+        <tr>
+            <th>Selected</th>
+            <th>Class</th>
+            <th>Institution</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (MathCenter.Models.Class @class in ViewBag.Data)
+        {
+            <tr>
+                <td class="text-center"><input type="checkbox" name="ClassID" value="@(@class.ClassID)" class="custom-checkbox" /></td>
+                <td class="text-center">@(@class.ToString())</td>
+                @{ var institution = MathCenter.Models.Class.CCCollegeStrings.FirstOrDefault(x => x.Value == @class.Instructor).Key; }
+                <td> @(institution)</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script type="text/javascript">
+        
+    </script>
+}

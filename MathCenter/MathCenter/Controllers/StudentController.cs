@@ -104,11 +104,90 @@ namespace MathCenter.Controllers
         [HttpGet]
         public ActionResult Class()
         {
-            string[] CCColleges = Enum.GetNames(typeof(Models.Class.CCColleges));
+            var CCColleges = Models.Class.CCCollegeStrings.Values;
 
-            ViewBag.OtherClasses = db.Classes.Where(c => c.Other != null).Select(c => c).ToList();            
-            ViewBag.CCClasses = db.Classes.Where(c => CCColleges.Contains(c.Instructor)).Select(c => c).ToList();
+            ViewBag.OtherClasses = db.Classes.Where(c => c.Other != null).Select(c => c).ToList();
+            ViewBag.CCClasses = db.Classes
+                .Where(c => CCColleges.Contains(c.Instructor))
+                .Select(c => c).ToList();
+            ViewBag.CCClassList = db.Classes
+                .Where(c => c.Other == null)
+                .Where(c => c.ClassNum < 300)
+                .Where(c => c.DeptPrefix == "MTH")
+                .OrderBy(c => c.ClassNum)
+                .GroupBy(c => c.ClassNum)
+                .Select(c => ("MTH " + c.Key.Value.ToString()))
+                .ToList();
             return View(db.Classes.Where(c => c.Other == null).Where(c => !CCColleges.Contains(c.Instructor)).Select(c => c).ToList());
+        }
+
+        [HttpPost]
+        public ActionResult Class(int[] ClassID)
+        {
+            Student currentStudent = db.Students.Find(_v_number);
+            if(ClassID.Length > 0 && currentStudent != null)
+            {
+                foreach (int Id in ClassID)
+                {
+                    db.StudentClasses.Add(new StudentClass {
+                        VNum = currentStudent.VNum,
+                        ClassID = Id
+                    });
+                    db.SignIns.Add(new SignIn {
+                        Week = _week_number,
+                        Date = DateTime.Today,
+                        Hour = DateTime.Now.Hour,
+                        Min = DateTime.Now.Minute,
+                        StudentID = currentStudent.VNum,
+                        ClassID = Id
+                    });
+                }
+                try
+                {
+                    db.SaveChanges();
+                    return RedirectToAction("Finish", "Student");
+                }
+                catch (Exception)
+                {
+                    ViewBag.Error = "There was an error adding your classes. Please try again.";
+                }
+            }
+
+            var CCColleges = Models.Class.CCCollegeStrings.Values;
+
+            ViewBag.OtherClasses = db.Classes.Where(c => c.Other != null).Select(c => c).ToList();
+            ViewBag.CCClasses = db.Classes
+                .Where(c => CCColleges.Contains(c.Instructor))
+                .Select(c => c).ToList();
+            ViewBag.CCClassList = db.Classes
+                .Where(c => c.Other == null)
+                .Where(c => c.ClassNum < 300)
+                .Where(c => c.DeptPrefix == "MTH")
+                .OrderBy(c => c.ClassNum)
+                .GroupBy(c => c.ClassNum)
+                .Select(c => ("MTH " + c.Key.Value.ToString()))
+                .ToList();
+            return View(db.Classes.Where(c => c.Other == null).Where(c => !CCColleges.Contains(c.Instructor)).Select(c => c).ToList());
+        }
+
+        public ActionResult Finish()
+        {
+            _v_number = null; //reset VNumber so if something weird happens we don't sign someone in twice.
+            return View();
+        }
+
+        public ActionResult Done()
+        {
+            Student student = db.Students.Find(_v_number);
+            if(student.FirstName == null)
+            {
+                return RedirectToAction("Name", "Student");
+            }
+            if(student.StudentClasses.Count == 0)
+            {
+                return RedirectToAction("Class", "Student");
+            }
+            return View(student);
         }
     }
 }  
