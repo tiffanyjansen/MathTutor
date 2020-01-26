@@ -29,11 +29,15 @@ namespace MathCenter.Controllers
         // "API" functions
         public JsonResult GetClasses(string ClassDeptNum, string ClassInstitution, string Other)
         {
-            if(Other != null)
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            if (Other != null)
             {
                 Class @class = new Class { Other = Other };
                 db.Classes.Add(@class);
-            } else
+                data.Add("type", "Other");
+                data.Add("className", @class.ToString());
+            }
+            else
             {
                 string[] classParts = ClassDeptNum.Split(' ');
 
@@ -50,81 +54,22 @@ namespace MathCenter.Controllers
                 string instructor = Class.CCCollegeStrings[ClassInstitution];
                 Class @class = new Class { DeptPrefix = dept, ClassNum = num, Instructor = instructor };
                 db.Classes.Add(@class);
+                data.Add("type", "Community");
+                data.Add("className", @class.ToString());
+                data.Add("Institution", ClassInstitution);
             }
-            string data;
             try
             {
                 db.SaveChanges();
-                data = "passed";
+                data.Add("classID", "" + db.Classes.Max(item => item.ClassID));
+                data.Add("success", "true");
             }
-            catch(Exception)
+            catch (Exception)
             {
-                data = "failed";
+                data.Add("success", "false");
             }
 
             return Json(data, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult FilterClasses(string DeptPrefix, string ClassNum, string Instructor, string Days, string Time)
-        {
-            var CCColleges = Class.CCCollegeStrings.Values;
-            var query = db.Classes.Where(c => c.Other == null).Where(c => !CCColleges.Contains(c.Instructor));
-
-            if(DeptPrefix != "" && DeptPrefix != null)
-            {
-                query = query.Where(c => c.DeptPrefix.Contains(DeptPrefix));
-            }
-            if (ClassNum != "" && ClassNum != null)
-            {
-                query = query.Where(c => c.ClassNum.ToString().Contains(ClassNum));
-            }
-            if (Instructor != "" && Instructor != null)
-            {
-                query = query.Where(c => c.Instructor.Contains(Instructor));
-            }
-            if (Days != "" && Days != null)
-            {
-                query = query.Where(c => c.Days.Contains(Days));
-            }
-            if (Time != "" && Time != null)
-            {
-                query = query.Where(c => c.Time.Contains(Time));
-            }
-
-            var classes = query.Select(c => new { c.ClassID, c.DeptPrefix, c.ClassNum, c.Instructor, c.Days, c.Time }).ToList();
-            return Json(classes, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult FilterOther(string Other)
-        {
-            var query = db.Classes.Where(c => c.Other != null);
-
-            if(!(Other == "" || Other == null))
-            {
-                query = query.Where(c => c.Other.Contains(Other));
-            }
-
-            var classes = query.Select(c => new { c.ClassID, c.DeptPrefix, c.ClassNum, c.Instructor, c.Days, c.Time }).ToList();
-            return Json(classes, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult FilterCommunity(string DeptNum, string Institution)
-        {
-            var CCColleges = Class.CCCollegeStrings.Values;
-            var query = db.Classes.Where(c => CCColleges.Contains(c.Instructor));
-
-            if(DeptNum != "" && DeptNum != null)
-            {
-                query = query.Where(c => c.ToString().Contains(DeptNum));
-            }
-            if(Institution != "" && Institution != null)
-            {
-                string[] splitInstitution = Institution.Split(' ');
-                query = query.Where(c => c.Instructor.Contains(splitInstitution[0]));
-            }
-
-            var classes = query.Select(c => new { c.ClassID, c.DeptPrefix, c.ClassNum, c.Instructor, c.Days, c.Time }).ToList();
-            return Json(classes, JsonRequestBehavior.AllowGet);
         }
     }
 }

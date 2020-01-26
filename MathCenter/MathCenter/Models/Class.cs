@@ -62,14 +62,14 @@ namespace MathCenter.Models
         {
             if(this.Other == null)
             {
-                string[] FirstLast = this.Instructor.Split(',');
-                if (FirstLast.Length == 1)
+                if(CCCollegeStrings.Values.Contains(this.Instructor))
                 {
-                    return this.DeptPrefix + " " + this.ClassNum + ": " + this.Instructor + " CC";
+                    var Institution = CCCollegeStrings.FirstOrDefault(x => x.Value == this.Instructor).Key;
+                    return this.DeptPrefix + " " + this.ClassNum + ": " + Institution;
                 }
                 else
                 {
-                    return this.DeptPrefix + " " + this.ClassNum + ": " + FirstLast[0].Trim();
+                    return this.DeptPrefix + " " + this.ClassNum + ": " + this.Instructor;
                 }
             }
             else

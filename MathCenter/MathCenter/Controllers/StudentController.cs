@@ -104,21 +104,10 @@ namespace MathCenter.Controllers
         [HttpGet]
         public ActionResult Class()
         {
-            var CCColleges = Models.Class.CCCollegeStrings.Values;
-
-            ViewBag.OtherClasses = db.Classes.Where(c => c.Other != null).Select(c => c).ToList();
-            ViewBag.CCClasses = db.Classes
-                .Where(c => CCColleges.Contains(c.Instructor))
-                .Select(c => c).ToList();
-            ViewBag.CCClassList = db.Classes
-                .Where(c => c.Other == null)
-                .Where(c => c.ClassNum < 300)
-                .Where(c => c.DeptPrefix == "MTH")
-                .OrderBy(c => c.ClassNum)
-                .GroupBy(c => c.ClassNum)
-                .Select(c => ("MTH " + c.Key.Value.ToString()))
-                .ToList();
-            return View(db.Classes.Where(c => c.Other == null).Where(c => !CCColleges.Contains(c.Instructor)).Select(c => c).ToList());
+            ViewBag.OtherClasses = getOtherClasses();
+            ViewBag.CCClasses = getCommunityCollegeClasses();
+            ViewBag.CCClassList = getCommunityClassList();
+            return View(getCommonClasses());
         }
 
         [HttpPost]
@@ -127,21 +116,7 @@ namespace MathCenter.Controllers
             Student currentStudent = db.Students.Find(_v_number);
             if(ClassID.Length > 0 && currentStudent != null)
             {
-                foreach (int Id in ClassID)
-                {
-                    db.StudentClasses.Add(new StudentClass {
-                        VNum = currentStudent.VNum,
-                        ClassID = Id
-                    });
-                    db.SignIns.Add(new SignIn {
-                        Week = _week_number,
-                        Date = DateTime.Today,
-                        Hour = DateTime.Now.Hour,
-                        Min = DateTime.Now.Minute,
-                        StudentID = currentStudent.VNum,
-                        ClassID = Id
-                    });
-                }
+                createSignIns(ClassID, currentStudent);
                 try
                 {
                     db.SaveChanges();
@@ -153,21 +128,10 @@ namespace MathCenter.Controllers
                 }
             }
 
-            var CCColleges = Models.Class.CCCollegeStrings.Values;
-
-            ViewBag.OtherClasses = db.Classes.Where(c => c.Other != null).Select(c => c).ToList();
-            ViewBag.CCClasses = db.Classes
-                .Where(c => CCColleges.Contains(c.Instructor))
-                .Select(c => c).ToList();
-            ViewBag.CCClassList = db.Classes
-                .Where(c => c.Other == null)
-                .Where(c => c.ClassNum < 300)
-                .Where(c => c.DeptPrefix == "MTH")
-                .OrderBy(c => c.ClassNum)
-                .GroupBy(c => c.ClassNum)
-                .Select(c => ("MTH " + c.Key.Value.ToString()))
-                .ToList();
-            return View(db.Classes.Where(c => c.Other == null).Where(c => !CCColleges.Contains(c.Instructor)).Select(c => c).ToList());
+            ViewBag.OtherClasses = getOtherClasses();
+            ViewBag.CCClasses = getCommunityCollegeClasses();
+            ViewBag.CCClassList = getCommunityClassList();
+            return View(getCommonClasses());
         }
 
         public ActionResult Finish()
@@ -176,6 +140,7 @@ namespace MathCenter.Controllers
             return View();
         }
 
+        [HttpGet]
         public ActionResult Done()
         {
             Student student = db.Students.Find(_v_number);
@@ -188,6 +153,78 @@ namespace MathCenter.Controllers
                 return RedirectToAction("Class", "Student");
             }
             return View(student);
+        }
+
+        [HttpPost]
+        public ActionResult Done(int[] ClassID)
+        {
+            Student currentStudent = db.Students.Find(_v_number);
+            if (ClassID.Length > 0 && currentStudent != null)
+            {
+                createSignIns(ClassID, currentStudent);
+                try
+                {
+                    db.SaveChanges();
+                    return RedirectToAction("Finish", "Student");
+                }
+                catch (Exception)
+                {
+                    ViewBag.Error = "There was an error. Please try again.";
+                }
+            }
+
+            return View(currentStudent);
+        }
+
+        public List<Class> getOtherClasses()
+        {
+            return db.Classes.Where(c => c.Other != null).Select(c => c).ToList();
+        }
+
+        public List<Class> getCommunityCollegeClasses()
+        {
+            var CCColleges = Models.Class.CCCollegeStrings.Values;
+            return db.Classes.Where(c => CCColleges.Contains(c.Instructor)).Select(c => c).ToList();
+        }
+
+        public List<string> getCommunityClassList()
+        {
+            return db.Classes.Where(c => c.Other == null).Where(c => c.ClassNum < 300).Where(c => c.DeptPrefix == "MTH")
+                .OrderBy(c => c.ClassNum)
+                .GroupBy(c => c.ClassNum)
+                .Select(c => ("MTH " + c.Key.Value.ToString()))
+                .ToList();
+        }
+
+        public List<Class> getCommonClasses()
+        {
+            var CCColleges = Models.Class.CCCollegeStrings.Values;
+            return db.Classes.Where(c => c.Other == null).Where(c => !CCColleges.Contains(c.Instructor)).Select(c => c).ToList();
+        }
+
+        public void createSignIns(int[] ClassID, Student student)
+        {
+            foreach (int Id in ClassID)
+            {
+                StudentClass studentClass = db.StudentClasses.Where(c => c.VNum == student.VNum).Where(c => c.ClassID == Id).FirstOrDefault();
+                if(studentClass == null)
+                {
+                    db.StudentClasses.Add(new StudentClass
+                    {
+                        VNum = student.VNum,
+                        ClassID = Id
+                    });
+                }
+                db.SignIns.Add(new SignIn
+                {
+                    Week = _week_number,
+                    Date = DateTime.Today,
+                    Hour = DateTime.Now.Hour,
+                    Min = DateTime.Now.Minute,
+                    StudentID = student.VNum,
+                    ClassID = Id
+                });
+            }
         }
     }
 }  

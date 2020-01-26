@@ -3342,6 +3342,7 @@
     <Content Include="Scripts\bootstrap.bundle.js.map" />
     <Content Include="Content\DataTables\datatables.js" />
     <Content Include="Content\DataTables\datatables.min.js" />
+    <Content Include="Scripts\datatable-component.js" />
     <Content Include="Scripts\errors.js" />
     <Content Include="Scripts\esm\popper-utils.js" />
     <Content Include="Scripts\esm\popper-utils.min.js" />
@@ -3352,7 +3353,7 @@
     <Content Include="Scripts\esm\popper-utils.min.js.map" />
     <Content Include="Scripts\esm\popper-utils.js.map" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
-    <Content Include="Scripts\form-submit.js" />
+    <Content Include="Scripts\form-helpers.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
@@ -3453,6 +3454,7 @@
     <Content Include="Scripts\popper.min.js" />
     <Content Include="Scripts\progress-bar.js" />
     <Content Include="Scripts\reloadPage.js" />
+    <Content Include="Scripts\search-helpers.js" />
     <Content Include="Scripts\umd\popper-utils.js" />
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />

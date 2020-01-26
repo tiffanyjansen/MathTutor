@@ -149,43 +149,54 @@
 </div>
 
 @section Scripts {
-    <script type="text/javascript" src="~/Scripts/form-submit.js"></script>
-    <script type="text/javascript" src="~/Scripts/search-helpers.js"></script>
+    <script type="text/javascript" src="~/Scripts/form-helpers.js"></script>
+    <script type="text/javascript" src="~/Scripts/datatable-component.js"></script>
     <script type="text/javascript">
         window.table = null;
         window.comTable = null;
         window.otherTable = null;
-        $(document).ready(function () {
-            $('.table-hover tr').click(function (event) {
-                if (event.target.type !== 'checkbox') {
-                    $(':checkbox', this).trigger('click');
-                }
-                var disabled = true;
-                $('.custom-checkbox').each(function (index, elem) {
-                    if (elem.checked) {
-                        $('button[type="submit"]').removeAttr('disabled');
-                        disabled = false;
-                    }
-                });
-                if (disabled) {
-                    $('button[type="submit"]').attr('disabled', 'disabled');
-                }
-            });
+        var classDataTable = new DatatableComponent();
+        var commDataTable = new DatatableComponent();
+        var otherDataTable = new DatatableComponent();
 
-            window.table = $('#classes_select_table').DataTable({
-                "paging": false,
-                "ordering": true,
-                "info": false,
-                "scrollY": 310,
-                "scrollX": true,
-                "dom": '<"table-header border-bottom row"<"table-header-left-class col-md-9 col-12"><"table-header-right col-md-3 col-12" B>><"progress-bar-mine">t',
-                "buttons": {
-                    "buttons": [
-                        { extend: 'colvis', className: 'btn-danger' },
-                    ]
-                },
-                "bSortCellsTop": true,
-                "columns": [
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
+            classDataTable.createSearch();
+            commDataTable.createSearch();
+            otherDataTable.createSearch();
+        });
+
+        function successAjax(data) {
+            if (data.type) {
+                if (data.type == 'Other') {
+                    var rowNode = otherDataTable.table.row.add([
+                        '<input type="checkbox" name="ClassID" value="' + data.classID + '" class="custom-checkbox" />',
+                        data.className,
+                    ]).draw(false).node();
+                    $(rowNode).find('td').eq(0).addClass('text-center');
+                    $(rowNode).find('td').eq(1).addClass('text-center');
+                } else {
+                    var rowNode = commDataTable.table.row.add([
+                        '<input type="checkbox" name="ClassID" value="' + data.classID + '" class="custom-checkbox" />',
+                        data.className,
+                        data.Institution,
+                    ]).draw(false).node();
+                    $(rowNode).find('td').eq(0).addClass('text-center');
+                    $(rowNode).find('td').eq(1).addClass('text-center');
+                }
+            }
+            bindTableEvents();
+        }
+
+        $(document).ready(function () {
+            classDataTable.init({
+                table: window.table,
+                domClass: '<"table-header border-bottom row"<"table-header-left-class col-md-9 col-12"><"table-header-right col-md-3 col-12" B>><"progress-bar-mine">t',
+                $table: $('#classes_select_table'),
+                buttons: true,
+                orderColumn: 2,
+                orderType: 'asc',
+                columns: [
                     { "visible": true },
                     { "visible": true },
                     { "visible": true },
@@ -193,54 +204,41 @@
                     { "visible": false },
                     { "visible": true },
                 ],
-                "order": [[2, "asc"]],
+                tableID: 'classes_select_table',
+                inputClass: 'class-filter',
             });
 
-            window.comTable = $('#comm_select_table').DataTable({
-                "paging": false,
-                "ordering": true,
-                "info": false,
-                "scrollY": 310,
-                "scrollX": true,
-                "dom": '<"table-header border-bottom row"<"table-header-left-class col-md-12 col-12">><"progress-bar-mine">t',
-                "bSortCellsTop": true,
-                "columns": [
+            commDataTable.init({
+                table: window.comTable,
+                domClass: '<"table-header border-bottom row"<"table-header-left-class col-md-12 col-12">><"progress-bar-mine">t',
+                $table: $('#comm_select_table'),
+                buttons: false,
+                orderColumn: 2,
+                orderType: 'asc',
+                columns: [
                     { "visible": true },
                     { "visible": true },
                     { "visible": true },
                 ],
-                "order": [[2, "asc"]],
+                tableID: 'comm_select_table',
+                inputClass: 'comm-filter',
             });
 
-            window.otherTable = $('#other_select_table').DataTable({
-                "paging": false,
-                "ordering": true,
-                "info": false,
-                "scrollY": 310,
-                "scrollX": true,
-                "dom": '<"table-header border-bottom row"<"table-header-left-class col-md-12 col-12">><"progress-bar-mine">t',
-                "bSortCellsTop": true,
-                "columns": [
+            otherDataTable.init({
+                table: window.otherTable,
+                domClass: '<"table-header border-bottom row"<"table-header-left-class col-md-12 col-12">><"progress-bar-mine">t',
+                $table: $('#other_select_table'),
+                orderColumn: 1,
+                orderType: 'asc',
+                columns: [
                     { "visible": true },
                     { "visible": true },
                 ],
-                "order": [[1, "asc"]],
+                tableID: 'other_select_table',
+                inputClass: 'other-filter',
             });
 
-            createSearches();
-        });
-
-        $('.custom-checkbox').on('click', function (e) {
-            var disabled = true;
-            $('.custom_checkbox').each(function (index, elem) {
-                if (elem.checked) {
-                    $('button[type="submit"]').removeAttr('disabled');
-                    disabled = false;
-                }
-            });
-            if (disabled) {
-                $('button[type="submit"]').attr('disabled', 'disabled');
-            }
+            bindTableEvents();
         });
     </script>
     <script type="text/javascript" src="~/Scripts/progress-bar.js"></script>

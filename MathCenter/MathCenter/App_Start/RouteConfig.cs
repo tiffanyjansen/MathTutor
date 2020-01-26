@@ -20,24 +20,6 @@ namespace MathCenter
             );
 
             routes.MapRoute(
-                name: "filter",
-                url: "api/filter/classes",
-                defaults: new { controller = "Home", action = "FilterClasses" }
-            );
-
-            routes.MapRoute(
-                name: "other",
-                url: "api/filter/other",
-                defaults: new { controller = "Home", action = "FilterOther" }
-            );
-
-            routes.MapRoute(
-                name: "community",
-                url: "api/filter/community",
-                defaults: new { controller = "Home", action = "FilterCommunity" }
-            );
-
-            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }

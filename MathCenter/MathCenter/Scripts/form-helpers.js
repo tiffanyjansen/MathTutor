@@ -40,11 +40,38 @@ function submitForm(data) {
     });
 }
 
-function successAjax(data) {
-    location.reload(true); //reload the page to get the new classes.
-    //Find a better solution for this.
-}
-
 function errorAjax(data) {
     console.log(data);
+}
+
+function bindTableEvents() {
+    $('.table-hover tr').click(function (event) {
+        if (event.target.type !== 'checkbox') {
+            $(':checkbox', this).trigger('click');
+        }
+        checkShouldDisable();
+    });
+
+    $('.custom-checkbox').on('click', function (e) {
+        checkShouldDisable();
+    });
+}
+
+function checkShouldDisable() {
+    var disabled = true;
+    $('.custom-checkbox').each(function (index, elem) {
+        if (elem.checked) {
+            $('button[type="submit"]').removeAttr('disabled');
+            disabled = false;
+        }
+    });
+    if (disabled) {
+        $('button[type="submit"]').attr('disabled', 'disabled');
+    }
+}
+
+function bindDoneEvents() {
+    $('.custom-checkbox').on('click', function (e) {
+        checkShouldDisable();
+    });
 }
