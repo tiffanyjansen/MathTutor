@@ -3454,6 +3454,7 @@
     <Content Include="Scripts\popper.min.js" />
     <Content Include="Scripts\progress-bar-50.js" />
     <Content Include="Scripts\progress-bar-66.js" />
+    <Content Include="Scripts\refresh-home-page.js" />
     <Content Include="Scripts\reloadPage.js" />
     <Content Include="Scripts\search-helpers.js" />
     <Content Include="Scripts\umd\popper-utils.js" />

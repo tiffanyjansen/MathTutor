@@ -29,11 +29,11 @@ namespace MathCenter.Controllers
             }
             else if (Week == -1)
             {
-                ViewBag.Error = "Please select a week number.";
+                TempData["Error"] = "Please select a week number.";
             }
             else
             {
-                ViewBag.Error = "Incorrect password. Please try again.";
+                TempData["Error"] = "Incorrect password. Please try again.";
             }
             return RedirectToAction("Index", "Home");
         }
@@ -51,7 +51,7 @@ namespace MathCenter.Controllers
             if (ModelState.IsValid)
             {
                 _v_number = model.VNum;
-                if (db.Students.Find(_v_number) != null)
+                if (db.Students.Find(_v_number) != null && db.Students.Find(_v_number).SignIns.Count() > 0)
                 {
                     return RedirectToAction("Done", "Student");
                 }
@@ -67,12 +67,15 @@ namespace MathCenter.Controllers
         [HttpGet]
         public ActionResult Name()
         {
-            var ProgressPercent = 50;
+            var ProgressPercent = 33;
             Student student = db.Students.Find(_v_number);
             if (student == null)
             {
                 student = new Student { VNum = _v_number };
-                ProgressPercent = 33;
+            }
+            else if (student.SignIns.Count() > 0)
+            {
+                ProgressPercent = 50;
             }
             ViewBag.ProgressPercent = ProgressPercent;
             return View(student);
@@ -133,12 +136,12 @@ namespace MathCenter.Controllers
             var ProgressPercent = 66;
             if (ClassID.Length > 0 && currentStudent != null)
             {
-                createSignIns(ClassID, currentStudent);
                 if (currentStudent.StudentClasses.Count > 0)
                 {
                     ProgressPercent = 50;
                     redirectAction = "Done";
                 }
+                createSignIns(ClassID, currentStudent);
                 try
                 {
                     db.SaveChanges();
@@ -204,15 +207,29 @@ namespace MathCenter.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        public List<int> getStudentClasses()
+        {
+            List<int> list = new List<int>();
+
+            Student student = db.Students.Find(_v_number);
+            if (student != null && student.StudentClasses.Count > 0)
+            {
+                list = student.StudentClasses.Select(c => c.ClassID).ToList();
+            }
+
+            return list;
+        }
         public List<Class> getOtherClasses()
         {
-            return db.Classes.Where(c => c.Other != null).Select(c => c).ToList();
+            List<int> sClasses = getStudentClasses();           
+            return db.Classes.Where(c => c.Other != null).Where(c => !sClasses.Contains(c.ClassID)).Select(c => c).ToList();
         }
 
         public List<Class> getCommunityCollegeClasses()
         {
+            List<int> sClasses = getStudentClasses();
             var CCColleges = Models.Class.CCCollegeStrings.Values;
-            return db.Classes.Where(c => CCColleges.Contains(c.Instructor)).Select(c => c).ToList();
+            return db.Classes.Where(c => CCColleges.Contains(c.Instructor)).Where(c => !sClasses.Contains(c.ClassID)).Select(c => c).ToList();
         }
 
         public List<string> getCommunityClassList()
@@ -226,8 +243,9 @@ namespace MathCenter.Controllers
 
         public List<Class> getCommonClasses()
         {
+            List<int> sClasses = getStudentClasses();
             var CCColleges = Models.Class.CCCollegeStrings.Values;
-            return db.Classes.Where(c => c.Other == null).Where(c => !CCColleges.Contains(c.Instructor)).Select(c => c).ToList();
+            return db.Classes.Where(c => c.Other == null).Where(c => !CCColleges.Contains(c.Instructor)).Where(c => !sClasses.Contains(c.ClassID)).Select(c => c).ToList();
         }
 
         public void createSignIns(int[] ClassID, Student student)

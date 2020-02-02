@@ -39,7 +39,8 @@ table {
             }
 
             &:nth-child(even) th {
-                background-color: transparent;
+                background-color: $white;
+                color: $black;
                 input {
                     width:100%;
                 }

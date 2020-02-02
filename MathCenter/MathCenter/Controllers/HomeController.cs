@@ -23,6 +23,10 @@ namespace MathCenter.Controllers
         /// <returns>The View</returns>
         public ActionResult Index()
         {
+            if(TempData["Error"] != null)
+            {
+                ViewBag.Error = TempData["Error"].ToString();
+            }
             return View();
         }
 

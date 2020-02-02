@@ -20,7 +20,8 @@ table {
     border: 1px solid #A7A9AC;
     text-align: center; }
   table thead tr:nth-child(even) th {
-    background-color: transparent; }
+    background-color: #FFFFFF;
+    color: #231F20; }
     table thead tr:nth-child(even) th input {
       width: 100%; }
   table thead tr th,

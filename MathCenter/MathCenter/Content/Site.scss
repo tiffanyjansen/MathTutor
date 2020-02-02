@@ -165,17 +165,30 @@ a {
 
 .error {
     background-color: transparent;
-    color: red;
+    color: $red;
     border-radius: 5px;
-    margin: 0.5rem;
+    margin: 0 0.5em 0.5em;
+    padding: 0 0.5em 0.5em;
 
     .oi {
         top: 2px;
+        color: $red;
     }
 
     p {
         font-size: $font-size;
-        padding: 0.5rem;
+        margin: 0;
+    }
+}
+
+.input-group-text {
+    background-color: $gray;
+    &.oi {
+       &:before {
+           top: 6px;
+           left: 3px;
+           position: relative;
+       }
     }
 }
 

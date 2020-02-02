@@ -33,7 +33,7 @@ namespace MathCenter.Controllers
             //Return specific errors if the input is not valid.
             else
             {
-                ViewBag.Error = "Incorrect password. Please try again.";
+                TempData["Error"] = "Incorrect password. Please try again.";
                 return RedirectToAction("Index", "Home");
             }
         }
@@ -88,7 +88,7 @@ namespace MathCenter.Controllers
             }
             DateTime endDate = (DateTime)end;
 
-            if(startDate.Month > endDate.Month || (startDate.Month == endDate.Month && startDate.Day > endDate.Day) || startDate.Year > endDate.Year)
+            if(startDate > endDate)
             {
                 ViewBag.Error = "Please make sure your start date is before your end date.";
                 return View();

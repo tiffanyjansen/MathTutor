@@ -1,5 +1,5 @@
 ﻿@model MathCenter.Models.ViewModels.WelcomeViewModel
-@Html.ActionLink("Log Out", "LogOut", "Student", null, new { @class = "log-out-link"})
+@Html.ActionLink("Log Out", "LogOut", "Student", null, new { @class = "log-out-link" })
 <div class="content">
     @if (ViewBag.Error != null)
     {
@@ -21,16 +21,17 @@
         <div class="col-lg-6 col-md-10 col-12">
             @using (Html.BeginForm())
             {
-            <div class="row form-group justify-content-center no-gutters">
-                <label class="col-1 vertical-center text-right">V&nbsp;</label>
-                @Html.TextBoxFor(model => model.VNum, new { @class = "form-control col-11", style = "display:inline-block !important;", placeholder = "XXXXXXXX" })
-            </div>
-                <div class="row form-group">
-                    <div class="col-12 text-right">
-                        <button class="btn btn-lg btn-danger" type="submit">Submit</button>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">V</span>
                     </div>
+                    @Html.TextBoxFor(model => model.VNum, new { @class = "form-control col-11", style = "display:inline-block !important;", placeholder = "XXXXXXXX" })
                 </div>
             }
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script type="text/javascript" src="~/Scripts/refresh-home-page.js"></script>
+}
