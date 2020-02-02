@@ -41,6 +41,7 @@ namespace MathCenter.Controllers
         [HttpGet]
         public ActionResult Index()
         {
+            _v_number = null; //reset VNumber.
             return View();
         }
 
@@ -66,11 +67,14 @@ namespace MathCenter.Controllers
         [HttpGet]
         public ActionResult Name()
         {
+            var ProgressPercent = 50;
             Student student = db.Students.Find(_v_number);
             if (student == null)
             {
                 student = new Student { VNum = _v_number };
+                ProgressPercent = 33;
             }
+            ViewBag.ProgressPercent = ProgressPercent;
             return View(student);
         }
 
@@ -79,11 +83,16 @@ namespace MathCenter.Controllers
         {
             if (ModelState.IsValid)
             {
+                var redirectAction = "Done";
                 try
                 {
                     student.FirstName = student.CapitalizeName(student.FirstName);
                     student.LastName = student.CapitalizeName(student.LastName);
-                    db.Students.Add(student);
+                    if(db.Students.Find(_v_number) == null)
+                    {
+                        redirectAction = "Class";
+                        db.Students.Add(student);
+                    }
 
                     db.SaveChanges();
                 }
@@ -92,7 +101,7 @@ namespace MathCenter.Controllers
                     ViewBag.Error = "There was an error adding you to the database. Please ask a tutor for help.";
                     return View(student);
                 }
-                return RedirectToAction("Class", "Student");
+                return RedirectToAction(redirectAction, "Student");
             }
             else
             {
@@ -104,6 +113,12 @@ namespace MathCenter.Controllers
         [HttpGet]
         public ActionResult Class()
         {
+            var ProgressPercent = 66;
+            if(db.Students.Find(_v_number).StudentClasses.Count > 0)
+            {
+                ProgressPercent = 50;
+            }
+            ViewBag.ProgressPercent = ProgressPercent;
             ViewBag.OtherClasses = getOtherClasses();
             ViewBag.CCClasses = getCommunityCollegeClasses();
             ViewBag.CCClassList = getCommunityClassList();
@@ -114,13 +129,20 @@ namespace MathCenter.Controllers
         public ActionResult Class(int[] ClassID)
         {
             Student currentStudent = db.Students.Find(_v_number);
-            if(ClassID.Length > 0 && currentStudent != null)
+            var redirectAction = "Finish";
+            var ProgressPercent = 66;
+            if (ClassID.Length > 0 && currentStudent != null)
             {
                 createSignIns(ClassID, currentStudent);
+                if (currentStudent.StudentClasses.Count > 0)
+                {
+                    ProgressPercent = 50;
+                    redirectAction = "Done";
+                }
                 try
                 {
                     db.SaveChanges();
-                    return RedirectToAction("Finish", "Student");
+                    return RedirectToAction(redirectAction, "Student");
                 }
                 catch (Exception)
                 {
@@ -128,6 +150,7 @@ namespace MathCenter.Controllers
                 }
             }
 
+            ViewBag.ProgressPercent = ProgressPercent;
             ViewBag.OtherClasses = getOtherClasses();
             ViewBag.CCClasses = getCommunityCollegeClasses();
             ViewBag.CCClassList = getCommunityClassList();
@@ -136,7 +159,6 @@ namespace MathCenter.Controllers
 
         public ActionResult Finish()
         {
-            _v_number = null; //reset VNumber so if something weird happens we don't sign someone in twice.
             return View();
         }
 
@@ -174,6 +196,12 @@ namespace MathCenter.Controllers
             }
 
             return View(currentStudent);
+        }
+
+        public ActionResult SignOut()
+        {
+            _week_number = 0;
+            return RedirectToAction("Index", "Home");
         }
 
         public List<Class> getOtherClasses()

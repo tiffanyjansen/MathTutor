@@ -8,30 +8,19 @@
             <th>@Html.DisplayNameFor(data => firstClass.Instructor)</th>
             <th>@Html.DisplayNameFor(data => firstClass.Days)</th>
             <th>@Html.DisplayNameFor(data => firstClass.Time)</th>
-            <th>@Html.DisplayNameFor(data => firstClass.Other)</th>
-        </tr>
-        <tr>
-            <td><input type="text" placeholder="Search CRN" /></td>
-            <td><input type="text" placeholder="Search Department" /></td>
-            <td><input type="text" placeholder="Search Class Number" /></td>
-            <td><input type="text" placeholder="Search Instructor" /></td>
-            <td><input type="text" placeholder="Search Days in Class" /></td>
-            <td><input type="text" placeholder="Search Starting Time" /></td>
-            <td><input type="text" placeholder="Search Other" /></td>
         </tr>
     </thead>
     <tbody>
         @foreach (MathCenter.Models.Class @class in ViewBag.Data)
         {
-            <tr>
-                <td class="text-center">@Html.DisplayFor(data => @class.CRN)</td>
-                <td class="text-center">@Html.DisplayFor(data => @class.DeptPrefix)</td>
-                <td class="text-center">@Html.DisplayFor(data => @class.ClassNum)</td>
-                <td>@Html.DisplayFor(data => @class.Instructor)</td>
-                <td class="text-center">@Html.DisplayFor(data => @class.Days)</td>
-                <td class="text-center">@Html.DisplayFor(data => @class.Time)</td>
-                <td>@Html.DisplayFor(data => @class.Other)</td>
-            </tr>
+        <tr>
+            <td class="text-center">@Html.DisplayFor(data => @class.CRN)</td>
+            <td class="text-center">@(@class.getDepartment())</td>
+            <td class="text-center">@(@class.getClassNumber())</td>
+            <td>@(@class.getInstructor())</td>
+            <td class="text-center">@Html.DisplayFor(data => @class.Days)</td>
+            <td class="text-center">@Html.DisplayFor(data => @class.Time)</td>
+        </tr>
         }
     </tbody>
 </table>

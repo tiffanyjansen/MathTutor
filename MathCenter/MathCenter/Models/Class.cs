@@ -6,6 +6,7 @@ namespace MathCenter.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
     using System.Linq;
+    using System.Text.RegularExpressions;
 
     public partial class Class
     {
@@ -38,6 +39,7 @@ namespace MathCenter.Models
         [Display(Name = "Starting Time")]
         public string Time { get; set; }
 
+        [RegularExpression(@"^[A-Z]{1,3}\s[\d]{2,3}$")]
         public string Other { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -75,6 +77,60 @@ namespace MathCenter.Models
             else
             {
                 return this.Other;
+            }
+        }
+
+        public string getInstructor()
+        {
+            if (CCCollegeStrings.Values.Contains(this.Instructor))
+            {
+                return CCCollegeStrings.FirstOrDefault(x => x.Value == this.Instructor).Key;
+            }
+            else
+            {
+                return this.Instructor;
+            }
+        }
+
+        public string getDepartment()
+        {
+            if (this.DeptPrefix != null)
+            {
+                return this.DeptPrefix;
+            }
+            else
+            {
+                if(this.Other != null)
+                {
+                    Regex rx = new Regex(@"([A-Z]{1,3})");
+                    var match  = rx.Match(this.Other);
+                    return match.Value;
+                }
+                else
+                {
+                    return "";
+                }
+            }
+        }
+
+        public int getClassNumber()
+        {
+            if (this.ClassNum != null)
+            {
+                return (int) this.ClassNum;
+            }
+            else
+            {
+                if (this.Other != null)
+                {
+                    Regex rx = new Regex(@"([\d]{2,3})");
+                    var match = rx.Match(this.Other);
+                    return Int32.Parse(match.Value);
+                }
+                else
+                {
+                    return 0;
+                }
             }
         }
 

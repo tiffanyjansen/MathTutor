@@ -1,66 +1,73 @@
 ﻿@model MathCenter.Models.Student
 
-<div class="content">
-    <div class="row">
-        <div class="col-12 border-bottom">
-            <h2>Please verify your information and select your classes:</h2>
-        </div>
-    </div>
-    @Html.Partial("_Progress", "Partials", new ViewDataDictionary { { "progress", 50 } })
-    @if (ViewBag.Error != null)
-    {
-        @Html.Partial("_Errors", "Partials", new ViewDataDictionary { { "error", ViewBag.Error } })
-    }
-    @using (Html.BeginForm("Done", "Student", FormMethod.Post, new { }))
-    {
+    <div class="content">
         <div class="row">
-            <div class="col-12">
-                <div class="row">
-                    <div class="col-md-4 col-12 form-group text-md-right">
-                        <label class="h4 border-bottom">Your V-Number:</label>&nbsp; &nbsp;<a class="h6" href="@Url.Action("Index", "Student")"><span class="oi oi-pencil red-text" title="Edit V-Number" aria-hidden="true"></span></a>
-                    </div>
-                    <div class="col-md-8 col-12 form-group">
-                        <h4>@Model.VNum</h4>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4 col-12 form-group text-md-right">
-                        <label class="h4 border-bottom">Your Name:</label>&nbsp;&nbsp;<a class="h6" href="@Url.Action("Name", "Student")"><span class="oi oi-pencil red-text" title="Edit Name" aria-hidden="true"></span></a>
-                    </div>
-                    <div class="col-md-8 col-12 form-group">
-                        <h4>@Model.ToString()</h4>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12">
-                <div class="row">
-                    <div class="col-md-4 col-12 text-md-right">
-                        <label class="border-bottom h4">Your Classes:</label>&nbsp;&nbsp;<a class="h6" href="@Url.Action("Class", "Student")"><span class="oi oi-plus red-text" title="Add Class" aria-hidden="true"></span></a>
-                    </div>
-                    <div class="col-md-8 row">
-                        @foreach (var @class in Model.StudentClasses)
-                        {
-                            <div class="col-12">
-                                <label class="h4">
-                                    <input type="checkbox" name="ClassID" value="@(@class.ClassID)" class="custom-checkbox" />
-                                    &nbsp;@(@class.Class.ToLongString())
-                                </label>
-                            </div>
-                        }
-                    </div>
-                </div>
+            <div class="col-12 border-bottom">
+                <h2>Please verify your information and select your classes:</h2>
             </div>
         </div>
-        <div class="row justify-content-center form-group">
-            <div class="col-12 text-right">
-                <button class="btn btn-lg btn-danger" type="submit" disabled>Continue</button>
+        @Html.Partial("_Progress", "Partials", new ViewDataDictionary { { "progress", 50 } })
+        @if (ViewBag.Error != null)
+        {
+            @Html.Partial("_Errors", "Partials", new ViewDataDictionary { { "error", ViewBag.Error } })
+        }
+        @using (Html.BeginForm("Done", "Student", FormMethod.Post, new { }))
+        {
+            <div class="row">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-md-4 col-12 form-group text-md-right">
+                            <label class="h4 border-bottom">Your V-Number:</label>&nbsp; &nbsp;<a class="h6" href="@Url.Action("Index", "Student")"><span class="oi oi-pencil red-text" title="Edit V-Number" aria-hidden="true"></span></a>
+                        </div>
+                        <div class="col-md-8 col-12 form-group">
+                            <h4>@Model.VNum</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-12 form-group text-md-right">
+                            <label class="h4 border-bottom">Your Name:</label>&nbsp;&nbsp;<a class="h6" href="@Url.Action("Name", "Student")"><span class="oi oi-pencil red-text" title="Edit Name" aria-hidden="true"></span></a>
+                        </div>
+                        <div class="col-md-8 col-12 form-group">
+                            <h4>@Model.ToString()</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-md-4 col-12 text-md-right">
+                            <label class="border-bottom h4">Your Classes:</label>&nbsp;&nbsp;<a class="h6" href="@Url.Action("Class", "Student")"><span class="oi oi-plus red-text" title="Add Class" aria-hidden="true"></span></a>
+                        </div>
+                        <div class="col-md-8 row">
+                            @foreach (var @class in Model.StudentClasses)
+                            {
+                                <div class="col-12">
+                                    <label class="h4">
+                                        <input type="checkbox" name="ClassID" value="@(@class.ClassID)" class="custom-checkbox" />
+                                        &nbsp;@(@class.Class.ToLongString())
+                                    </label>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+            <div class="row justify-content-center form-group">
+                <div class="col-6">
+                    <div class="text-left">
+                        <a href="@Url.Action("Index", "Student")" class="btn btn-lg btn-default">Go Back</a>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="text-right">
+                        <button class="btn btn-lg btn-danger" type="submit" disabled>Continue</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    @section Scripts {
+        <script type="text/javascript" src="~/Scripts/form-helpers.js"></script>
+        <script type="text/javascript">
+            bindDoneEvents();
+        </script>
     }
-</div>
-@section Scripts {
-    <script type="text/javascript" src="~/Scripts/form-helpers.js"></script>
-    <script type="text/javascript">
-        bindDoneEvents();
-    </script>
-}

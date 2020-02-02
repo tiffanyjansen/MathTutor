@@ -1,4 +1,5 @@
 ﻿@model MathCenter.Models.ViewModels.WelcomeViewModel
+@Html.ActionLink("Log Out", "LogOut", "Student", null, new { @class = "log-out-link"})
 <div class="content">
     @if (ViewBag.Error != null)
     {

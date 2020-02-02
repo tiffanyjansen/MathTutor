@@ -8,52 +8,40 @@
 </div>
 
 @section Scripts {
+    <script type="text/javascript" src="~/Scripts/datatable-component.js"></script>
     <script type="text/javascript">
+        window.facultyClassTable = null;
+        var classCreator = new DatatableCreator();
+
         $(document).ready(function () {
-            $('#classes_table').DataTable({
-                "paging": false,
-                "ordering": true,
-                "info": false,
-                "scrollY": 310,
-                "scrollX": true,
-                "dom": '<"table-header border-bottom row"<"table-header-left-class col-md-6 col-12"><"table-header-right col-md-6 col-12" B>>t',
-                "buttons": {
+             window.facultyClassTable = classCreator.init({
+                table: window.facultyClassTable,
+                domClass: '<"table-header border-bottom row"<"table-header-left-class col-md-6 col-12"><"table-header-right col-md-6 col-12" B>>t',
+                tableID: "classes_table",
+                columns: [
+                    { "visible": false },
+                    { "visible": true },
+                    { "visible": true },
+                    { "visible": true },
+                    { "visible": true },
+                    { "visible": true },
+                ],
+                buttons: {
                     "buttons": [
                         {
                             text: "Go Back",
-                            action: function ( e, dt, button, config ) {
+                            action: function (e, dt, button, config) {
                                 window.location = 'Index';
                             },
                             className: 'btn-default',
                         },
                         { extend: 'excel', className: 'btn-default' },
-                        { extend: 'colvis', className: 'btn-danger' }
+                        { extend: 'colvis', className: 'btn-danger' },
                     ]
                 },
-                "bSortCellsTop": true,
-                "columns": [
-                    { "visible": false },
-                    { "visible": true },
-                    { "visible": true },
-                    { "visible": true },
-                    { "visible": false },
-                    { "visible": true },
-                    { "visible": false }
-                ],
-                "order":[[2, "asc"]],
-            });
-
-            //Filtering Function
-            var table = $('#classes_table').DataTable();
-            table.columns().every( function () {
-                var that = this; 
-                $('input', this.header()).on( 'keyup change clear', function () {
-                    if (that.search() !== this.value) {
-                        that
-                            .search( this.value )
-                            .draw();
-                    }
-                });
+                orderColumn: 2,
+                inputClass: 'class-filter',
+                skipFirst: false,
             });
         });
     </script>

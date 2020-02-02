@@ -1,64 +1,81 @@
 ﻿@model IEnumerable<MathCenter.Models.SignIn>
 
-<div class="content">
-    @Html.Partial("_DataDataTable", "Partials", new ViewDataDictionary {
-        { "data", Model.ToList() },
-        { "table_id", "data_table" }
-    })
-</div>
+    <div class="content">
+        <table id="data_table" class="display table-hover" style="width:100%">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Week)</th>
+                    <th>@Html.DisplayNameFor(model => model.Date)</th>
+                    <th>@Html.DisplayNameFor(model => model.Hour)</th>
+                    <th>@Html.DisplayNameFor(model => model.Min)</th>
+                    <th>@Html.DisplayNameFor(model => model.Student.FirstName)</th>
+                    <th>@Html.DisplayNameFor(model => model.Student.LastName)</th>
+                    <th>Class</th>
+                    <th>@Html.DisplayNameFor(model => model.Class.Instructor)</th>
+                    <th>@Html.DisplayNameFor(model => model.Class.Days)</th>
+                    <th>@Html.DisplayNameFor(model => model.Class.Time)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (MathCenter.Models.SignIn signIN in Model.ToList())
+                {
+                    <tr>
+                        <td class="text-center">@Html.DisplayFor(model => signIN.Week)</td>
+                        <td>@Html.DisplayFor(model => signIN.Date)</td>
+                        <td class="text-center">@Html.DisplayFor(model => signIN.Hour)</td>
+                        <td class="text-center">@Html.DisplayFor(model => signIN.Min)</td>
+                        <td class="text-center">@Html.DisplayFor(model => signIN.Student.FirstName)</td>
+                        <td class="text-center">@Html.DisplayFor(model => signIN.Student.LastName)</td>
+                        <td>@signIN.Class.ToString()</td>
+                        <td>@signIN.Class.getInstructor()</td>
+                        <td class="text-center">@Html.DisplayFor(model => signIN.Class.Days)</td>
+                        <td class="text-center">@Html.DisplayFor(model => signIN.Class.Time)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 
 @section Scripts {
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#data_table').DataTable({
-                "paging": false,
-                "ordering": true,
-                "info": false,
-                "scrollY": 310,
-                "scrollX": true,
-                "dom": '<"table-header border-bottom row"<"table-header-left-data col-md-6 col-12"><"table-header-right col-md-6 col-12" B>>t',
-                "buttons": {
-                    "buttons": [
-                        {
-                            text: "Go Back",
-                            action: function ( e, dt, button, config ) {
-                                window.location = 'Index';
-                            },
-                            className: 'btn-default',
-                        },
-                        { extend: 'excel', className: 'btn-default' },
-                        { extend: 'colvis', className: 'btn-danger' }
-                    ]
-                },
-                "bSortCellsTop": true,
-                "columns": [
-                    { "visible": true },
-                    { "visible": false },
-                    { "visible": false },
-                    { "visible": false },
-                    { "visible": true },
-                    { "visible": false },
-                    { "visible": true },
-                    { "visible": true },
-                    { "visible": false },
-                    { "visible": false },
-                    { "visible": false },
-                ],
-                "order":[[0, "asc"]],
-            });
+<script type="text/javascript" src="~/Scripts/datatable-component.js"></script>
+<script type="text/javascript">
+    window.facultyDataTable = null;
+    var dataCreator = new DatatableCreator();
 
-            //Filtering Function
-            var table = $('#data_table').DataTable();
-            table.columns().every( function () {
-                var that = this;
-                $('input', this.header()).on( 'keyup change clear', function () {
-                    if (that.search() !== this.value) {
-                        that
-                            .search( this.value )
-                            .draw();
-                    }
-                });
-            });
+    $(document).ready(function () {
+        dataCreator.init({
+            table: window.facultyDataTable,
+            domClass: '<"table-header border-bottom row"<"table-header-left-data col-md-6 col-12"><"table-header-right col-md-6 col-12" B>>t',
+            orderColumn: 0,
+            buttons: {
+                "buttons": [
+                    {
+                        text: "Go Back",
+                        action: function (e, dt, button, config) {
+                            window.location = 'Index';
+                        },
+                        className: 'btn-default',
+                    },
+                    { extend: 'excel', className: 'btn-default' },
+                    { extend: 'colvis', className: 'btn-danger' }
+                ]
+            },
+            columns: [
+                { "visible": true },
+                { "visible": false },
+                { "visible": false },
+                { "visible": false },
+                { "visible": true },
+                { "visible": true },
+                { "visible": true },
+                { "visible": true },
+                { "visible": false },
+                { "visible": false },
+            ],
+            tableID: 'data_table',
+            inputClass: 'data-filter',
+            skipFirst: false,
         });
-    </script>
+    });
+</script>
 }

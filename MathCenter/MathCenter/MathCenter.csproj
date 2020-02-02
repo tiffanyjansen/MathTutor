@@ -3452,7 +3452,8 @@
     <Content Include="Scripts\popper-utils.min.js" />
     <Content Include="Scripts\popper.js" />
     <Content Include="Scripts\popper.min.js" />
-    <Content Include="Scripts\progress-bar.js" />
+    <Content Include="Scripts\progress-bar-50.js" />
+    <Content Include="Scripts\progress-bar-66.js" />
     <Content Include="Scripts\reloadPage.js" />
     <Content Include="Scripts\search-helpers.js" />
     <Content Include="Scripts\umd\popper-utils.js" />
@@ -3494,7 +3495,6 @@
     <Content Include="Views\Student\Index.cshtml" />
     <Content Include="Views\Student\Name.cshtml" />
     <Content Include="Views\Shared\_ClassDataTable.cshtml" />
-    <Content Include="Views\Shared\_DataDataTable.cshtml" />
     <Content Include="Views\Student\Class.cshtml" />
     <Content Include="Views\Shared\_ClassSelectDataTable.cshtml" />
     <Content Include="Views\Shared\_CommSelectDataTable.cshtml" />
