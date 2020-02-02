@@ -1938,12 +1938,6 @@
     </Content>
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Images\logo_final.gif" />
-    <Content Include="Images\logo_final.jpg" />
-    <Content Include="Images\logo_horizontal.gif" />
-    <Content Include="Images\logo_horizontal.jpg" />
-    <Content Include="Images\mathheart.jpg" />
-    <Content Include="Images\WOULogo.PNG" />
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-reboot.min.css.map" />
@@ -3329,6 +3323,7 @@
     <Content Include="Content\DataTables\Buttons-1.6.1\css\mixins.scss" />
     <Content Include="Content\Tables.scss" />
     <None Include="Properties\PublishProfiles\math-center - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\math-center - Web Deploy1.pubxml" />
     <None Include="Properties\PublishProfiles\math-tutor - Web Deploy.pubxml" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap-datepicker.min.js" />
