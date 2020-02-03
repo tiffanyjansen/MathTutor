@@ -1,36 +1,44 @@
 ﻿@model MathCenter.Models.ViewModels.WelcomeViewModel
-@Html.ActionLink("Log Out", "LogOut", "Student", null, new { @class = "log-out-link" })
-<div class="content">
-    @if (ViewBag.Error != null)
-    {
-        @Html.Partial("_Errors", "Partials", new ViewDataDictionary { { "error", ViewBag.Error } })
-    }
+@Html.ActionLink("Log Out", "SignOut", "Student", null, new { @class = "log-out-link" })
+    <div class="content">
+        @if (ViewBag.Error != null)
+        {
+            @Html.Partial("_Errors", "Partials", new ViewDataDictionary { { "error", ViewBag.Error } })
+        }
 
-    <div class="row justify-content-center">
-        <div class="col-12 text-center welcome-title">
-            <h1>Welcome!</h1>
+        <div class="row justify-content-center">
+            <div class="col-12 text-center welcome-title">
+                <h1>Welcome!</h1>
+            </div>
+            <div class="col-12" id="border"></div>
         </div>
-        <div class="col-12" id="border"></div>
-    </div>
-    <div class="row justify-content-center">
-        <div class="col-lg-8 col-12">
-            <h2 class="border-bottom">Please enter your V Number</h2>
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-12">
+                <h2 class="border-bottom">Please enter your V Number</h2>
+            </div>
         </div>
-    </div>
-    <div class="row justify-content-center">
-        <div class="col-lg-6 col-md-10 col-12">
-            @using (Html.BeginForm())
-            {
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">V</span>
+        @using (Html.BeginForm())
+        {
+            <div class="row justtify-content-center  form-group">
+                <div class="offset-lg-3 col-lg-6 offset-md-1 col-md-10 col-12">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">V</span>
+                        </div>
+                        @Html.TextBoxFor(model => model.VNum, new { @class = "form-control col-11", style = "display:inline-block !important;", placeholder = "XXXXXXXX", required = true })
                     </div>
-                    @Html.TextBoxFor(model => model.VNum, new { @class = "form-control col-11", style = "display:inline-block !important;", placeholder = "XXXXXXXX" })
+
                 </div>
-            }
-        </div>
+            </div>
+            <div class="row form-group">
+                <div class="offset-lg-2 col-lg-8 col-12">
+                    <div class="text-right">
+                        <button class="btn btn-lg btn-danger" type="submit">Submit</button>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
-</div>
 
 @section Scripts {
     <script type="text/javascript" src="~/Scripts/refresh-home-page.js"></script>

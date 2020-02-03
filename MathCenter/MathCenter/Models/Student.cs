@@ -42,6 +42,13 @@ namespace MathCenter.Models
             return this.FirstName + " " + this.LastName;
         }
 
+        public Student CapitalizeNames()
+        {
+            this.FirstName = CapitalizeName(this.FirstName);
+            this.LastName = CapitalizeName(this.LastName);
+            return this;
+        }
+
         public string CapitalizeName(string name)
         {
             name = char.ToUpper(name[0]) + name.Substring(1);
@@ -57,6 +64,13 @@ namespace MathCenter.Models
                 name = name.Substring(0, index) + char.ToUpper(name[index]) + name.Substring(index + 1);
             }
             return name;
+        }
+
+        public Student Update(Student student)
+        {
+            this.FirstName = student.CapitalizeName(student.FirstName);
+            this.LastName = student.CapitalizeName(student.LastName);
+            return this;
         }
     }
 }
