@@ -1938,12 +1938,6 @@
     </Content>
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Images\logo_final.gif" />
-    <Content Include="Images\logo_final.jpg" />
-    <Content Include="Images\logo_horizontal.gif" />
-    <Content Include="Images\logo_horizontal.jpg" />
-    <Content Include="Images\mathheart.jpg" />
-    <Content Include="Images\WOULogo.PNG" />
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-reboot.min.css.map" />

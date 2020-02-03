@@ -41,6 +41,10 @@ namespace MathCenter.Controllers
         [HttpGet]
         public ActionResult Index()
         {
+            if(_week_number < 2 || _week_number > 11)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             _v_number = null; //reset VNumber.
             return View();
         }
@@ -68,6 +72,10 @@ namespace MathCenter.Controllers
         public ActionResult Name()
         {
             var ProgressPercent = 33;
+            if(_v_number == null)
+            {
+                return RedirectToAction("Index", "Student");
+            }
             Student student = db.Students.Find(_v_number);
             if (student == null)
             {
@@ -89,10 +97,14 @@ namespace MathCenter.Controllers
                 var redirectAction = "Done";
                 try
                 {
-                    student.FirstName = student.CapitalizeName(student.FirstName);
-                    student.LastName = student.CapitalizeName(student.LastName);
-                    if(db.Students.Find(_v_number) == null)
+                    Student currentStudent = db.Students.Find(_v_number);
+                    if(currentStudent != null)
                     {
+                        currentStudent = currentStudent.Update(student);
+                    }
+                    else
+                    {
+                        student = student.CapitalizeNames();
                         redirectAction = "Class";
                         db.Students.Add(student);
                     }
@@ -117,7 +129,12 @@ namespace MathCenter.Controllers
         public ActionResult Class()
         {
             var ProgressPercent = 66;
-            if(db.Students.Find(_v_number).StudentClasses.Count > 0)
+            Student student = db.Students.Find(_v_number);
+            if(student == null)
+            {
+                return RedirectToAction("Index", "Student");
+            }
+            else if(student.StudentClasses.Count > 0)
             {
                 ProgressPercent = 50;
             }
@@ -152,6 +169,10 @@ namespace MathCenter.Controllers
                     ViewBag.Error = "There was an error adding your classes. Please try again.";
                 }
             }
+            else if(ClassID.Length == 0)
+            {
+                ViewBag.Error = "Please select your class(es).";
+            }
 
             ViewBag.ProgressPercent = ProgressPercent;
             ViewBag.OtherClasses = getOtherClasses();
@@ -169,11 +190,15 @@ namespace MathCenter.Controllers
         public ActionResult Done()
         {
             Student student = db.Students.Find(_v_number);
-            if(student.FirstName == null)
+            if(student == null)
+            {
+                return RedirectToAction("Index", "Student");
+            }
+            else if (student.FirstName == null)
             {
                 return RedirectToAction("Name", "Student");
             }
-            if(student.StudentClasses.Count == 0)
+            else if(student.StudentClasses.Count == 0)
             {
                 return RedirectToAction("Class", "Student");
             }

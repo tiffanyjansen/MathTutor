@@ -20,7 +20,7 @@
                     <label class="h4">First Name:</label>
                 </div>
                 <div class="col-md-6 col-12">
-                    @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control" })
+                    @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", required = true  })
                 </div>
             </div>
             <div class="row form-group">
@@ -28,7 +28,7 @@
                     <label class="h4">Last Name:</label>
                 </div>
                 <div class="col-md-6 col-12">
-                    @Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
+                    @Html.TextBoxFor(model => model.LastName, new { @class = "form-control", required = true  })
                 </div>
             </div>
             <div class="row form-group">
