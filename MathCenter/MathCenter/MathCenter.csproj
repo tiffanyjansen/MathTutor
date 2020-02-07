@@ -186,6 +186,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\refresh-home-page.js" />
     <Content Include="Scripts\reloadPage.js" />
     <Content Include="Scripts\SelectClass.js" />
     <Content Include="Web.config">
